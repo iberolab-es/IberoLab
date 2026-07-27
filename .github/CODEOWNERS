@@ -1,0 +1,11 @@
+# Default reviewers for the repository
+* @iberolab-es @Garcajomi
+
+# Linguistic and methodological documentation
+/docs/ @iberolab-es @Garcajomi
+/database/ @iberolab-es @Garcajomi
+
+# Application and engine
+/web/ @Garcajomi
+/engine/ @Garcajomi
+/tests/ @Garcajomi

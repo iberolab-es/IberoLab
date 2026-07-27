@@ -1,0 +1,69 @@
+name: Aportación documental o lingüística
+description: Propón una grafía, variante, valor, referencia o corrección fundamentada.
+title: "[Investigación]: "
+labels:
+  - research
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Las aportaciones deben distinguir entre datos documentados, hipótesis académicas y propuestas experimentales.
+  - type: dropdown
+    id: script
+    attributes:
+      label: Sistema de escritura
+      options:
+        - Ibérico nororiental
+        - Ibérico meridional
+        - Greco-ibérico
+        - Celtibérico
+        - Otro o por determinar
+    validations:
+      required: true
+  - type: input
+    id: sign
+    attributes:
+      label: Signo, variante o cuestión analizada
+      placeholder: Identificador, transliteración o descripción breve
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence_level
+    attributes:
+      label: Tipo de aportación
+      options:
+        - Dato documentado
+        - Interpretación de consenso
+        - Hipótesis académica
+        - Propuesta experimental para el motor
+        - Recurso gráfico o de interfaz
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Propuesta
+      description: Describe el cambio y su justificación.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Fuentes y referencias
+      description: Incluye autor, título, edición, catálogo, DOI o enlace estable cuando sea posible.
+    validations:
+      required: true
+  - type: textarea
+    id: license
+    attributes:
+      label: Licencia o derechos del material gráfico
+      description: Obligatorio si adjuntas o propones imágenes, fuentes o SVG de terceros.
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: He separado los hechos documentados de mis propias hipótesis.
+          required: true
+        - label: El material aportado puede revisarse públicamente en GitHub.
+          required: true

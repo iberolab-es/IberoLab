@@ -1,0 +1,47 @@
+name: Propuesta de mejora
+description: Sugiere una función, cambio de interfaz o mejora de accesibilidad.
+title: "[Mejora]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema o necesidad
+      description: Explica qué dificultad resolvería la propuesta.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Solución propuesta
+      description: Describe el funcionamiento esperado con el mayor detalle posible.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+      description: Indica otras soluciones posibles, si las hay.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área principal
+      options:
+        - Motor fonético
+        - Base de signos
+        - Renderizado SVG
+        - Interfaz web
+        - Accesibilidad
+        - Documentación
+        - Comunidad y gobernanza
+        - Otra
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: He comprobado que no existe una propuesta equivalente.
+          required: true

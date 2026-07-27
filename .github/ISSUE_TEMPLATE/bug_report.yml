@@ -1,0 +1,59 @@
+name: Error técnico
+description: Informa de un fallo de conversión, renderizado o funcionamiento.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por informar del problema. No incluyas datos personales ni contraseñas.
+  - type: input
+    id: input_text
+    attributes:
+      label: Texto introducido
+      description: Palabra o frase exacta que produjo el fallo.
+      placeholder: "Ejemplo: Hola"
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Entorno
+      options:
+        - Safari en iPhone o iPad
+        - Chrome en Android
+        - Chrome en ordenador
+        - Firefox en ordenador
+        - Edge en ordenador
+        - Otro
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Resultado observado
+      description: Explica qué ocurrió y si la salida quedó vacía.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+      description: Explica qué esperabas que mostrara la aplicación.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Capturas o información adicional
+      description: Puedes arrastrar aquí capturas, registros o enlaces.
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: He comprobado que no existe una issue equivalente.
+          required: true
+        - label: Entiendo que IberoLab no ofrece una traducción literal al idioma ibérico.
+          required: true
