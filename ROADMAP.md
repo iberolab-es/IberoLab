@@ -19,11 +19,13 @@
 
 ## Fase 1B — Inventario paleográfico y SVG verificados
 
-- [ ] Diseñar el esquema de datos para signos, alógrafos y variantes.
-- [ ] Comenzar por el signario ibérico nororiental necesario para el corpus contrastado.
-- [ ] Registrar forma, valor, variante, procedencia, cronología, dirección y referencia.
-- [ ] Incorporar SVG propios derivados de formas documentadas o recursos con licencia compatible.
-- [ ] Reconstruir gráficamente las formas del corpus sin signos vacíos.
+- [x] Crear un mapeo gráfico provisional con formas normalizadas de referencia para 18 de los 19 tokens del corpus.
+- [x] Mantener `ń` como token explícitamente pendiente, sin sustituirlo por `n`, `m` o `ḿ`.
+- [x] Añadir un validador que comprueba cobertura, archivos SVG y salvaguardas contra salidas vacías.
+- [ ] Diseñar el esquema definitivo para signos, alógrafos y variantes.
+- [ ] Registrar forma, valor, variante, procedencia, cronología, dirección y referencia de cada alógrafo.
+- [ ] Sustituir progresivamente las formas normalizadas por SVG propios derivados de formas documentadas o recursos con licencia compatible.
+- [ ] Reconstruir gráficamente las once formas del corpus sin tokens pendientes.
 - [ ] Crear pruebas de integridad y regresión visual de la base.
 - [ ] Ampliar después, sin mezclar sistemas, a ibérico meridional, greco-ibérico y celtibérico.
 
@@ -39,9 +41,11 @@
 
 ## Fase 3 — Renderizador
 
-- [ ] Reutilizar del prototipo HTML anterior la arquitectura autónoma y el renderizado por tokens, no sus glifos experimentales.
-- [ ] Renderizado SVG independiente de fuentes del sistema.
-- [ ] Compatibilidad con Safari iOS, Chrome, Firefox y Edge.
+- [x] Reutilizar del prototipo HTML anterior la arquitectura autónoma y el renderizado por tokens, no sus glifos experimentales.
+- [x] Crear una página de referencia con salida inicial visible, lectura técnica y fallback por token.
+- [x] Preparar `docs/index.html` para una futura publicación desde `/docs` mediante GitHub Pages.
+- [ ] Integrar SVG locales verificados para eliminar la dependencia de carga remota.
+- [ ] Verificar compatibilidad real con Safari iOS, Chrome, Firefox y Edge.
 - [ ] Escritura de izquierda a derecha y derecha a izquierda cuando corresponda.
 - [ ] Copia, descarga y exportación accesible.
 - [ ] Pruebas visuales automatizadas.

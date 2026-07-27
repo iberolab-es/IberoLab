@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_id": "iberolab-reference-standard-dual",
+  "status": "provisional_reference_renderer",
+  "script": "Northeastern Iberian dual signary",
+  "purpose": "Provide a visible, reproducible reference rendering of the attested seed corpus before inscription-specific allographs are selected.",
+  "scientific_scope": {
+    "represents": "Standard reference sign shapes associated with conventional transliteration values.",
+    "does_not_represent": [
+      "A facsimile of the original inscription",
+      "The exact allograph used in every attestation",
+      "A translation into the Iberian language"
+    ]
+  },
+  "source_set": {
+    "collection": "Wikimedia Commons — Category:Iberian letters",
+    "collection_url": "https://commons.wikimedia.org/wiki/Category:Iberian_letters",
+    "file_series": "Sign Iber Noro Dual 01–38",
+    "author": "BotaFlo",
+    "date": "2022",
+    "licence": "CC0-1.0",
+    "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "scholarly_basis_as_described_by_source": "Dual northeastern Iberian signary following Ferrer & Jané 2005"
+  },
+  "signs": [
+    {"token":"a","reference_id":"dual-01-a","file_name":"Sign Iber Noro Dual 01 A.svg","graphic_status":"reference_svg_available"},
+    {"token":"e","reference_id":"dual-02-e","file_name":"Sign Iber Noro Dual 02 E.svg","graphic_status":"reference_svg_available"},
+    {"token":"i","reference_id":"dual-03-i","file_name":"Sign Iber Noro Dual 03 I.svg","graphic_status":"reference_svg_available"},
+    {"token":"u","reference_id":"dual-05-u","file_name":"Sign Iber Noro Dual 05 U.svg","graphic_status":"reference_svg_available"},
+    {"token":"gi","reference_id":"dual-08-gi","file_name":"Sign Iber Noro Dual 08 GI.svg","graphic_status":"reference_svg_available"},
+    {"token":"ke","reference_id":"dual-12-ke","file_name":"Sign Iber Noro Dual 12 KE.svg","graphic_status":"reference_svg_available"},
+    {"token":"ki","reference_id":"dual-13-ki","file_name":"Sign Iber Noro Dual 13 KI.svg","graphic_status":"reference_svg_available"},
+    {"token":"ba","reference_id":"dual-16-ba","file_name":"Sign Iber Noro Dual 16 BA.svg","graphic_status":"reference_svg_available"},
+    {"token":"da","reference_id":"dual-21-da","file_name":"Sign Iber Noro Dual 21 DA.svg","graphic_status":"reference_svg_available"},
+    {"token":"de","reference_id":"dual-22-de","file_name":"Sign Iber Noro Dual 22 DE.svg","graphic_status":"reference_svg_available"},
+    {"token":"di","reference_id":"dual-23-di","file_name":"Sign Iber Noro Dual 23 DI.svg","graphic_status":"reference_svg_available"},
+    {"token":"ta","reference_id":"dual-26-ta","file_name":"Sign Iber Noro Dual 26 TA.svg","graphic_status":"reference_svg_available"},
+    {"token":"s","reference_id":"dual-31-s","file_name":"Sign Iber Noro Dual 31 S.svg","graphic_status":"reference_svg_available"},
+    {"token":"ś","reference_id":"dual-32-s2","file_name":"Sign Iber Noro Dual 32 Ś.svg","graphic_status":"reference_svg_available"},
+    {"token":"r","reference_id":"dual-33-r","file_name":"Sign Iber Noro Dual 33 R.svg","graphic_status":"reference_svg_available"},
+    {"token":"ŕ","reference_id":"dual-34-r2","file_name":"Sign Iber Noro Dual 34 Ŕ.svg","graphic_status":"reference_svg_available"},
+    {"token":"l","reference_id":"dual-35-l","file_name":"Sign Iber Noro Dual 35 L.svg","graphic_status":"reference_svg_available"},
+    {"token":"n","reference_id":"dual-37-n","file_name":"Sign Iber Noro Dual 37 N.svg","graphic_status":"reference_svg_available"},
+    {"token":"ń","reference_id":null,"file_name":null,"graphic_status":"pending_nasal_sign_verification","note":"The recent transcription in taŕśabań is retained in the corpus, but no standard reference SVG is assigned until the exact sign and transcription convention are checked against the 2025 publication."}
+  ]
+}
