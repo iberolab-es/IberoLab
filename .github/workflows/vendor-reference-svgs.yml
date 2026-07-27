@@ -1,10 +1,12 @@
-name: Vendor reference SVGs
+name: Integrate local reference SVGs
 
 on:
   pull_request:
     branches: [main]
     paths:
       - scripts/vendor_reference_svgs.py
+      - scripts/integrate_local_assets.py
+      - scripts/validate_local_assets.py
       - .github/workflows/vendor-reference-svgs.yml
   workflow_dispatch:
 
@@ -12,7 +14,7 @@ permissions:
   contents: write
 
 jobs:
-  vendor:
+  integrate:
     if: github.actor != 'github-actions[bot]' && github.head_ref == 'feat/vendor-reference-svgs'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -28,42 +30,44 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Download, validate and inventory SVG resources
-        id: vendor
-        continue-on-error: true
+      - name: Ensure the 18 controlled SVG resources exist
         shell: bash
         run: |
-          set -o pipefail
-          python scripts/vendor_reference_svgs.py 2>&1 | tee /tmp/iberolab-vendor.log
+          set -euo pipefail
+          count="$(find docs/assets/signs/northeastern-dual -maxdepth 1 -type f -name '*.svg' 2>/dev/null | wc -l)"
+          if [[ -f data/signs/reference-standard-dual.assets.v1.json && "$count" -eq 18 ]]; then
+            echo "Reusing 18 already vendored SVG resources."
+          else
+            python scripts/vendor_reference_svgs.py
+          fi
 
-      - name: Persist a readable diagnostic when vendoring fails
-        if: steps.vendor.outcome == 'failure'
-        run: |
-          mkdir -p data/signs
-          cp /tmp/iberolab-vendor.log data/signs/vendor-error.log
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/signs/vendor-error.log
-          git commit -m "Record SVG vendoring failure [skip ci]"
-          git push origin HEAD:feat/vendor-reference-svgs
-          exit 1
+      - name: Switch the public renderer to local assets
+        run: python scripts/integrate_local_assets.py
 
-      - name: Check generated files
-        if: steps.vendor.outcome == 'success'
+      - name: Validate local SVG integrity and provenance
+        run: python scripts/validate_local_assets.py
+
+      - name: Run the existing project validations
         run: |
-          test -f data/signs/reference-standard-dual.assets.v1.json
-          test "$(find docs/assets/signs/northeastern-dual -maxdepth 1 -type f -name '*.svg' | wc -l)" -eq 18
+          python scripts/validate_corpus.py
+          python scripts/validate_source_audit.py
+          python scripts/validate_renderer.py
+          python scripts/validate_browser_matrix.py
           git diff --check
 
-      - name: Commit generated assets to the feature branch
-        if: steps.vendor.outcome == 'success'
+      - name: Commit the local-only integration to the feature branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A docs/assets/signs/northeastern-dual data/signs/reference-standard-dual.assets.v1.json data/signs/vendor-error.log
+          git add -A \
+            data/signs/reference-standard-dual.v1.json \
+            data/tests/browser-matrix.v1.json \
+            docs/index.html \
+            docs/test.html \
+            docs/TESTING.md
           if git diff --cached --quiet; then
-            echo "No generated changes to commit."
+            echo "No integration changes to commit."
             exit 0
           fi
-          git commit -m "Vendor CC0 reference SVG assets [skip ci]"
+          git commit -m "Use repository-local SVG assets [skip ci]"
           git push origin HEAD:feat/vendor-reference-svgs
