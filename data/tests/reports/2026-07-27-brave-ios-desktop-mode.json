@@ -1,0 +1,34 @@
+{
+  "application": "IberoLab browser self-test",
+  "version": "1.0.0",
+  "executed_at": "2026-07-27T23:00:14.404Z",
+  "page": "https://iberolab-es.github.io/IberoLab/test.html",
+  "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.4.2 Safari/605.1.15 Brave",
+  "language": "es-ES",
+  "online": true,
+  "result": "pass",
+  "metrics": {
+    "forms_evaluated": 11,
+    "forms_total": 11,
+    "svg_loaded": 18,
+    "svg_total": 18,
+    "failed_svg_tokens": [],
+    "empty_outputs": 0,
+    "pending_tokens": ["ń"],
+    "unexpected_pending": [],
+    "missing_expected_pending": []
+  },
+  "forms": [
+    {"form":"ildiŕda","tokens":["i","l","di","ŕ","da"],"failedTokens":[],"pending":[],"visibleCount":5},
+    {"form":"erder","tokens":["e","r","de","r"],"failedTokens":[],"pending":[],"visibleCount":4},
+    {"form":"undikesken","tokens":["u","n","di","ke","s","ke","n"],"failedTokens":[],"pending":[],"visibleCount":7},
+    {"form":"ars","tokens":["a","r","s"],"failedTokens":[],"pending":[],"visibleCount":3},
+    {"form":"ekiar","tokens":["e","ki","a","r"],"failedTokens":[],"pending":[],"visibleCount":4},
+    {"form":"egiar","tokens":["e","gi","a","r"],"failedTokens":[],"pending":[],"visibleCount":4},
+    {"form":"likine","tokens":["l","i","ki","n","e"],"failedTokens":[],"pending":[],"visibleCount":5},
+    {"form":"taŕśabań","tokens":["ta","ŕ","ś","a","ba","ń"],"failedTokens":[],"pending":["ń"],"visibleCount":6},
+    {"form":"baisetaś","tokens":["ba","i","s","e","ta","ś"],"failedTokens":[],"pending":[],"visibleCount":6},
+    {"form":"seltar","tokens":["s","e","l","ta","r"],"failedTokens":[],"pending":[],"visibleCount":5},
+    {"form":"ebanen","tokens":["e","ba","n","e","n"],"failedTokens":[],"pending":[],"visibleCount":5}
+  ]
+}
