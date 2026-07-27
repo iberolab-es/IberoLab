@@ -7,6 +7,7 @@
 - [x] Adoptar Apache License 2.0.
 - [x] Configurar plantillas de issues y gobernanza.
 - [x] Definir criterios de aceptación de datos.
+- [x] Añadir validación automática en GitHub Actions para cada cambio propuesto.
 
 ## Fase 1A — Corpus contrastado y segmentación
 
@@ -15,7 +16,8 @@
 - [x] Separar la seguridad de lectura del estado de interpretación semántica.
 - [x] Derivar un inventario mínimo de tokens únicamente a partir del corpus.
 - [x] Añadir validación automática de integridad y reproducibilidad.
-- [ ] Someter el corpus inicial a revisión documental antes de declararlo estable.
+- [x] Completar una revisión documental interna, forma por forma, con fuentes persistentes.
+- [ ] Obtener revisión externa de una persona especialista antes de declarar estable el corpus.
 
 ## Fase 1B — Inventario paleográfico y SVG verificados
 
@@ -39,25 +41,31 @@
 - [ ] Etiquetar la confianza y explicar cada decisión.
 - [ ] Evitar presentar la adaptación como traducción al idioma ibérico.
 
+Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima de la fase 1B.
+
 ## Fase 3 — Renderizador
 
 - [x] Reutilizar del prototipo HTML anterior la arquitectura autónoma y el renderizado por tokens, no sus glifos experimentales.
 - [x] Crear una página de referencia con salida inicial visible, lectura técnica y fallback por token.
-- [x] Preparar `docs/index.html` para una futura publicación desde `/docs` mediante GitHub Pages.
+- [x] Preparar `docs/index.html` para publicación desde `/docs` mediante GitHub Pages.
+- [x] Añadir navegación por las once formas, enlaces profundos y fuente documental visible.
+- [x] Verificar manualmente `ildiŕda` en Safari iOS con salida gráfica no vacía.
+- [ ] Revisar manualmente las otras diez formas en Safari iOS, especialmente `taŕśabań`.
 - [ ] Integrar SVG locales verificados para eliminar la dependencia de carga remota.
-- [ ] Verificar compatibilidad real con Safari iOS, Chrome, Firefox y Edge.
+- [ ] Verificar compatibilidad real con Chrome, Firefox y Edge de escritorio.
 - [ ] Escritura de izquierda a derecha y derecha a izquierda cuando corresponda.
 - [ ] Copia, descarga y exportación accesible.
 - [ ] Pruebas visuales automatizadas.
 
 ## Fase 4 — Beta web
 
-- [ ] Interfaz pública clara y responsive.
-- [ ] Reconstrucción verificable del corpus contrastado.
-- [ ] Adaptación experimental de entradas modernas mediante el motor de similitud.
-- [ ] Explicación de qué hace y qué no hace la herramienta.
-- [ ] Enlace directo al buzón de sugerencias de GitHub.
-- [ ] Publicación gratuita mediante GitHub Pages.
+- [x] Publicar una versión pre-alpha gratuita mediante GitHub Pages.
+- [x] Disponer de una interfaz pública responsive con salida inicial visible.
+- [x] Explicar públicamente qué hace y qué no hace la herramienta.
+- [x] Enlazar el buzón estructurado de sugerencias de GitHub.
+- [ ] Reconstruir de forma verificable todo el corpus mediante recursos gráficos locales.
+- [ ] Incorporar la adaptación experimental de entradas modernas mediante el motor de similitud.
+- [ ] Superar la revisión paleográfica, las pruebas multidispositivo y la revisión externa necesarias para etiquetar una beta.
 
 ## Fase 5 — Ampliación
 
@@ -69,4 +77,4 @@
 
 ## Criterio de publicación
 
-No se etiquetará una versión como beta pública hasta que el renderizador reconstruya de forma visible y reproducible las formas contrastadas en móvil y escritorio, y cada transformación moderna pueda explicarse paso a paso.
+La pre-alpha puede mostrar formas contrastadas y limitaciones explícitas. No se etiquetará una versión como beta hasta que el renderizador reconstruya de forma visible y reproducible el corpus mediante recursos controlados en móvil y escritorio, y cada transformación moderna pueda explicarse paso a paso.

@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0.0",
+  "audit_id": "iberolab-source-review-2026-07-28",
+  "reviewed_on": "2026-07-28",
+  "scope": "Verify that every seed form is attested in the cited scholarly literature and record the limits of the current normalized reference renderer. This audit does not claim attestation-specific allograph reconstruction.",
+  "status_definitions": {
+    "reading_verified": "The form or sequence is explicitly present in the cited scholarly source.",
+    "context_verified": "The archaeological, numismatic, onomastic or formulaic context is supported by the source.",
+    "semantics_disputed": "The sequence is attested, but its grammatical or lexical interpretation remains disputed.",
+    "normalized_reference_only": "The current graphic output uses a normalized signary reference rather than the exact allograph of the attestation."
+  },
+  "entries": [
+    {
+      "form_id": "ib-ne-ildirda-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "The cited study uses ildiŕda in its title and discussion.",
+        "The article also prints a dotted epigraphic sequence i.l.ti.ŕ.ta for one coin legend; the current di/da tokens are a dual-value normalization and must not be presented as a facsimile."
+      ],
+      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-erder-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "supported_hypothesis",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "erder is explicitly analysed as a monetary value expression.",
+        "Its proposed value of one half is a scholarly hypothesis supported by context, not a universally secure lexical translation."
+      ],
+      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-undikesken-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "undikesken is used in the cited numismatic comparison.",
+        "Conventional publications may also preserve forms such as untikesken; IberoLab follows the spelling used in the cited study and records variants rather than silently merging them."
+      ],
+      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-ars-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "ars is used by the cited study as the mint or monetary comparator associated with a hemidrachm.",
+        "The entry must not imply that ars alone reproduces the complete legend of every cited specimen."
+      ],
+      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-ekiar-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "contextually_supported",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "The Ca n'Oliver publication explicitly identifies the authorship or production formula as characterised by ekiar/egiar.",
+        "The exact grammatical value is not treated as fully settled."
+      ],
+      "source_urls": [
+        "https://hdl.handle.net/2445/217431",
+        "https://doi.org/10.36707/palaeohispanica.v0i15.39"
+      ],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-egiar-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "contextually_supported",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "egiar is explicitly presented together with ekiar as a documented formulaic variant.",
+        "The current renderer represents the conventional reading, not the exact ductus of a specific vessel."
+      ],
+      "source_urls": ["https://hdl.handle.net/2445/217431"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-likine-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "identified_name",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "The Caminreal research review treats likine as one of the central anthroponymic elements of the mosaic inscription.",
+        "The page renders an isolated scholarly form and does not reconstruct the complete mosaic inscription."
+      ],
+      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i15.39"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-tarsaban-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "identified_name",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "The 2025 publication gives the complete sequence taŕśabańar and isolates the owner's name taŕśabań.",
+        "The transcription ń is verified as part of the scholarly reading, but the current generic sign series does not provide a safely assignable ń SVG."
+      ],
+      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v25i1.703"],
+      "pending_tokens": ["ń"]
+    },
+    {
+      "form_id": "ib-ne-baisetas-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "identified_name_role_disputed",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "The updated Sinarcas study explicitly discusses baisetaś in the funerary text.",
+        "Its status as a personal name is supported, while the precise role of the named person within the syntactic analysis remains debated."
+      ],
+      "source_urls": ["https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4"],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-seltar-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "contextually_supported",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "seltar is explicitly present in the Sinarcas analysis and is treated in the funerary context as referring to the tomb or monument.",
+        "IberoLab labels this as a contextual interpretation, not an unrestricted dictionary translation."
+      ],
+      "source_urls": [
+        "https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4",
+        "https://doi.org/10.36707/palaeohispanica.v0i17.137"
+      ],
+      "pending_tokens": []
+    },
+    {
+      "form_id": "ib-ne-ebanen-001",
+      "reading_status": "reading_verified",
+      "context_status": "context_verified",
+      "semantic_review": "semantics_disputed",
+      "rendering_status": "normalized_reference_only",
+      "findings": [
+        "ebanen is explicitly discussed in the updated Sinarcas study.",
+        "Competing analyses treat it as a possible filiation marker or as a verbal form; no translation is assigned by IberoLab."
+      ],
+      "source_urls": ["https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4"],
+      "pending_tokens": []
+    }
+  ]
+}
