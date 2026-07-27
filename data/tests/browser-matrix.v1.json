@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "matrix_id": "iberolab-browser-matrix",
+  "updated_on": "2026-07-28",
+  "test_page": "https://iberolab-es.github.io/IberoLab/test.html",
+  "expected": {
+    "forms_total": 11,
+    "mapped_svg_tokens": 18,
+    "empty_outputs": 0,
+    "explicit_pending_tokens": ["ń"]
+  },
+  "environments": [
+    {
+      "id": "safari-ios-iphone-manual-001",
+      "platform": "iOS",
+      "browser": "Safari",
+      "device_class": "iPhone",
+      "status": "partial_pass",
+      "verified_on": "2026-07-27",
+      "coverage": {
+        "forms_checked": ["ib-ne-ildirda-001"],
+        "visible_output": true,
+        "responsive_layout": true,
+        "source_links": false,
+        "self_test_page": false
+      },
+      "evidence": "User-provided screenshots confirm visible rendering of i · l · di · ŕ · da and a usable responsive layout.",
+      "pending": [
+        "Run the browser self-test after deployment.",
+        "Review the other ten forms.",
+        "Verify the explicit ń pending state in taŕśabań."
+      ]
+    },
+    {
+      "id": "chrome-desktop-pending",
+      "platform": "desktop",
+      "browser": "Chrome",
+      "device_class": "desktop",
+      "status": "pending",
+      "coverage": {}
+    },
+    {
+      "id": "firefox-desktop-pending",
+      "platform": "desktop",
+      "browser": "Firefox",
+      "device_class": "desktop",
+      "status": "pending",
+      "coverage": {}
+    },
+    {
+      "id": "edge-desktop-pending",
+      "platform": "desktop",
+      "browser": "Edge",
+      "device_class": "desktop",
+      "status": "pending",
+      "coverage": {}
+    }
+  ]
+}
