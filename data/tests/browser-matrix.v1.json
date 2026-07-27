@@ -14,21 +14,42 @@
       "id": "safari-ios-iphone-manual-001",
       "platform": "iOS",
       "browser": "Safari",
+      "browser_version_from_user_agent": "26.4",
       "device_class": "iPhone",
-      "status": "partial_pass",
+      "user_agent_os_token": "iPhone OS 18_7",
+      "status": "pass",
       "verified_on": "2026-07-27",
+      "report_file": "data/tests/reports/2026-07-27-safari-ios-iphone.json",
       "coverage": {
-        "forms_checked": ["ib-ne-ildirda-001"],
+        "forms_checked": [
+          "ib-ne-ildirda-001",
+          "ib-ne-erder-001",
+          "ib-ne-undikesken-001",
+          "ib-ne-ars-001",
+          "ib-ne-ekiar-001",
+          "ib-ne-egiar-001",
+          "ib-ne-likine-001",
+          "ib-ne-tarsaban-001",
+          "ib-ne-baisetas-001",
+          "ib-ne-seltar-001",
+          "ib-ne-ebanen-001"
+        ],
+        "forms_evaluated": 11,
         "visible_output": true,
         "responsive_layout": true,
-        "source_links": false,
-        "self_test_page": false
+        "self_test_page": true,
+        "svg_loaded": 18,
+        "svg_failed": 0,
+        "empty_outputs": 0,
+        "pending_tokens": ["ń"],
+        "unexpected_pending": [],
+        "source_links_checked": false,
+        "deep_links_checked": false
       },
-      "evidence": "User-provided screenshots confirm visible rendering of i · l · di · ŕ · da and a usable responsive layout.",
+      "evidence": "The repository owner supplied screenshots and the complete browser self-test JSON. All eleven forms produced visible output, all eighteen mapped SVG resources loaded and taŕśabań preserved ń as an explicit pending token.",
       "pending": [
-        "Run the browser self-test after deployment.",
-        "Review the other ten forms.",
-        "Verify the explicit ń pending state in taŕśabań."
+        "Verify deep links by form identifier.",
+        "Repeat the complete test after remote SVG resources are replaced with local repository assets."
       ]
     },
     {
