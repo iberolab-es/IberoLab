@@ -11,10 +11,67 @@ MATRIX = ROOT / "data" / "tests" / "browser-matrix.v1.json"
 TEST_PAGE = ROOT / "docs" / "test.html"
 REQUIRED_BROWSERS = {"Safari", "Chrome", "Firefox", "Edge"}
 ALLOWED_STATUS = {"pending", "partial_pass", "pass", "fail"}
+EXPECTED_FORMS = {
+    "ildiŕda", "erder", "undikesken", "ars", "ekiar", "egiar",
+    "likine", "taŕśabań", "baisetaś", "seltar", "ebanen",
+}
 
 
-def validate() -> tuple[int, int]:
-    matrix = json.loads(MATRIX.read_text(encoding="utf-8"))
+def load_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def validate_pass_report(environment: dict, context: str, expected: dict) -> None:
+    report_name = environment.get("report_file")
+    if not isinstance(report_name, str) or not report_name:
+        raise ValueError(f"{context}: pass status requires report_file")
+
+    report_path = ROOT / report_name
+    if not report_path.is_file():
+        raise ValueError(f"{context}: report file does not exist: {report_name}")
+
+    report = load_json(report_path)
+    metrics = report.get("metrics", {})
+    if report.get("result") != "pass":
+        raise ValueError(f"{context}: linked report result is not pass")
+    if metrics.get("forms_evaluated") != expected["forms_total"]:
+        raise ValueError(f"{context}: report does not evaluate all forms")
+    if metrics.get("forms_total") != expected["forms_total"]:
+        raise ValueError(f"{context}: report forms_total mismatch")
+    if metrics.get("svg_loaded") != expected["mapped_svg_tokens"]:
+        raise ValueError(f"{context}: report SVG count mismatch")
+    if metrics.get("svg_total") != expected["mapped_svg_tokens"]:
+        raise ValueError(f"{context}: report svg_total mismatch")
+    if metrics.get("empty_outputs") != expected["empty_outputs"]:
+        raise ValueError(f"{context}: report contains empty outputs")
+    if metrics.get("failed_svg_tokens") != []:
+        raise ValueError(f"{context}: report contains failed SVG tokens")
+    if metrics.get("pending_tokens") != expected["explicit_pending_tokens"]:
+        raise ValueError(f"{context}: report pending token mismatch")
+    if metrics.get("unexpected_pending") != []:
+        raise ValueError(f"{context}: report contains unexpected pending tokens")
+    if metrics.get("missing_expected_pending") != []:
+        raise ValueError(f"{context}: report misses expected pending tokens")
+
+    forms = report.get("forms", [])
+    names = {item.get("form") for item in forms}
+    if names != EXPECTED_FORMS:
+        raise ValueError(f"{context}: report form set mismatch")
+
+    for item in forms:
+        if item.get("failedTokens"):
+            raise ValueError(f"{context}: {item.get('form')!r} contains failed tokens")
+        visible_count = item.get("visibleCount")
+        tokens = item.get("tokens")
+        if not isinstance(tokens, list) or visible_count != len(tokens):
+            raise ValueError(f"{context}: {item.get('form')!r} visible token count mismatch")
+        expected_pending = ["ń"] if item.get("form") == "taŕśabań" else []
+        if item.get("pending") != expected_pending:
+            raise ValueError(f"{context}: {item.get('form')!r} pending state mismatch")
+
+
+def validate() -> tuple[int, int, int]:
+    matrix = load_json(MATRIX)
     expected = matrix.get("expected", {})
     environments = matrix.get("environments", [])
 
@@ -32,6 +89,7 @@ def validate() -> tuple[int, int]:
 
     browsers = set()
     ids = set()
+    passed = 0
     for index, environment in enumerate(environments):
         context = f"environments[{index}]"
         environment_id = environment.get("id")
@@ -41,8 +99,12 @@ def validate() -> tuple[int, int]:
 
         browser = environment.get("browser")
         browsers.add(browser)
-        if environment.get("status") not in ALLOWED_STATUS:
+        status = environment.get("status")
+        if status not in ALLOWED_STATUS:
             raise ValueError(f"{context}: invalid status")
+        if status == "pass":
+            validate_pass_report(environment, context, expected)
+            passed += 1
 
     missing_browsers = REQUIRED_BROWSERS - browsers
     if missing_browsers:
@@ -63,19 +125,16 @@ def validate() -> tuple[int, int]:
     if missing_markers:
         raise ValueError(f"self-test page lacks safeguards: {missing_markers}")
 
-    for form in [
-        "ildiŕda", "erder", "undikesken", "ars", "ekiar", "egiar",
-        "likine", "taŕśabań", "baisetaś", "seltar", "ebanen",
-    ]:
+    for form in EXPECTED_FORMS:
         if form not in html:
             raise ValueError(f"self-test page lacks form {form!r}")
 
-    return len(environments), len(REQUIRED_BROWSERS)
+    return len(environments), len(REQUIRED_BROWSERS), passed
 
 
 if __name__ == "__main__":
     try:
-        environment_count, browser_count = validate()
+        environment_count, browser_count, passed_count = validate()
     except (OSError, json.JSONDecodeError, KeyError, ValueError) as exc:
         print(f"BROWSER MATRIX VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
@@ -83,5 +142,6 @@ if __name__ == "__main__":
     print(
         "BROWSER MATRIX VALIDATION OK: "
         f"{environment_count} environments; {browser_count} required browsers; "
-        "public self-test covers eleven forms and preserves ń as pending."
+        f"{passed_count} complete pass report(s); public self-test covers eleven "
+        "forms and preserves ń as pending."
     )
