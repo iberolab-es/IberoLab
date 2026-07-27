@@ -23,12 +23,14 @@
 
 - [x] Crear un mapeo gráfico provisional con formas normalizadas de referencia para 18 de los 19 tokens del corpus.
 - [x] Mantener `ń` como token explícitamente pendiente, sin sustituirlo por `n`, `m` o `ḿ`.
-- [x] Añadir un validador que comprueba cobertura, archivos SVG y salvaguardas contra salidas vacías.
+- [x] Integrar los dieciocho SVG de referencia dentro del repositorio y eliminar su dependencia remota durante la navegación.
+- [x] Registrar para cada SVG la fuente, la autoría, la licencia, la ruta local, el tamaño y el hash SHA-256.
+- [x] Añadir pruebas automáticas de existencia, integridad criptográfica, XML válido y ausencia de marcadores activos inseguros.
 - [ ] Diseñar el esquema definitivo para signos, alógrafos y variantes.
 - [ ] Registrar forma, valor, variante, procedencia, cronología, dirección y referencia de cada alógrafo.
-- [ ] Sustituir progresivamente las formas normalizadas por SVG propios derivados de formas documentadas o recursos con licencia compatible.
-- [ ] Reconstruir gráficamente las once formas del corpus sin tokens pendientes.
-- [ ] Crear pruebas de integridad y regresión visual de la base.
+- [ ] Sustituir progresivamente las formas normalizadas por SVG propios derivados de testimonios documentados o por recursos compatibles seleccionados específicamente.
+- [ ] Resolver paleográficamente `ń` o mantenerlo formalmente pendiente si la evidencia no permite una asignación segura.
+- [ ] Crear pruebas automatizadas de regresión visual de la base.
 - [ ] Ampliar después, sin mezclar sistemas, a ibérico meridional, greco-ibérico y celtibérico.
 
 ## Fase 2 — Motor de similitud y adaptación fonética
@@ -49,10 +51,11 @@ Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima 
 - [x] Crear una página de referencia con salida inicial visible, lectura técnica y fallback por token.
 - [x] Preparar `docs/index.html` para publicación desde `/docs` mediante GitHub Pages.
 - [x] Añadir navegación por las once formas, enlaces profundos y fuente documental visible.
-- [x] Verificar manualmente `ildiŕda` en Safari iOS con salida gráfica no vacía.
-- [ ] Revisar manualmente las otras diez formas en Safari iOS, especialmente `taŕśabań`.
-- [ ] Integrar SVG locales verificados para eliminar la dependencia de carga remota.
-- [ ] Verificar compatibilidad real con Chrome, Firefox y Edge de escritorio.
+- [x] Revisar técnicamente las once formas en Safari, Chrome, Brave y Edge sobre iPhone en la implementación remota previa.
+- [x] Integrar SVG locales controlados y adaptar el autodiagnóstico para identificarlos como `local_repository`.
+- [ ] Repetir la prueba completa en Safari, Chrome, Brave y Edge sobre iPhone después del despliegue local.
+- [ ] Verificar compatibilidad real con Chrome, Firefox y Edge ejecutados en ordenador.
+- [ ] Verificar manualmente los enlaces profundos por identificador.
 - [ ] Escritura de izquierda a derecha y derecha a izquierda cuando corresponda.
 - [ ] Copia, descarga y exportación accesible.
 - [ ] Pruebas visuales automatizadas.
@@ -63,7 +66,7 @@ Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima 
 - [x] Disponer de una interfaz pública responsive con salida inicial visible.
 - [x] Explicar públicamente qué hace y qué no hace la herramienta.
 - [x] Enlazar el buzón estructurado de sugerencias de GitHub.
-- [ ] Reconstruir de forma verificable todo el corpus mediante recursos gráficos locales.
+- [ ] Confirmar mediante pruebas manuales que todo el corpus se reconstruye con los recursos locales en móvil y escritorio.
 - [ ] Incorporar la adaptación experimental de entradas modernas mediante el motor de similitud.
 - [ ] Superar la revisión paleográfica, las pruebas multidispositivo y la revisión externa necesarias para etiquetar una beta.
 
