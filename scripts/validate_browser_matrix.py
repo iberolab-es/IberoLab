@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MATRIX = ROOT / "data" / "tests" / "browser-matrix.v1.json"
 TEST_PAGE = ROOT / "docs" / "test.html"
 REQUIRED_BROWSERS = {"Safari", "Chrome", "Firefox", "Edge"}
+REQUIRED_DESKTOP_BROWSERS = {"Chrome", "Firefox", "Edge"}
 ALLOWED_STATUS = {"pending", "partial_pass", "pass", "fail"}
 EXPECTED_FORMS = {
     "ildiŕda", "erder", "undikesken", "ars", "ekiar", "egiar",
@@ -34,6 +35,8 @@ def validate_pass_report(environment: dict, context: str, expected: dict) -> Non
     metrics = report.get("metrics", {})
     if report.get("result") != "pass":
         raise ValueError(f"{context}: linked report result is not pass")
+    if report.get("application") != "IberoLab browser self-test":
+        raise ValueError(f"{context}: unexpected report application")
     if metrics.get("forms_evaluated") != expected["forms_total"]:
         raise ValueError(f"{context}: report does not evaluate all forms")
     if metrics.get("forms_total") != expected["forms_total"]:
@@ -53,6 +56,11 @@ def validate_pass_report(environment: dict, context: str, expected: dict) -> Non
     if metrics.get("missing_expected_pending") != []:
         raise ValueError(f"{context}: report misses expected pending tokens")
 
+    engine_token = environment.get("engine_token_from_user_agent")
+    user_agent = report.get("user_agent", "")
+    if engine_token and engine_token not in user_agent:
+        raise ValueError(f"{context}: report user_agent lacks declared engine token")
+
     forms = report.get("forms", [])
     names = {item.get("form") for item in forms}
     if names != EXPECTED_FORMS:
@@ -70,7 +78,7 @@ def validate_pass_report(environment: dict, context: str, expected: dict) -> Non
             raise ValueError(f"{context}: {item.get('form')!r} pending state mismatch")
 
 
-def validate() -> tuple[int, int, int]:
+def validate() -> tuple[int, int, int, int]:
     matrix = load_json(MATRIX)
     expected = matrix.get("expected", {})
     environments = matrix.get("environments", [])
@@ -88,8 +96,10 @@ def validate() -> tuple[int, int, int]:
         raise ValueError("browser environments must be non-empty")
 
     browsers = set()
+    desktop_browsers = set()
     ids = set()
     passed = 0
+    desktop_passed = 0
     for index, environment in enumerate(environments):
         context = f"environments[{index}]"
         environment_id = environment.get("id")
@@ -98,17 +108,33 @@ def validate() -> tuple[int, int, int]:
         ids.add(environment_id)
 
         browser = environment.get("browser")
+        platform = environment.get("platform")
+        device_class = environment.get("device_class")
         browsers.add(browser)
+        if platform == "desktop" and device_class == "desktop":
+            desktop_browsers.add(browser)
+
         status = environment.get("status")
         if status not in ALLOWED_STATUS:
             raise ValueError(f"{context}: invalid status")
         if status == "pass":
             validate_pass_report(environment, context, expected)
             passed += 1
+            if platform == "desktop" and device_class == "desktop":
+                desktop_passed += 1
+
+        if environment.get("presentation_mode") == "request_desktop_site" and platform == "desktop":
+            raise ValueError(f"{context}: request_desktop_site must not be classified as desktop platform")
 
     missing_browsers = REQUIRED_BROWSERS - browsers
     if missing_browsers:
         raise ValueError(f"browser matrix lacks: {sorted(missing_browsers)}")
+
+    missing_desktop_targets = REQUIRED_DESKTOP_BROWSERS - desktop_browsers
+    if missing_desktop_targets:
+        raise ValueError(
+            f"browser matrix lacks explicit desktop targets: {sorted(missing_desktop_targets)}"
+        )
 
     html = TEST_PAGE.read_text(encoding="utf-8")
     markers = [
@@ -129,12 +155,12 @@ def validate() -> tuple[int, int, int]:
         if form not in html:
             raise ValueError(f"self-test page lacks form {form!r}")
 
-    return len(environments), len(REQUIRED_BROWSERS), passed
+    return len(environments), len(REQUIRED_BROWSERS), passed, desktop_passed
 
 
 if __name__ == "__main__":
     try:
-        environment_count, browser_count, passed_count = validate()
+        environment_count, browser_count, passed_count, desktop_passed_count = validate()
     except (OSError, json.JSONDecodeError, KeyError, ValueError) as exc:
         print(f"BROWSER MATRIX VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
@@ -142,6 +168,7 @@ if __name__ == "__main__":
     print(
         "BROWSER MATRIX VALIDATION OK: "
         f"{environment_count} environments; {browser_count} required browsers; "
-        f"{passed_count} complete pass report(s); public self-test covers eleven "
-        "forms and preserves ń as pending."
+        f"{passed_count} complete pass report(s), of which {desktop_passed_count} "
+        "are true desktop environments; public self-test covers eleven forms and "
+        "preserves ń as pending."
     )
