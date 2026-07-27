@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentación del proyecto
+    url: https://github.com/iberolab-es/IberoLab#readme
+    about: Consulta primero el alcance, los límites y la hoja de ruta de IberoLab.
