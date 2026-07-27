@@ -10,8 +10,11 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import time
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
@@ -19,10 +22,14 @@ from xml.etree import ElementTree
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / "docs" / "assets" / "signs" / "northeastern-dual"
 MANIFEST = ROOT / "data" / "signs" / "reference-standard-dual.assets.v1.json"
+ERROR_LOG = ROOT / "data" / "signs" / "vendor-error.log"
 SOURCE_BASE = "https://commons.wikimedia.org/wiki/Special:Redirect/file/"
 FILE_PAGE_BASE = "https://commons.wikimedia.org/wiki/File:"
-USER_AGENT = "IberoLab/1.0 (+https://github.com/iberolab-es/IberoLab)"
+USER_AGENT = "IberoLab/1.0 (+https://github.com/iberolab-es/IberoLab; contact: iberolab.es@gmail.com)"
 MAX_BYTES = 1_000_000
+MAX_ATTEMPTS = 5
+REQUEST_INTERVAL_SECONDS = 7.0
+RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
 
 SIGN_SPECS = [
     ("a", "dual-01-a", "Sign Iber Noro Dual 01 A.svg"),
@@ -54,16 +61,62 @@ FORBIDDEN_MARKERS = (
 )
 
 
+def retry_delay(exc: HTTPError | URLError, attempt: int) -> float:
+    if isinstance(exc, HTTPError):
+        retry_after = exc.headers.get("Retry-After")
+        if retry_after:
+            try:
+                return max(1.0, float(retry_after))
+            except ValueError:
+                try:
+                    retry_at = parsedate_to_datetime(retry_after)
+                    return max(1.0, retry_at.timestamp() - time.time())
+                except (TypeError, ValueError, OverflowError):
+                    pass
+        if exc.code == 429:
+            return max(60.0, 15.0 * attempt)
+    return min(120.0, 10.0 * (2 ** (attempt - 1)))
+
+
 def fetch_svg(file_name: str) -> tuple[bytes, str, str | None]:
     source_url = SOURCE_BASE + quote(file_name)
-    request = Request(source_url, headers={"User-Agent": USER_AGENT, "Accept": "image/svg+xml,*/*;q=0.8"})
-    with urlopen(request, timeout=45) as response:
-        media_type = response.headers.get_content_type()
-        final_url = response.geturl()
-        data = response.read(MAX_BYTES + 1)
-    if len(data) > MAX_BYTES:
-        raise ValueError(f"{file_name}: resource exceeds {MAX_BYTES} bytes")
-    return data, final_url, media_type
+    last_error: HTTPError | URLError | None = None
+
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        request = Request(
+            source_url,
+            headers={
+                "User-Agent": USER_AGENT,
+                "Accept": "image/svg+xml,*/*;q=0.8",
+                "Accept-Encoding": "identity",
+            },
+        )
+        try:
+            with urlopen(request, timeout=60) as response:
+                media_type = response.headers.get_content_type()
+                final_url = response.geturl()
+                data = response.read(MAX_BYTES + 1)
+            if len(data) > MAX_BYTES:
+                raise ValueError(f"{file_name}: resource exceeds {MAX_BYTES} bytes")
+            return data, final_url, media_type
+        except HTTPError as exc:
+            last_error = exc
+            if exc.code not in RETRYABLE_HTTP_CODES or attempt == MAX_ATTEMPTS:
+                raise
+        except URLError as exc:
+            last_error = exc
+            if attempt == MAX_ATTEMPTS:
+                raise
+
+        delay = retry_delay(last_error, attempt)
+        print(
+            f"retry {attempt}/{MAX_ATTEMPTS} for {file_name} after {delay:.0f}s: {last_error}",
+            file=sys.stderr,
+            flush=True,
+        )
+        time.sleep(delay)
+
+    raise RuntimeError(f"{file_name}: exhausted retries: {last_error}")
 
 
 def validate_svg(data: bytes, file_name: str) -> None:
@@ -85,7 +138,9 @@ def main() -> int:
     ASSET_DIR.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, object]] = []
 
-    for token, reference_id, file_name in SIGN_SPECS:
+    for index, (token, reference_id, file_name) in enumerate(SIGN_SPECS):
+        if index:
+            time.sleep(REQUEST_INTERVAL_SECONDS)
         data, final_url, media_type = fetch_svg(file_name)
         validate_svg(data, file_name)
         local_name = f"{reference_id}.svg"
@@ -109,7 +164,11 @@ def main() -> int:
                 "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
             }
         )
-        print(f"vendored {token:>2} -> {local_path.relative_to(ROOT)} ({len(data)} bytes, {digest[:12]})")
+        print(
+            f"vendored {token:>2} -> {local_path.relative_to(ROOT)} "
+            f"({len(data)} bytes, {digest[:12]})",
+            flush=True,
+        )
 
     manifest = {
         "schema_version": "1.0.0",
@@ -132,6 +191,7 @@ def main() -> int:
     }
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    ERROR_LOG.unlink(missing_ok=True)
     print(f"manifest written: {MANIFEST.relative_to(ROOT)} ({len(records)} assets)")
     return 0
 
