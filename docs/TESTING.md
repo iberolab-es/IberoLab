@@ -28,9 +28,28 @@ IberoLab mantiene una matriz versionada de pruebas en `data/tests/browser-matrix
 5. Pulsar **Copiar informe**.
 6. Adjuntar el JSON a la issue #6, indicando cualquier anomalía visual que la prueba automática no detecte.
 
+## Resultados registrados
+
+### Safari en iPhone — prueba completa satisfactoria
+
+El 27 de julio de 2026 se registró una ejecución completa proporcionada por la persona propietaria del repositorio:
+
+- 11 de 11 formas evaluadas;
+- 18 de 18 SVG cargados;
+- 0 recursos gráficos fallidos;
+- 0 salidas vacías;
+- `ń` conservado como único token explícitamente pendiente en `taŕśabań`;
+- diseño responsive y contenido legible en las capturas aportadas.
+
+El informe íntegro se conserva en `data/tests/reports/2026-07-27-safari-ios-iphone.json`. La versión y el token de sistema operativo se registran exactamente como los declara el `user_agent`; no se reinterpretan como identificación inequívoca de la versión instalada.
+
+Esta prueba no cubre todavía los enlaces profundos por identificador y deberá repetirse cuando los SVG remotos sean sustituidos por recursos locales.
+
 ## Privacidad
 
 La prueba se ejecuta localmente en el navegador. No envía los resultados a ningún servidor de IberoLab. El informe solo sale del dispositivo cuando la persona lo copia y lo aporta voluntariamente.
+
+El informe versionado incluye metadatos técnicos del navegador facilitados voluntariamente para reproducibilidad, pero no incorpora dirección IP, identificadores de cuenta ni datos personales declarados por la aplicación.
 
 ## Estados de la matriz
 
