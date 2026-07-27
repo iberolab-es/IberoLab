@@ -1,0 +1,50 @@
+name: Vendor reference SVGs
+
+on:
+  push:
+    branches: [feat/vendor-reference-svgs]
+    paths:
+      - scripts/vendor_reference_svgs.py
+      - .github/workflows/vendor-reference-svgs.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/vendor-reference-svgs
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download, validate and inventory SVG resources
+        run: python scripts/vendor_reference_svgs.py
+
+      - name: Check generated files
+        run: |
+          test -f data/signs/reference-standard-dual.assets.v1.json
+          test "$(find docs/assets/signs/northeastern-dual -maxdepth 1 -type f -name '*.svg' | wc -l)" -eq 18
+          git diff --check
+
+      - name: Commit generated assets to the feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/assets/signs/northeastern-dual data/signs/reference-standard-dual.assets.v1.json
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "Vendor CC0 reference SVG assets [skip ci]"
+          git push origin HEAD:feat/vendor-reference-svgs
