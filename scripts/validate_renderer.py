@@ -27,10 +27,14 @@ def main() -> int:
     for token in sorted(used):
         item = signs[token]
         status = item.get("graphic_status")
-        if status == "reference_svg_available":
-            name = item.get("file_name")
-            if not name or not name.endswith(".svg"):
-                raise ValueError(f"{token!r}: invalid SVG filename")
+        if status == "local_reference_svg_available":
+            local_path = item.get("local_path")
+            if not isinstance(local_path, str) or not local_path.endswith(".svg"):
+                raise ValueError(f"{token!r}: invalid local SVG path")
+            if not local_path.startswith("docs/assets/signs/northeastern-dual/"):
+                raise ValueError(f"{token!r}: local SVG path is outside the controlled asset directory")
+            if not (ROOT / local_path).is_file():
+                raise ValueError(f"{token!r}: local SVG does not exist")
             available += 1
         elif status and status.startswith("pending_"):
             unresolved.append(token)
@@ -51,10 +55,14 @@ def main() -> int:
         "rendererReady",
         "No es una traducción al idioma ibérico",
         "Referencia normalizada",
+        "Recursos gráficos locales de referencia",
     ]
     absent = [marker for marker in required_markers if marker not in html]
     if absent:
         raise ValueError(f"HTML lacks required safeguards: {absent}")
+
+    if "Special:Redirect/file" in html or "COMMONS_REDIRECT" in html:
+        raise ValueError("public renderer still contains a remote SVG dependency")
 
     absent_forms = [item["id"] for item in corpus["forms"] if item["id"] not in html]
     if absent_forms:
@@ -65,9 +73,9 @@ def main() -> int:
 
     print(
         "RENDERER VALIDATION OK: "
-        f"{len(corpus['forms'])} forms; {available} SVG mappings; "
+        f"{len(corpus['forms'])} forms; {available} local SVG mappings; "
         f"{len(unresolved)} explicit unresolved token(s): "
-        f"{', '.join(unresolved) or 'none'}; evidence and navigation safeguards present."
+        f"{', '.join(unresolved) or 'none'}; evidence, navigation and local-only delivery safeguards present."
     )
     return 0
 
