@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "matrix_id": "iberolab-browser-matrix",
   "updated_on": "2026-07-28",
   "test_page": "https://iberolab-es.github.io/IberoLab/test.html",
@@ -16,24 +16,14 @@
       "browser": "Safari",
       "browser_version_from_user_agent": "26.4",
       "device_class": "iPhone",
+      "presentation_mode": "mobile",
+      "engine_token_from_user_agent": "AppleWebKit/605.1.15",
       "user_agent_os_token": "iPhone OS 18_7",
       "status": "pass",
       "verified_on": "2026-07-27",
       "report_file": "data/tests/reports/2026-07-27-safari-ios-iphone.json",
       "coverage": {
-        "forms_checked": [
-          "ib-ne-ildirda-001",
-          "ib-ne-erder-001",
-          "ib-ne-undikesken-001",
-          "ib-ne-ars-001",
-          "ib-ne-ekiar-001",
-          "ib-ne-egiar-001",
-          "ib-ne-likine-001",
-          "ib-ne-tarsaban-001",
-          "ib-ne-baisetas-001",
-          "ib-ne-seltar-001",
-          "ib-ne-ebanen-001"
-        ],
+        "forms_checked": ["ib-ne-ildirda-001", "ib-ne-erder-001", "ib-ne-undikesken-001", "ib-ne-ars-001", "ib-ne-ekiar-001", "ib-ne-egiar-001", "ib-ne-likine-001", "ib-ne-tarsaban-001", "ib-ne-baisetas-001", "ib-ne-seltar-001", "ib-ne-ebanen-001"],
         "forms_evaluated": 11,
         "visible_output": true,
         "responsive_layout": true,
@@ -47,10 +37,82 @@
         "deep_links_checked": false
       },
       "evidence": "The repository owner supplied screenshots and the complete browser self-test JSON. All eleven forms produced visible output, all eighteen mapped SVG resources loaded and taŕśabań preserved ń as an explicit pending token.",
-      "pending": [
-        "Verify deep links by form identifier.",
-        "Repeat the complete test after remote SVG resources are replaced with local repository assets."
-      ]
+      "pending": ["Verify deep links by form identifier.", "Repeat the complete test after remote SVG resources are replaced with local repository assets."]
+    },
+    {
+      "id": "chrome-ios-iphone-desktop-mode-001",
+      "platform": "iOS",
+      "browser": "Chrome",
+      "browser_version_from_user_agent": "CriOS/150",
+      "device_class": "iPhone",
+      "presentation_mode": "request_desktop_site",
+      "engine_token_from_user_agent": "AppleWebKit/605.1.15",
+      "status": "pass",
+      "verified_on": "2026-07-27",
+      "report_file": "data/tests/reports/2026-07-27-chrome-ios-desktop-mode.json",
+      "coverage": {
+        "forms_evaluated": 11,
+        "visible_output": true,
+        "self_test_page": true,
+        "svg_loaded": 18,
+        "svg_failed": 0,
+        "empty_outputs": 0,
+        "pending_tokens": ["ń"],
+        "unexpected_pending": [],
+        "deep_links_checked": false
+      },
+      "evidence": "Complete pass report supplied from Chrome on iPhone with desktop-site presentation. The user agent declares AppleWebKit/605.1.15, so this does not replace a Chrome desktop-engine test.",
+      "pending": ["Repeat after local SVG integration.", "Retain the separate Chrome desktop environment as pending."]
+    },
+    {
+      "id": "brave-ios-iphone-desktop-mode-001",
+      "platform": "iOS",
+      "browser": "Brave",
+      "browser_version_from_user_agent": "not unambiguously declared",
+      "device_class": "iPhone",
+      "presentation_mode": "request_desktop_site",
+      "engine_token_from_user_agent": "AppleWebKit/605.1.15",
+      "status": "pass",
+      "verified_on": "2026-07-27",
+      "report_file": "data/tests/reports/2026-07-27-brave-ios-desktop-mode.json",
+      "coverage": {
+        "forms_evaluated": 11,
+        "visible_output": true,
+        "self_test_page": true,
+        "svg_loaded": 18,
+        "svg_failed": 0,
+        "empty_outputs": 0,
+        "pending_tokens": ["ń"],
+        "unexpected_pending": [],
+        "deep_links_checked": false
+      },
+      "evidence": "Complete pass report supplied from Brave on iPhone with desktop-site presentation. The user agent declares AppleWebKit/605.1.15 and a Brave marker.",
+      "pending": ["Repeat after local SVG integration."]
+    },
+    {
+      "id": "edge-ios-iphone-desktop-mode-001",
+      "platform": "iOS",
+      "browser": "Edge",
+      "browser_version_from_user_agent": "EdgiOS/150",
+      "device_class": "iPhone",
+      "presentation_mode": "request_desktop_site",
+      "engine_token_from_user_agent": "AppleWebKit/605.1.15",
+      "status": "pass",
+      "verified_on": "2026-07-27",
+      "report_file": "data/tests/reports/2026-07-27-edge-ios-desktop-mode.json",
+      "coverage": {
+        "forms_evaluated": 11,
+        "visible_output": true,
+        "self_test_page": true,
+        "svg_loaded": 18,
+        "svg_failed": 0,
+        "empty_outputs": 0,
+        "pending_tokens": ["ń"],
+        "unexpected_pending": [],
+        "deep_links_checked": false
+      },
+      "evidence": "Complete pass report supplied from Edge on iPhone with desktop-site presentation. The user agent declares AppleWebKit/605.1.15, so this does not replace an Edge desktop-engine test.",
+      "pending": ["Repeat after local SVG integration.", "Retain the separate Edge desktop environment as pending."]
     },
     {
       "id": "chrome-desktop-pending",
