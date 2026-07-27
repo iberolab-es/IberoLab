@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate coverage of the provisional reference renderer."""
+"""Validate coverage and public safeguards of the provisional renderer."""
 from __future__ import annotations
 
 import json
@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "data" / "corpus" / "attested-forms.v1.json"
 MAPPING = ROOT / "data" / "signs" / "reference-standard-dual.v1.json"
+HTML = ROOT / "docs" / "index.html"
 
 
 def main() -> int:
@@ -16,12 +17,13 @@ def main() -> int:
     mapping = json.loads(MAPPING.read_text(encoding="utf-8"))
     signs = {item["token"]: item for item in mapping["signs"]}
     used = {token for form in corpus["forms"] for token in form["grapheme_sequence"]}
+
     missing = sorted(used - signs.keys())
     if missing:
         raise ValueError(f"Tokens absent from renderer mapping: {missing}")
 
     available = 0
-    unresolved = []
+    unresolved: list[str] = []
     for token in sorted(used):
         item = signs[token]
         status = item.get("graphic_status")
@@ -35,16 +37,37 @@ def main() -> int:
         else:
             raise ValueError(f"{token!r}: unknown graphic status {status!r}")
 
-    html = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
-    required_markers = ["renderForm", "glyph-fallback", "DOMContentLoaded"]
-    absent_markers = [marker for marker in required_markers if marker not in html]
-    if absent_markers:
-        raise ValueError(f"HTML lacks required safeguards: {absent_markers}")
+    html = HTML.read_text(encoding="utf-8")
+    required_markers = [
+        "renderForm",
+        "glyph-fallback",
+        "DOMContentLoaded",
+        "sourceLink",
+        "evidenceText",
+        "transcriptionNote",
+        "previousButton",
+        "nextButton",
+        "hashchange",
+        "rendererReady",
+        "No es una traducción al idioma ibérico",
+        "Referencia normalizada",
+    ]
+    absent = [marker for marker in required_markers if marker not in html]
+    if absent:
+        raise ValueError(f"HTML lacks required safeguards: {absent}")
+
+    absent_forms = [item["id"] for item in corpus["forms"] if item["id"] not in html]
+    if absent_forms:
+        raise ValueError(f"HTML lacks corpus entries: {absent_forms}")
+
+    if unresolved != ["ń"]:
+        raise ValueError(f"expected only explicit unresolved token ń, got {unresolved}")
 
     print(
         "RENDERER VALIDATION OK: "
         f"{len(corpus['forms'])} forms; {available} SVG mappings; "
-        f"{len(unresolved)} explicit unresolved token(s): {', '.join(unresolved) or 'none'}."
+        f"{len(unresolved)} explicit unresolved token(s): "
+        f"{', '.join(unresolved) or 'none'}; evidence and navigation safeguards present."
     )
     return 0
 
