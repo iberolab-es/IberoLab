@@ -56,7 +56,7 @@ def validate() -> tuple[int, int]:
         "failed_svg_tokens",
         "navigator.userAgent",
         "navigator.clipboard",
-        "data-self-test",
+        "dataset.selfTest",
         "No valida la exactitud paleográfica",
     ]
     missing_markers = [marker for marker in markers if marker not in html]
