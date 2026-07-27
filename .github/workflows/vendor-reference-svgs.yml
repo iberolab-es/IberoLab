@@ -1,8 +1,8 @@
 name: Vendor reference SVGs
 
 on:
-  push:
-    branches: [feat/vendor-reference-svgs]
+  pull_request:
+    branches: [main]
     paths:
       - scripts/vendor_reference_svgs.py
       - .github/workflows/vendor-reference-svgs.yml
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   vendor:
-    if: github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]' && github.head_ref == 'feat/vendor-reference-svgs'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
