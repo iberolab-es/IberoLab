@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iberolab-es/IberoLab/blob/main/data/schema/attested-forms.schema.json",
+  "title": "IberoLab attested forms corpus",
+  "type": "object",
+  "required": ["schema_version", "dataset_id", "dataset_status", "scope", "forms"],
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "dataset_id": {"type": "string", "minLength": 3},
+    "dataset_status": {"enum": ["research_seed", "reviewed", "published"]},
+    "scope": {
+      "type": "object",
+      "required": ["language", "script", "purpose", "exclusions"]
+    },
+    "forms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "form", "category", "reading_confidence", "semantic_status", "interpretation", "grapheme_sequence", "attestation_note", "sources"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^ib-ne-[a-z0-9-]+-[0-9]{3}$"},
+          "form": {"type": "string", "minLength": 1},
+          "category": {"type": "string", "minLength": 3},
+          "reading_confidence": {"enum": ["low", "medium", "high", "very_high"]},
+          "semantic_status": {"enum": ["uninterpreted", "disputed", "supported_hypothesis", "contextually_supported", "identified_name", "identified_referent"]},
+          "interpretation": {"type": "string", "minLength": 10},
+          "grapheme_sequence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "attestation_note": {"type": "string", "minLength": 10},
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["citation", "url", "evidence_role"],
+              "properties": {
+                "citation": {"type": "string", "minLength": 10},
+                "doi": {"type": "string"},
+                "url": {"type": "string", "pattern": "^https://"},
+                "evidence_role": {"type": "string", "minLength": 3}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

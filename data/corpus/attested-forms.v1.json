@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_id": "iberolab-attested-forms-seed",
+  "dataset_status": "research_seed",
+  "scope": {
+    "language": "Iberian",
+    "script": "Northeastern Iberian",
+    "purpose": "Seed corpus of attested scholarly transcriptions used to derive the minimum sign inventory and test future rendering.",
+    "exclusions": [
+      "Modern personal names",
+      "Modern place names",
+      "Free conversion from Spanish",
+      "Unlabelled semantic translations"
+    ]
+  },
+  "forms": [
+    {
+      "id": "ib-ne-ildirda-001",
+      "form": "ildiŕda",
+      "category": "toponymic_coin_legend",
+      "reading_confidence": "high",
+      "semantic_status": "identified_referent",
+      "interpretation": "Toponymic mint legend; no lexical translation is asserted.",
+      "grapheme_sequence": ["i", "l", "di", "ŕ", "da"],
+      "attestation_note": "Coin legend discussed together with the secondary legend erder.",
+      "sources": [
+        {
+          "citation": "Ferrer i Jané, Joan; Giral Royo, Francesc (2007). A propósito de un semis de ildiŕda con leyenda erder.",
+          "doi": "10.36707/palaeohispanica.v0i7.277",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i7.277",
+          "evidence_role": "reading_and_context"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-erder-001",
+      "form": "erder",
+      "category": "monetary_value_mark",
+      "reading_confidence": "high",
+      "semantic_status": "supported_hypothesis",
+      "interpretation": "Interpreted in the cited study as a value mark equivalent to one half; stored as a scholarly hypothesis, not as an absolute translation.",
+      "grapheme_sequence": ["e", "r", "de", "r"],
+      "attestation_note": "Secondary legend on a semis of ildiŕda and compared with other quantitative contexts.",
+      "sources": [
+        {
+          "citation": "Ferrer i Jané, Joan; Giral Royo, Francesc (2007). A propósito de un semis de ildiŕda con leyenda erder.",
+          "doi": "10.36707/palaeohispanica.v0i7.277",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i7.277",
+          "evidence_role": "reading_and_interpretation"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-undikesken-001",
+      "form": "undikesken",
+      "category": "ethnonymic_or_mint_legend",
+      "reading_confidence": "high",
+      "semantic_status": "identified_referent",
+      "interpretation": "Attested monetary legend used as a comparator; no word-for-word translation is asserted.",
+      "grapheme_sequence": ["u", "n", "di", "ke", "s", "ke", "n"],
+      "attestation_note": "Mentioned in the analysis of erder as part of a semis value formula.",
+      "sources": [
+        {
+          "citation": "Ferrer i Jané, Joan; Giral Royo, Francesc (2007). A propósito de un semis de ildiŕda con leyenda erder.",
+          "doi": "10.36707/palaeohispanica.v0i7.277",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i7.277",
+          "evidence_role": "reading_and_context"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-ars-001",
+      "form": "ars",
+      "category": "mint_legend",
+      "reading_confidence": "high",
+      "semantic_status": "identified_referent",
+      "interpretation": "Attested mint legend in the cited monetary comparison; no lexical translation is asserted.",
+      "grapheme_sequence": ["a", "r", "s"],
+      "attestation_note": "Referenced in connection with a hemidrachm bearing a related value mark.",
+      "sources": [
+        {
+          "citation": "Ferrer i Jané, Joan; Giral Royo, Francesc (2007). A propósito de un semis de ildiŕda con leyenda erder.",
+          "doi": "10.36707/palaeohispanica.v0i7.277",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i7.277",
+          "evidence_role": "reading_and_context"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-ekiar-001",
+      "form": "ekiar",
+      "category": "authorship_formula_term",
+      "reading_confidence": "high",
+      "semantic_status": "contextually_supported",
+      "interpretation": "Term associated in scholarship with an authorship or production formula; exact grammatical value remains open.",
+      "grapheme_sequence": ["e", "ki", "a", "r"],
+      "attestation_note": "Documented in an Iberian authorship formula and discussed in the Caminreal mosaic literature.",
+      "sources": [
+        {
+          "citation": "Moncunill Martí, Noemí; Francès, Joan (2017). Un nuevo cálato inscrito de Ca n'Oliver.",
+          "url": "https://hdl.handle.net/2445/217431",
+          "evidence_role": "reading_and_formula"
+        },
+        {
+          "citation": "Simón Cornago, Ignacio (2015). Treinta años de investigaciones sobre la inscripción musiva de Caminreal.",
+          "doi": "10.36707/palaeohispanica.v0i15.39",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i15.39",
+          "evidence_role": "research_review"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-egiar-001",
+      "form": "egiar",
+      "category": "authorship_formula_variant",
+      "reading_confidence": "high",
+      "semantic_status": "contextually_supported",
+      "interpretation": "Documented phonetic or orthographic variant of ekiar in an authorship formula.",
+      "grapheme_sequence": ["e", "gi", "a", "r"],
+      "attestation_note": "Variant explicitly presented as ekiar/egiar in the cited study.",
+      "sources": [
+        {
+          "citation": "Moncunill Martí, Noemí; Francès, Joan (2017). Un nuevo cálato inscrito de Ca n'Oliver.",
+          "url": "https://hdl.handle.net/2445/217431",
+          "evidence_role": "reading_and_variant"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-likine-001",
+      "form": "likine",
+      "category": "anthroponym",
+      "reading_confidence": "high",
+      "semantic_status": "identified_name",
+      "interpretation": "Personal name discussed in the Caminreal mosaic inscription.",
+      "grapheme_sequence": ["l", "i", "ki", "n", "e"],
+      "attestation_note": "One of the principal elements reviewed in scholarship on the Caminreal mosaic.",
+      "sources": [
+        {
+          "citation": "Simón Cornago, Ignacio (2015). Treinta años de investigaciones sobre la inscripción musiva de Caminreal.",
+          "doi": "10.36707/palaeohispanica.v0i15.39",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i15.39",
+          "evidence_role": "reading_and_onomastic_context"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-tarsaban-001",
+      "form": "taŕśabań",
+      "category": "anthroponym",
+      "reading_confidence": "very_high",
+      "semantic_status": "identified_name",
+      "interpretation": "Personal name identified as the owner of two Attic skyphoi and probably of the associated household.",
+      "grapheme_sequence": ["ta", "ŕ", "ś", "a", "ba", "ń"],
+      "attestation_note": "The full sequence taŕśabańar completes an earlier fragment taŕśa[; the cited paper isolates the name taŕśabań.",
+      "sources": [
+        {
+          "citation": "Ferrer i Jané, Joan et al. (2025). La casa de Taŕśabań.",
+          "doi": "10.36707/palaeohispanica.v25i1.703",
+          "url": "https://doi.org/10.36707/palaeohispanica.v25i1.703",
+          "evidence_role": "reading_identification_and_context"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-baisetas-001",
+      "form": "baisetaś",
+      "category": "anthroponym",
+      "reading_confidence": "high",
+      "semantic_status": "identified_name",
+      "interpretation": "Personal name in the Sinarcas funerary inscription; the precise syntactic role in the full text remains debated.",
+      "grapheme_sequence": ["ba", "i", "s", "e", "ta", "ś"],
+      "attestation_note": "Part of the updated philological study of the Sinarcas stele.",
+      "sources": [
+        {
+          "citation": "Quixal Santos, David; Ferrer i Jané, Joan; Iranzo Viana, Pascual (2024). Nuevas miradas a la estela de Sinarcas.",
+          "url": "https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4",
+          "evidence_role": "reading_and_funerary_context"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-seltar-001",
+      "form": "seltar",
+      "category": "funerary_lexeme",
+      "reading_confidence": "high",
+      "semantic_status": "contextually_supported",
+      "interpretation": "Widely treated in the cited funerary analysis as referring to the tomb or funerary monument; retained as a contextual interpretation.",
+      "grapheme_sequence": ["s", "e", "l", "ta", "r"],
+      "attestation_note": "Occurs in the Sinarcas stele within a funerary context.",
+      "sources": [
+        {
+          "citation": "Quixal Santos, David; Ferrer i Jané, Joan; Iranzo Viana, Pascual (2024). Nuevas miradas a la estela de Sinarcas.",
+          "url": "https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4",
+          "evidence_role": "reading_and_contextual_interpretation"
+        },
+        {
+          "citation": "Moncunill Martí, Noemí (2017). Nombres comunes en ibérico y su inserción dentro de la frase.",
+          "doi": "10.36707/palaeohispanica.v0i17.137",
+          "url": "https://doi.org/10.36707/palaeohispanica.v0i17.137",
+          "evidence_role": "common_noun_methodology"
+        }
+      ]
+    },
+    {
+      "id": "ib-ne-ebanen-001",
+      "form": "ebanen",
+      "category": "funerary_formula_term",
+      "reading_confidence": "high",
+      "semantic_status": "disputed",
+      "interpretation": "Attested sequence whose grammatical and semantic analysis remains disputed; no translation is assigned.",
+      "grapheme_sequence": ["e", "ba", "n", "e", "n"],
+      "attestation_note": "Discussed in competing analyses of the Sinarcas funerary formula.",
+      "sources": [
+        {
+          "citation": "Quixal Santos, David; Ferrer i Jané, Joan; Iranzo Viana, Pascual (2024). Nuevas miradas a la estela de Sinarcas.",
+          "url": "https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4",
+          "evidence_role": "reading_and_interpretive_history"
+        }
+      ]
+    }
+  ]
+}
