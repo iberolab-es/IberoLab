@@ -79,3 +79,10 @@ El informe versionado incluye metadatos técnicos del navegador facilitados volu
 ## Criterio de avance
 
 La fase de navegadores no se considera completa hasta registrar pruebas satisfactorias en Safari iOS y en Chrome, Firefox y Edge ejecutados realmente en un ordenador. Las pruebas de aplicaciones iOS con «sitio de escritorio» amplían la cobertura móvil, pero no cubren los motores ni el entorno de escritorio. Superar el diagnóstico técnico no sustituye la revisión paleográfica externa.
+
+
+## Transición a recursos locales
+
+Desde la revisión que integra `reference-standard-dual.assets.v1.json`, la página pública carga los 18 SVG desde el propio repositorio. Los informes móviles anteriores se conservan como evidencia histórica de la implementación remota, pero pasan a `partial_pass` hasta repetir el diagnóstico con los recursos locales desplegados.
+
+El modo «sitio de escritorio» en iPhone continúa siendo una prueba iOS basada en WebKit y no sustituye Chrome, Firefox o Edge ejecutados realmente en un ordenador.

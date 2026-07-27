@@ -193,7 +193,7 @@
   </section>
 
   <footer>
-    Recursos gráficos provisionales: serie “Sign Iber Noro Dual 01–38”, BotaFlo, Wikimedia Commons, CC0. La auditoría documental está versionada en el repositorio y las grafías específicas de cada testimonio siguen en revisión.<br><br>
+    Recursos gráficos locales de referencia: 18 SVG de la serie “Sign Iber Noro Dual 01–38”, BotaFlo, Wikimedia Commons, CC0. Su procedencia, URL resuelta, tamaño y SHA-256 están versionados en el manifiesto del repositorio. Las grafías específicas de cada testimonio siguen en revisión.<br><br>
     ¿Has detectado un error o dispones de una fuente que pueda mejorar el proyecto? <a href="https://github.com/iberolab-es/IberoLab/issues/new/choose" target="_blank" rel="noopener noreferrer">Enviar una sugerencia o aportación</a>.
   </footer>
 </main>
@@ -202,27 +202,26 @@
 (() => {
   "use strict";
 
-  const COMMONS_REDIRECT = "https://commons.wikimedia.org/wiki/Special:Redirect/file/";
 
   const SIGNS = {
-    "a":  "Sign Iber Noro Dual 01 A.svg",
-    "e":  "Sign Iber Noro Dual 02 E.svg",
-    "i":  "Sign Iber Noro Dual 03 I.svg",
-    "u":  "Sign Iber Noro Dual 05 U.svg",
-    "gi": "Sign Iber Noro Dual 08 GI.svg",
-    "ke": "Sign Iber Noro Dual 12 KE.svg",
-    "ki": "Sign Iber Noro Dual 13 KI.svg",
-    "ba": "Sign Iber Noro Dual 16 BA.svg",
-    "da": "Sign Iber Noro Dual 21 DA.svg",
-    "de": "Sign Iber Noro Dual 22 DE.svg",
-    "di": "Sign Iber Noro Dual 23 DI.svg",
-    "ta": "Sign Iber Noro Dual 26 TA.svg",
-    "s":  "Sign Iber Noro Dual 31 S.svg",
-    "ś":  "Sign Iber Noro Dual 32 Ś.svg",
-    "r":  "Sign Iber Noro Dual 33 R.svg",
-    "ŕ":  "Sign Iber Noro Dual 34 Ŕ.svg",
-    "l":  "Sign Iber Noro Dual 35 L.svg",
-    "n":  "Sign Iber Noro Dual 37 N.svg"
+    "a": "assets/signs/northeastern-dual/dual-01-a.svg",
+    "e": "assets/signs/northeastern-dual/dual-02-e.svg",
+    "i": "assets/signs/northeastern-dual/dual-03-i.svg",
+    "u": "assets/signs/northeastern-dual/dual-05-u.svg",
+    "gi": "assets/signs/northeastern-dual/dual-08-gi.svg",
+    "ke": "assets/signs/northeastern-dual/dual-12-ke.svg",
+    "ki": "assets/signs/northeastern-dual/dual-13-ki.svg",
+    "ba": "assets/signs/northeastern-dual/dual-16-ba.svg",
+    "da": "assets/signs/northeastern-dual/dual-21-da.svg",
+    "de": "assets/signs/northeastern-dual/dual-22-de.svg",
+    "di": "assets/signs/northeastern-dual/dual-23-di.svg",
+    "ta": "assets/signs/northeastern-dual/dual-26-ta.svg",
+    "s": "assets/signs/northeastern-dual/dual-31-s.svg",
+    "ś": "assets/signs/northeastern-dual/dual-32-s2.svg",
+    "r": "assets/signs/northeastern-dual/dual-33-r.svg",
+    "ŕ": "assets/signs/northeastern-dual/dual-34-r2.svg",
+    "l": "assets/signs/northeastern-dual/dual-35-l.svg",
+    "n": "assets/signs/northeastern-dual/dual-37-n.svg"
   };
 
   const FORMS = [
@@ -331,8 +330,8 @@
   const evidenceText = document.getElementById("evidenceText");
   const sourceLink = document.getElementById("sourceLink");
 
-  function assetUrl(fileName) {
-    return COMMONS_REDIRECT + encodeURIComponent(fileName);
+  function assetUrl(localPath) {
+    return localPath;
   }
 
   function createCard(token) {
@@ -348,7 +347,6 @@
       const image = document.createElement("img");
       image.alt = `Signo ibérico normalizado de referencia para ${token}`;
       image.loading = "eager";
-      image.referrerPolicy = "no-referrer";
       image.src = assetUrl(fileName);
       image.addEventListener("error", () => {
         card.classList.add("failed");

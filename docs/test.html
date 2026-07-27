@@ -79,17 +79,25 @@
 <script>
 (() => {
   "use strict";
-  const COMMONS = "https://commons.wikimedia.org/wiki/Special:Redirect/file/";
   const SIGNS = {
-    a:"Sign Iber Noro Dual 01 A.svg", e:"Sign Iber Noro Dual 02 E.svg",
-    i:"Sign Iber Noro Dual 03 I.svg", u:"Sign Iber Noro Dual 05 U.svg",
-    gi:"Sign Iber Noro Dual 08 GI.svg", ke:"Sign Iber Noro Dual 12 KE.svg",
-    ki:"Sign Iber Noro Dual 13 KI.svg", ba:"Sign Iber Noro Dual 16 BA.svg",
-    da:"Sign Iber Noro Dual 21 DA.svg", de:"Sign Iber Noro Dual 22 DE.svg",
-    di:"Sign Iber Noro Dual 23 DI.svg", ta:"Sign Iber Noro Dual 26 TA.svg",
-    s:"Sign Iber Noro Dual 31 S.svg", ś:"Sign Iber Noro Dual 32 Ś.svg",
-    r:"Sign Iber Noro Dual 33 R.svg", ŕ:"Sign Iber Noro Dual 34 Ŕ.svg",
-    l:"Sign Iber Noro Dual 35 L.svg", n:"Sign Iber Noro Dual 37 N.svg"
+    "a": "assets/signs/northeastern-dual/dual-01-a.svg",
+    "e": "assets/signs/northeastern-dual/dual-02-e.svg",
+    "i": "assets/signs/northeastern-dual/dual-03-i.svg",
+    "u": "assets/signs/northeastern-dual/dual-05-u.svg",
+    "gi": "assets/signs/northeastern-dual/dual-08-gi.svg",
+    "ke": "assets/signs/northeastern-dual/dual-12-ke.svg",
+    "ki": "assets/signs/northeastern-dual/dual-13-ki.svg",
+    "ba": "assets/signs/northeastern-dual/dual-16-ba.svg",
+    "da": "assets/signs/northeastern-dual/dual-21-da.svg",
+    "de": "assets/signs/northeastern-dual/dual-22-de.svg",
+    "di": "assets/signs/northeastern-dual/dual-23-di.svg",
+    "ta": "assets/signs/northeastern-dual/dual-26-ta.svg",
+    "s": "assets/signs/northeastern-dual/dual-31-s.svg",
+    "ś": "assets/signs/northeastern-dual/dual-32-s2.svg",
+    "r": "assets/signs/northeastern-dual/dual-33-r.svg",
+    "ŕ": "assets/signs/northeastern-dual/dual-34-r2.svg",
+    "l": "assets/signs/northeastern-dual/dual-35-l.svg",
+    "n": "assets/signs/northeastern-dual/dual-37-n.svg"
   };
   const FORMS = [
     ["ildiŕda",["i","l","di","ŕ","da"]],
@@ -111,7 +119,7 @@
   const results = document.getElementById("results");
   const report = document.getElementById("report");
 
-  function imageUrl(file) { return COMMONS + encodeURIComponent(file); }
+  function imageUrl(localPath) { return localPath; }
 
   function loadImage(token) {
     return new Promise(resolve => {
@@ -180,12 +188,13 @@
 
     globalStatus.className = `status ${passed ? "ok" : "error"}`;
     globalStatus.textContent = passed
-      ? "Prueba técnica superada: 11 formas evaluadas, ninguna salida vacía y ń permanece explícitamente pendiente."
+      ? "Prueba técnica superada: 11 formas evaluadas, 18 SVG locales cargados, ninguna salida vacía y ń permanece explícitamente pendiente."
       : "La prueba ha detectado incidencias. Consulta las filas y copia el informe para documentarlas.";
 
     const payload = {
       application: "IberoLab browser self-test",
-      version: "1.0.0",
+      version: "1.1.0",
+      asset_mode: "local_repository",
       executed_at: new Date().toISOString(),
       page: location.href,
       user_agent: navigator.userAgent,
