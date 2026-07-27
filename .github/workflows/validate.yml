@@ -31,3 +31,6 @@ jobs:
 
       - name: Validate reference renderer
         run: python scripts/validate_renderer.py
+
+      - name: Validate browser matrix and self-test
+        run: python scripts/validate_browser_matrix.py
