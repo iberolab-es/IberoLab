@@ -45,6 +45,24 @@ El informe íntegro se conserva en `data/tests/reports/2026-07-27-safari-ios-iph
 
 Esta prueba no cubre todavía los enlaces profundos por identificador y deberá repetirse cuando los SVG remotos sean sustituidos por recursos locales.
 
+### Chrome, Brave y Edge en iPhone con «sitio de escritorio»
+
+El mismo día se registraron tres ejecuciones completas adicionales desde Chrome, Brave y Edge en iPhone solicitando la presentación de escritorio. Las tres obtuvieron:
+
+- 11 de 11 formas evaluadas;
+- 18 de 18 SVG cargados;
+- 0 recursos fallidos;
+- 0 salidas vacías;
+- `ń` como único token pendiente esperado.
+
+Los informes se conservan en:
+
+- `data/tests/reports/2026-07-27-chrome-ios-desktop-mode.json`;
+- `data/tests/reports/2026-07-27-brave-ios-desktop-mode.json`;
+- `data/tests/reports/2026-07-27-edge-ios-desktop-mode.json`.
+
+Estas ejecuciones se clasifican como pruebas de **iOS en modo de presentación de escritorio**, no como pruebas de navegador de ordenador. Sus cadenas `user_agent` declaran `AppleWebKit/605.1.15`; por ello no sustituyen las pruebas pendientes de Chrome, Firefox y Edge ejecutados realmente en escritorio.
+
 ## Privacidad
 
 La prueba se ejecuta localmente en el navegador. No envía los resultados a ningún servidor de IberoLab. El informe solo sale del dispositivo cuando la persona lo copia y lo aporta voluntariamente.
@@ -60,4 +78,4 @@ El informe versionado incluye metadatos técnicos del navegador facilitados volu
 
 ## Criterio de avance
 
-La fase de navegadores no se considera completa hasta registrar pruebas satisfactorias en Safari iOS, Chrome, Firefox y Edge de escritorio. Superar el diagnóstico técnico no sustituye la revisión paleográfica externa.
+La fase de navegadores no se considera completa hasta registrar pruebas satisfactorias en Safari iOS y en Chrome, Firefox y Edge ejecutados realmente en un ordenador. Las pruebas de aplicaciones iOS con «sitio de escritorio» amplían la cobertura móvil, pero no cubren los motores ni el entorno de escritorio. Superar el diagnóstico técnico no sustituye la revisión paleográfica externa.
