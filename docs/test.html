@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <title>IberoLab — Diagnóstico del renderizador</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#071019; --panel:#101b26; --panel2:#0a141e; --line:#2b3c4f;
+      --text:#eef5ff; --muted:#a9b8ca; --accent:#35a7ff; --ok:#59d39b;
+      --warn:#f4c86a; --error:#ff7b7b;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#142538 0,var(--bg) 45rem);color:var(--text)}
+    main{width:min(980px,calc(100% - 28px));margin:0 auto;padding:36px 0 70px}
+    a{color:var(--accent)}
+    .eyebrow{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+    h1{font-size:clamp(2rem,7vw,3.8rem);line-height:1;margin:8px 0 14px}
+    .lead{color:var(--muted);line-height:1.65;max-width:760px}
+    .panel{margin-top:22px;border:1px solid var(--line);background:var(--panel);border-radius:24px;padding:clamp(18px,4vw,30px)}
+    .notice{border-left:4px solid var(--warn);padding:12px 14px;background:var(--panel2);color:var(--muted);line-height:1.55;border-radius:10px}
+    button{min-height:52px;border:1px solid var(--line);border-radius:14px;padding:0 18px;font:inherit;font-weight:800;color:white;background:linear-gradient(135deg,var(--accent),#1962c4);cursor:pointer}
+    button.secondary{background:var(--panel2)}
+    button:disabled{opacity:.55;cursor:wait}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+    .metric{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:14px}
+    .metric strong{display:block;font-size:1.55rem}
+    .metric span{color:var(--muted);font-size:.85rem}
+    .status{font-weight:800;padding:10px 12px;border-radius:10px;background:var(--panel2)}
+    .status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.error{color:var(--error)}
+    .results{display:grid;gap:10px;margin-top:16px}
+    .row{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:13px 14px;display:grid;grid-template-columns:minmax(120px,1fr) 2fr auto;gap:12px;align-items:center}
+    .row code{color:var(--text);overflow-wrap:anywhere}.row .tokens{color:var(--muted)}
+    .pill{border-radius:999px;padding:5px 9px;font-size:.78rem;font-weight:850;white-space:nowrap}
+    .pill.ok{color:var(--ok);border:1px solid var(--ok)} .pill.warn{color:var(--warn);border:1px solid var(--warn)} .pill.error{color:var(--error);border:1px solid var(--error)}
+    textarea{width:100%;min-height:260px;background:#050b11;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:14px;font:500 .84rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+    .privacy{color:var(--muted);font-size:.9rem;line-height:1.55}
+    @media(max-width:700px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr}.pill{justify-self:start}.actions button{width:100%}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">IberoLab · diagnóstico local</div>
+  <h1>Comprobación del corpus</h1>
+  <p class="lead">Esta página prueba, en el navegador actual, que las once formas están declaradas, que sus signos normalizados pueden cargarse y que el único token deliberadamente pendiente es <code>ń</code>.</p>
+
+  <div class="notice"><strong>No valida la exactitud paleográfica.</strong> Comprueba funcionamiento técnico, carga de recursos y ausencia de salidas vacías. La forma exacta de cada alógrafo sigue requiriendo revisión especializada.</div>
+
+  <section class="panel">
+    <h2>Prueba automática</h2>
+    <div class="actions">
+      <button id="runButton" type="button">Comprobar las 11 formas</button>
+      <button id="copyButton" class="secondary" type="button" disabled>Copiar informe</button>
+      <a href="./">Volver al corpus</a>
+    </div>
+    <div id="globalStatus" class="status">Prueba todavía no ejecutada.</div>
+    <div class="summary">
+      <div class="metric"><strong id="formsMetric">0/11</strong><span>formas evaluadas</span></div>
+      <div class="metric"><strong id="signsMetric">0/18</strong><span>SVG cargados</span></div>
+      <div class="metric"><strong id="emptyMetric">0</strong><span>salidas vacías</span></div>
+      <div class="metric"><strong id="pendingMetric">0</strong><span>tokens pendientes</span></div>
+    </div>
+    <div id="results" class="results" aria-live="polite"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Informe reproducible</h2>
+    <p class="privacy">El diagnóstico se ejecuta íntegramente en tu dispositivo. No envía el navegador, la dirección IP ni los resultados a IberoLab. El informe solo se copia si pulsas el botón correspondiente y puedes adjuntarlo voluntariamente en una issue.</p>
+    <textarea id="report" readonly aria-label="Informe técnico de la prueba">Ejecuta primero la comprobación.</textarea>
+    <p><a href="https://github.com/iberolab-es/IberoLab/issues/6" target="_blank" rel="noopener noreferrer">Abrir la tarea de pruebas y SVG locales</a></p>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const COMMONS = "https://commons.wikimedia.org/wiki/Special:Redirect/file/";
+  const SIGNS = {
+    a:"Sign Iber Noro Dual 01 A.svg", e:"Sign Iber Noro Dual 02 E.svg",
+    i:"Sign Iber Noro Dual 03 I.svg", u:"Sign Iber Noro Dual 05 U.svg",
+    gi:"Sign Iber Noro Dual 08 GI.svg", ke:"Sign Iber Noro Dual 12 KE.svg",
+    ki:"Sign Iber Noro Dual 13 KI.svg", ba:"Sign Iber Noro Dual 16 BA.svg",
+    da:"Sign Iber Noro Dual 21 DA.svg", de:"Sign Iber Noro Dual 22 DE.svg",
+    di:"Sign Iber Noro Dual 23 DI.svg", ta:"Sign Iber Noro Dual 26 TA.svg",
+    s:"Sign Iber Noro Dual 31 S.svg", ś:"Sign Iber Noro Dual 32 Ś.svg",
+    r:"Sign Iber Noro Dual 33 R.svg", ŕ:"Sign Iber Noro Dual 34 Ŕ.svg",
+    l:"Sign Iber Noro Dual 35 L.svg", n:"Sign Iber Noro Dual 37 N.svg"
+  };
+  const FORMS = [
+    ["ildiŕda",["i","l","di","ŕ","da"]],
+    ["erder",["e","r","de","r"]],
+    ["undikesken",["u","n","di","ke","s","ke","n"]],
+    ["ars",["a","r","s"]],
+    ["ekiar",["e","ki","a","r"]],
+    ["egiar",["e","gi","a","r"]],
+    ["likine",["l","i","ki","n","e"]],
+    ["taŕśabań",["ta","ŕ","ś","a","ba","ń"]],
+    ["baisetaś",["ba","i","s","e","ta","ś"]],
+    ["seltar",["s","e","l","ta","r"]],
+    ["ebanen",["e","ba","n","e","n"]]
+  ];
+  const EXPECTED_PENDING = new Set(["ń"]);
+  const runButton = document.getElementById("runButton");
+  const copyButton = document.getElementById("copyButton");
+  const globalStatus = document.getElementById("globalStatus");
+  const results = document.getElementById("results");
+  const report = document.getElementById("report");
+
+  function imageUrl(file) { return COMMONS + encodeURIComponent(file); }
+
+  function loadImage(token) {
+    return new Promise(resolve => {
+      const image = new Image();
+      const timer = setTimeout(() => resolve({token, ok:false, reason:"timeout"}), 15000);
+      image.onload = () => { clearTimeout(timer); resolve({token, ok:true}); };
+      image.onerror = () => { clearTimeout(timer); resolve({token, ok:false, reason:"load-error"}); };
+      image.referrerPolicy = "no-referrer";
+      image.src = imageUrl(SIGNS[token]);
+    });
+  }
+
+  function row(form, tokens, state, detail) {
+    const item = document.createElement("div");
+    item.className = "row";
+    const name = document.createElement("code");
+    name.textContent = form;
+    const sequence = document.createElement("div");
+    sequence.className = "tokens";
+    sequence.textContent = tokens.join(" · ");
+    const pill = document.createElement("span");
+    pill.className = `pill ${state}`;
+    pill.textContent = detail;
+    item.append(name, sequence, pill);
+    return item;
+  }
+
+  async function run() {
+    runButton.disabled = true;
+    copyButton.disabled = true;
+    results.replaceChildren();
+    globalStatus.className = "status";
+    globalStatus.textContent = "Comprobando recursos…";
+
+    const tokenResults = await Promise.all(Object.keys(SIGNS).map(loadImage));
+    const failed = new Set(tokenResults.filter(item => !item.ok).map(item => item.token));
+    let emptyOutputs = 0;
+    let evaluated = 0;
+    const pendingFound = new Set();
+    const formReport = [];
+
+    for (const [form, tokens] of FORMS) {
+      evaluated += 1;
+      const pending = tokens.filter(token => !SIGNS[token]);
+      pending.forEach(token => pendingFound.add(token));
+      const failedTokens = tokens.filter(token => failed.has(token));
+      const visibleCount = tokens.length - failedTokens.length;
+      if (visibleCount === 0) emptyOutputs += 1;
+
+      let state = "ok";
+      let detail = "correcta";
+      if (failedTokens.length) { state = "error"; detail = `fallan: ${failedTokens.join(", ")}`; }
+      else if (pending.length) { state = "warn"; detail = `pendiente: ${pending.join(", ")}`; }
+      results.append(row(form, tokens, state, detail));
+      formReport.push({form, tokens, failedTokens, pending, visibleCount});
+    }
+
+    const unexpectedPending = [...pendingFound].filter(token => !EXPECTED_PENDING.has(token));
+    const missingExpected = [...EXPECTED_PENDING].filter(token => !pendingFound.has(token));
+    const passed = failed.size === 0 && emptyOutputs === 0 && unexpectedPending.length === 0 && missingExpected.length === 0;
+
+    document.getElementById("formsMetric").textContent = `${evaluated}/${FORMS.length}`;
+    document.getElementById("signsMetric").textContent = `${Object.keys(SIGNS).length - failed.size}/${Object.keys(SIGNS).length}`;
+    document.getElementById("emptyMetric").textContent = String(emptyOutputs);
+    document.getElementById("pendingMetric").textContent = String(pendingFound.size);
+
+    globalStatus.className = `status ${passed ? "ok" : "error"}`;
+    globalStatus.textContent = passed
+      ? "Prueba técnica superada: 11 formas evaluadas, ninguna salida vacía y ń permanece explícitamente pendiente."
+      : "La prueba ha detectado incidencias. Consulta las filas y copia el informe para documentarlas.";
+
+    const payload = {
+      application: "IberoLab browser self-test",
+      version: "1.0.0",
+      executed_at: new Date().toISOString(),
+      page: location.href,
+      user_agent: navigator.userAgent,
+      language: navigator.language,
+      online: navigator.onLine,
+      result: passed ? "pass" : "fail",
+      metrics: {
+        forms_evaluated: evaluated,
+        forms_total: FORMS.length,
+        svg_loaded: Object.keys(SIGNS).length - failed.size,
+        svg_total: Object.keys(SIGNS).length,
+        failed_svg_tokens: [...failed],
+        empty_outputs: emptyOutputs,
+        pending_tokens: [...pendingFound],
+        unexpected_pending: unexpectedPending,
+        missing_expected_pending: missingExpected
+      },
+      forms: formReport
+    };
+    report.value = JSON.stringify(payload, null, 2);
+    copyButton.disabled = false;
+    runButton.disabled = false;
+    document.documentElement.dataset.selfTest = passed ? "pass" : "fail";
+  }
+
+  async function copyReport() {
+    try {
+      await navigator.clipboard.writeText(report.value);
+      copyButton.textContent = "Informe copiado";
+    } catch {
+      report.focus();
+      report.select();
+      document.execCommand("copy");
+      copyButton.textContent = "Informe seleccionado";
+    }
+    setTimeout(() => { copyButton.textContent = "Copiar informe"; }, 1800);
+  }
+
+  runButton.addEventListener("click", run);
+  copyButton.addEventListener("click", copyReport);
+})();
+</script>
+</body>
+</html>
