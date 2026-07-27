@@ -15,7 +15,7 @@ jobs:
   vendor:
     if: github.actor != 'github-actions[bot]' && github.head_ref == 'feat/vendor-reference-svgs'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Check out feature branch
         uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/assets/signs/northeastern-dual data/signs/reference-standard-dual.assets.v1.json
+          git add -A docs/assets/signs/northeastern-dual data/signs/reference-standard-dual.assets.v1.json data/signs/vendor-error.log
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
             exit 0
