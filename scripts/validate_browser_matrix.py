@@ -12,6 +12,7 @@ TEST_PAGE = ROOT / "docs" / "test.html"
 REQUIRED_BROWSERS = {"Safari", "Chrome", "Firefox", "Edge"}
 REQUIRED_DESKTOP_BROWSERS = {"Chrome", "Firefox", "Edge"}
 ALLOWED_STATUS = {"pending", "partial_pass", "pass", "fail"}
+CURRENT_ASSET_MODE = "local_repository"
 EXPECTED_FORMS = {
     "ildiŕda", "erder", "undikesken", "ars", "ekiar", "egiar",
     "likine", "taŕśabań", "baisetaś", "seltar", "ebanen",
@@ -22,10 +23,10 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def validate_pass_report(environment: dict, context: str, expected: dict) -> None:
+def validate_report_core(environment: dict, context: str, expected: dict) -> dict:
     report_name = environment.get("report_file")
     if not isinstance(report_name, str) or not report_name:
-        raise ValueError(f"{context}: pass status requires report_file")
+        raise ValueError(f"{context}: tested status requires report_file")
 
     report_path = ROOT / report_name
     if not report_path.is_file():
@@ -76,9 +77,10 @@ def validate_pass_report(environment: dict, context: str, expected: dict) -> Non
         expected_pending = ["ń"] if item.get("form") == "taŕśabań" else []
         if item.get("pending") != expected_pending:
             raise ValueError(f"{context}: {item.get('form')!r} pending state mismatch")
+    return report
 
 
-def validate() -> tuple[int, int, int, int]:
+def validate() -> tuple[int, int, int, int, int]:
     matrix = load_json(MATRIX)
     expected = matrix.get("expected", {})
     environments = matrix.get("environments", [])
@@ -91,6 +93,8 @@ def validate() -> tuple[int, int, int, int]:
         raise ValueError("browser matrix must require zero empty outputs")
     if expected.get("explicit_pending_tokens") != ["ń"]:
         raise ValueError("browser matrix must preserve only ń as explicit pending token")
+    if expected.get("asset_mode") != CURRENT_ASSET_MODE:
+        raise ValueError("browser matrix must target local_repository asset mode")
 
     if not isinstance(environments, list) or not environments:
         raise ValueError("browser environments must be non-empty")
@@ -100,6 +104,8 @@ def validate() -> tuple[int, int, int, int]:
     ids = set()
     passed = 0
     desktop_passed = 0
+    historical_partial = 0
+
     for index, environment in enumerate(environments):
         context = f"environments[{index}]"
         environment_id = environment.get("id")
@@ -117,11 +123,26 @@ def validate() -> tuple[int, int, int, int]:
         status = environment.get("status")
         if status not in ALLOWED_STATUS:
             raise ValueError(f"{context}: invalid status")
+
         if status == "pass":
-            validate_pass_report(environment, context, expected)
+            report = validate_report_core(environment, context, expected)
+            if report.get("asset_mode") != CURRENT_ASSET_MODE:
+                raise ValueError(f"{context}: current pass report does not use local_repository assets")
             passed += 1
             if platform == "desktop" and device_class == "desktop":
                 desktop_passed += 1
+
+        if status == "partial_pass" and environment.get("report_file"):
+            report = validate_report_core(environment, context, expected)
+            tested_mode = environment.get("tested_asset_mode")
+            if tested_mode == "remote_reference":
+                if report.get("asset_mode") not in (None, "remote_reference"):
+                    raise ValueError(f"{context}: historical report has an inconsistent asset mode")
+                if environment.get("current_asset_mode") != CURRENT_ASSET_MODE:
+                    raise ValueError(f"{context}: historical entry does not identify the current asset mode")
+                if environment.get("current_implementation_verified") is not False:
+                    raise ValueError(f"{context}: historical entry must remain unverified for current assets")
+                historical_partial += 1
 
         if environment.get("presentation_mode") == "request_desktop_site" and platform == "desktop":
             raise ValueError(f"{context}: request_desktop_site must not be classified as desktop platform")
@@ -146,21 +167,25 @@ def validate() -> tuple[int, int, int, int]:
         "navigator.clipboard",
         "dataset.selfTest",
         "No valida la exactitud paleográfica",
+        'asset_mode: "local_repository"',
+        "assets/signs/northeastern-dual/",
     ]
     missing_markers = [marker for marker in markers if marker not in html]
     if missing_markers:
         raise ValueError(f"self-test page lacks safeguards: {missing_markers}")
+    if "Special:Redirect/file" in html or "const COMMONS" in html:
+        raise ValueError("self-test still contains a remote SVG dependency")
 
     for form in EXPECTED_FORMS:
         if form not in html:
             raise ValueError(f"self-test page lacks form {form!r}")
 
-    return len(environments), len(REQUIRED_BROWSERS), passed, desktop_passed
+    return len(environments), len(REQUIRED_BROWSERS), passed, desktop_passed, historical_partial
 
 
 if __name__ == "__main__":
     try:
-        environment_count, browser_count, passed_count, desktop_passed_count = validate()
+        environment_count, browser_count, passed_count, desktop_passed_count, historical_count = validate()
     except (OSError, json.JSONDecodeError, KeyError, ValueError) as exc:
         print(f"BROWSER MATRIX VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
@@ -168,7 +193,7 @@ if __name__ == "__main__":
     print(
         "BROWSER MATRIX VALIDATION OK: "
         f"{environment_count} environments; {browser_count} required browsers; "
-        f"{passed_count} complete pass report(s), of which {desktop_passed_count} "
-        "are true desktop environments; public self-test covers eleven forms and "
-        "preserves ń as pending."
+        f"{passed_count} current local-asset pass report(s), of which {desktop_passed_count} "
+        f"are true desktop environments; {historical_count} historical remote-asset partial pass report(s); "
+        "public self-test covers eleven forms and preserves ń as pending."
     )

@@ -3,4 +3,12 @@ Copyright 2026 IberoLab contributors
 
 This product includes software and documentation developed by the IberoLab project.
 
-Historical sign forms, bibliographic data and third-party resources may have separate attribution and licensing requirements. Those resources must be documented individually before distribution.
+The provisional reference renderer includes 18 SVG files from the Wikimedia Commons series “Sign Iber Noro Dual 01–38”, created by BotaFlo and released under CC0 1.0 Universal. Their individual source pages, resolved download URLs, local paths, sizes and SHA-256 hashes are recorded in:
+
+  data/signs/reference-standard-dual.assets.v1.json
+
+Additional explanatory information is provided in:
+
+  docs/ASSET_PROVENANCE.md
+
+These normalized reference shapes are not facsimiles of the allographs used in every attested inscription. Other historical forms, bibliographic data and third-party resources may have separate attribution and licensing requirements and must be documented individually before distribution.

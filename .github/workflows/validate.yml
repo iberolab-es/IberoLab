@@ -29,6 +29,9 @@ jobs:
       - name: Validate scholarly source audit
         run: python scripts/validate_source_audit.py
 
+      - name: Validate local SVG integrity and provenance
+        run: python scripts/validate_local_assets.py
+
       - name: Validate reference renderer
         run: python scripts/validate_renderer.py
 
