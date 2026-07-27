@@ -29,15 +29,34 @@ jobs:
           python-version: "3.12"
 
       - name: Download, validate and inventory SVG resources
-        run: python scripts/vendor_reference_svgs.py
+        id: vendor
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/vendor_reference_svgs.py 2>&1 | tee /tmp/iberolab-vendor.log
+
+      - name: Persist a readable diagnostic when vendoring fails
+        if: steps.vendor.outcome == 'failure'
+        run: |
+          mkdir -p data/signs
+          cp /tmp/iberolab-vendor.log data/signs/vendor-error.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/signs/vendor-error.log
+          git commit -m "Record SVG vendoring failure [skip ci]"
+          git push origin HEAD:feat/vendor-reference-svgs
+          exit 1
 
       - name: Check generated files
+        if: steps.vendor.outcome == 'success'
         run: |
           test -f data/signs/reference-standard-dual.assets.v1.json
           test "$(find docs/assets/signs/northeastern-dual -maxdepth 1 -type f -name '*.svg' | wc -l)" -eq 18
           git diff --check
 
       - name: Commit generated assets to the feature branch
+        if: steps.vendor.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
