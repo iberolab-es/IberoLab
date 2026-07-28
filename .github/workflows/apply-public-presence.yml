@@ -2,11 +2,9 @@ name: Finalize public academic presence
 
 # Temporary one-shot workflow; removed before merge.
 on:
-  push:
-    branches: [feat/public-academic-presence]
-    paths:
-      - scripts/finalize_public_presence.py
-      - .github/workflows/apply-public-presence.yml
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
 
 permissions:
@@ -14,7 +12,7 @@ permissions:
 
 jobs:
   finalize:
-    if: github.actor != 'github-actions[bot]'
+    if: github.head_ref == 'feat/public-academic-presence' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
