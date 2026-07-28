@@ -3,496 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="dark light">
+  <meta name="color-scheme" content="dark">
   <meta name="description" content="Adaptación fonética experimental de nombres, palabras y frases breves mediante signos ibéricos normalizados.">
   <title>IberoLab — Conversor breve experimental</title>
+  <link rel="stylesheet" href="public-site.css">
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #071019;
-      --panel: #101b26;
-      --panel-2: #0a141e;
-      --line: #2b3c4f;
-      --text: #eef5ff;
-      --muted: #a9b8ca;
-      --accent: #35a7ff;
-      --accent-2: #1962c4;
-      --ok: #59d39b;
-      --warn: #f4c86a;
-      --danger: #ff8f8f;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #142538 0, var(--bg) 45rem);
-      color: var(--text);
-    }
-    main { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0 64px; }
-    a { color: var(--accent); }
-    .topline { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-    .eyebrow { color: var(--accent); font-weight: 850; letter-spacing: .12em; text-transform: uppercase; font-size: .76rem; }
-    .back { text-decoration: none; font-weight: 750; }
-    h1 { margin: 10px 0 12px; font-size: clamp(2rem, 6vw, 4.1rem); line-height: 1; }
-    .lead { max-width: 850px; color: var(--muted); font-size: 1.06rem; line-height: 1.65; }
-    .notice, .panel { border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 93%, transparent); border-radius: 24px; }
-    .notice { padding: 16px 18px; margin: 22px 0; color: var(--muted); line-height: 1.55; }
-    .notice strong { color: var(--text); }
-    .panel { padding: clamp(18px, 4vw, 34px); box-shadow: 0 22px 70px rgba(0,0,0,.28); }
-    form { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; }
-    label { display: block; font-weight: 850; margin-bottom: 8px; }
-    input, button {
-      min-height: 54px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      font: inherit;
-    }
-    input { width: 100%; background: var(--panel-2); color: var(--text); padding: 0 15px; font-size: 1.05rem; }
-    button { padding: 0 20px; font-weight: 800; color: white; background: linear-gradient(135deg, var(--accent), var(--accent-2)); cursor: pointer; }
-    button.secondary { min-height: 42px; background: var(--panel-2); color: var(--text); padding: 0 14px; }
-    button.example { min-height: 38px; padding: 0 13px; background: rgba(53,167,255,.12); color: var(--accent); }
-    button:disabled { opacity: .55; cursor: not-allowed; }
-    button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
-    .examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 13px; color: var(--muted); }
-    .counter { margin-top: 8px; color: var(--muted); font-size: .85rem; }
-    .history { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
-    .history[hidden] { display: none; }
-    .history-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
-    .history-head h2 { margin: 0; font-size: 1rem; }
-    .history-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    button.history-item { min-height: 38px; padding: 0 13px; background: rgba(89,211,155,.1); color: var(--ok); }
-    button.history-clear { min-height: 36px; padding: 0 12px; background: transparent; color: var(--muted); }
-    .history-note { margin: 9px 0 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
-    .result { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 26px; }
-    .result-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
-    .result-head h2 { margin: 0; font-size: clamp(1.45rem, 4vw, 2.3rem); }
-    .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-    .badge { border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; font-size: .8rem; font-weight: 850; }
-    .badge.direct { border-color: color-mix(in srgb, var(--ok) 65%, var(--line)); color: var(--ok); }
-    .badge.approximate { border-color: color-mix(in srgb, var(--warn) 65%, var(--line)); color: var(--warn); }
-    .badge.blocked { border-color: color-mix(in srgb, var(--danger) 65%, var(--line)); color: var(--danger); }
-    .badge.classification { color: var(--accent); }
-    #glyphOutput {
-      min-height: 176px;
-      margin-top: 17px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: var(--panel-2);
-      padding: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 11px;
-      align-items: center;
-    }
-    .word-group { display: grid; gap: 7px; align-items: start; padding: 4px 0; }
-    .word-label { color: var(--accent); font-size: .76rem; font-weight: 850; letter-spacing: .04em; }
-    .word-signs { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
-    .word-separator { color: var(--muted); font-size: 1.5rem; padding: 0 3px; }
-    .sign-card {
-      width: 78px;
-      min-height: 120px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: #f7f2e7;
-      color: #17202a;
-      display: grid;
-      grid-template-rows: 74px auto;
-      place-items: center;
-      padding: 8px;
-      overflow: hidden;
-    }
-    .sign-card img { display: block; width: 56px; height: 67px; object-fit: contain; }
-    .sign-card.failed img { display: none; }
-    .glyph-fallback { display: none; width: 56px; height: 64px; border: 2px dashed #7a6650; border-radius: 10px; place-items: center; text-align: center; font-size: .73rem; font-weight: 850; }
-    .sign-card.failed .glyph-fallback { display: grid; }
-    .sign-token { width: 100%; border-top: 1px solid #d6cdbf; padding-top: 7px; text-align: center; font-weight: 900; }
-    .blocked-message { width: 100%; color: var(--danger); line-height: 1.55; font-weight: 750; }
-    .technical-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
-    .technical-card { border: 1px solid var(--line); border-radius: 15px; background: rgba(7,16,25,.58); padding: 14px; }
-    .technical-card h3 { margin: 0 0 7px; color: var(--accent); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
-    .technical-card p { margin: 0; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
-    .technical-card code { color: var(--text); }
-    .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
-    .action-status { min-height: 1.35em; margin-top: 8px; color: var(--muted); font-size: .85rem; }
-    .explanation { margin-top: 20px; display: grid; gap: 10px; }
-    .explanation h3 { margin: 0; }
-    .notice-item { border-left: 3px solid var(--line); padding: 9px 12px; color: var(--muted); line-height: 1.5; background: rgba(7,16,25,.45); border-radius: 0 10px 10px 0; }
-    .notice-item.warning { border-left-color: var(--warn); }
-    .notice-item.information { border-left-color: var(--accent); }
-    .notice-item.blocking { border-left-color: var(--danger); color: var(--danger); }
-    .empty-explanation { color: var(--ok); }
-    .boundary { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); line-height: 1.6; font-size: .92rem; }
-    footer { margin-top: 24px; color: var(--muted); line-height: 1.6; font-size: .9rem; }
-    @media (max-width: 720px) {
-      form { grid-template-columns: 1fr; }
-      form > button { width: 100%; }
-      .technical-grid { grid-template-columns: 1fr; }
-      #glyphOutput { padding: 14px; gap: 8px; }
-      .sign-card { width: 70px; min-height: 112px; grid-template-rows: 68px auto; }
-      .sign-card img { width: 51px; height: 61px; }
-    }
+    :root{color-scheme:dark;--bg:#071019;--panel:#101b26;--panel2:#0a141e;--line:#2b3c4f;--text:#eef5ff;--muted:#a9b8ca;--accent:#35a7ff;--accent2:#1962c4;--ok:#59d39b;--warn:#f4c86a;--danger:#ff8f8f;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#142538 0,var(--bg) 45rem);color:var(--text)}main{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:36px 0 68px}a{color:var(--accent)}.topline{display:flex;justify-content:space-between;align-items:center;gap:16px}.eyebrow{color:#e4c584;font-weight:850;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}.back{text-decoration:none;font-weight:750}h1{margin:10px 0 12px;font-size:clamp(2rem,6vw,4.1rem);line-height:1}.lead{max-width:850px;color:var(--muted);font-size:1.06rem;line-height:1.65}.notice,.panel{border:1px solid var(--line);background:rgba(16,27,38,.94);border-radius:24px}.notice{padding:16px 18px;margin:22px 0;color:var(--muted);line-height:1.55}.notice strong{color:var(--text)}.panel{padding:clamp(18px,4vw,34px);box-shadow:0 22px 70px rgba(0,0,0,.28)}form{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}label{display:block;font-weight:850;margin-bottom:8px}input,button{min-height:54px;border-radius:14px;border:1px solid var(--line);font:inherit}input{width:100%;background:var(--panel2);color:var(--text);padding:0 15px;font-size:1.05rem}button{padding:0 20px;font-weight:800;color:white;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer}button.secondary{min-height:42px;background:var(--panel2);color:var(--text);padding:0 14px}button.example{min-height:38px;padding:0 13px;background:rgba(53,167,255,.12);color:var(--accent)}button:disabled{opacity:.55;cursor:not-allowed}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid rgba(53,167,255,.45);outline-offset:2px}.examples{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:13px;color:var(--muted)}.counter{margin-top:8px;color:var(--muted);font-size:.85rem}.history{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.history[hidden]{display:none}.history-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}.history-head h2{margin:0;font-size:1rem}.history-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}button.history-item{min-height:38px;padding:0 13px;background:rgba(89,211,155,.1);color:var(--ok)}button.history-clear{min-height:36px;padding:0 12px;background:transparent;color:var(--muted)}.history-note{margin:9px 0 0;color:var(--muted);font-size:.82rem;line-height:1.45}.result{margin-top:28px;border-top:1px solid var(--line);padding-top:26px}.result-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}.result-head h2{margin:0;font-size:clamp(1.45rem,4vw,2.3rem)}.badges{display:flex;flex-wrap:wrap;gap:8px}.badge{border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:850}.badge.direct{border-color:rgba(89,211,155,.65);color:var(--ok)}.badge.approximate{border-color:rgba(244,200,106,.65);color:var(--warn)}.badge.blocked{border-color:rgba(255,143,143,.65);color:var(--danger)}.badge.classification{color:var(--accent)}#glyphOutput{min-height:176px;margin-top:17px;border:1px solid var(--line);border-radius:20px;background:var(--panel2);padding:20px;display:flex;flex-wrap:wrap;gap:11px;align-items:center}.word-group{display:grid;gap:7px;align-items:start;padding:4px 0}.word-label{color:var(--accent);font-size:.76rem;font-weight:850;letter-spacing:.04em}.word-signs{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.word-separator{color:var(--muted);font-size:1.5rem;padding:0 3px}.sign-card{width:78px;min-height:120px;border:1px solid var(--line);border-radius:15px;background:#f7f2e7;color:#17202a;display:grid;grid-template-rows:74px auto;place-items:center;padding:8px;overflow:hidden}.sign-card img{display:block;width:56px;height:67px;object-fit:contain}.sign-card.failed img{display:none}.glyph-fallback{display:none;width:56px;height:64px;border:2px dashed #7a6650;border-radius:10px;place-items:center;text-align:center;font-size:.73rem;font-weight:850;white-space:pre-line}.sign-card.failed .glyph-fallback{display:grid}.sign-token{width:100%;border-top:1px solid #d6cdbf;padding-top:7px;text-align:center;font-weight:900}.blocked-message{width:100%;color:var(--danger);line-height:1.55;font-weight:750}.technical-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}.technical-card{border:1px solid var(--line);border-radius:15px;background:rgba(7,16,25,.58);padding:14px}.technical-card h3{margin:0 0 7px;color:var(--accent);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}.technical-card p{margin:0;color:var(--muted);line-height:1.5;overflow-wrap:anywhere}.technical-card code{color:var(--text)}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.action-status{min-height:1.35em;margin-top:8px;color:var(--muted);font-size:.85rem}.explanation{margin-top:20px;display:grid;gap:10px}.explanation h3{margin:0}.notice-item{border-left:3px solid var(--line);padding:9px 12px;color:var(--muted);line-height:1.5;background:rgba(7,16,25,.45);border-radius:0 10px 10px 0}.notice-item.warning{border-left-color:var(--warn)}.notice-item.information{border-left-color:var(--accent)}.notice-item.blocking{border-left-color:var(--danger);color:var(--danger)}.empty-explanation{color:var(--ok)}.boundary{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);line-height:1.6;font-size:.92rem}footer{margin-top:24px;color:var(--muted);line-height:1.6;font-size:.9rem}@media(max-width:720px){form{grid-template-columns:1fr}form>button{width:100%}.technical-grid{grid-template-columns:1fr}#glyphOutput{padding:14px;gap:8px}.sign-card{width:70px;min-height:112px;grid-template-rows:68px auto}.sign-card img{width:51px;height:61px}}
   </style>
 </head>
 <body>
+<nav class="site-nav" aria-label="Navegación principal"><div class="site-nav-inner"><a class="brand-link" href="./"><img src="assets/brand/iberolab-emblem.svg" alt=""><span class="brand-word">Ibero<span>Lab</span></span></a><div class="site-links"><a href="corpus.html">Corpus</a><a href="historia.html">Historia</a><a href="metodologia.html">Metodología</a><a class="nav-cta" href="convertir.html" aria-current="page">Conversor</a></div></div></nav>
 <main>
-  <header>
-    <div class="topline">
-      <div class="eyebrow">IberoLab · demostrador MVP</div>
-      <a class="back" href="./">Corpus documentado</a>
-    </div>
-    <h1>Escribe algo breve.<br>Visualízalo en signos ibéricos.</h1>
-    <p class="lead">Introduce un nombre, una palabra o una frase corta. El demostrador adapta su sonido mediante convenciones explícitas del signario ibérico nororiental y muestra cualquier aproximación que haya sido necesaria.</p>
-  </header>
-
-  <div class="notice">
-    <strong>No es una traducción al idioma ibérico.</strong> Es una adaptación fonética experimental del español moderno. Los signos son formas normalizadas de referencia y no facsímiles de una inscripción arqueológica concreta.
-  </div>
-
+  <header><div class="topline"><div class="eyebrow">IberoLab · demostrador MVP</div><a class="back" href="corpus.html">Corpus documentado</a></div><h1>Escribe algo breve.<br>Visualízalo en signos ibéricos.</h1><p class="lead">Introduce un nombre, una palabra o una frase corta. El demostrador adapta su sonido mediante convenciones explícitas y muestra cualquier aproximación necesaria.</p></header>
+  <div class="notice"><strong>No es una traducción al idioma ibérico.</strong> Es una adaptación fonética experimental del español moderno. Los signos son formas normalizadas de referencia y no facsímiles de una inscripción concreta.</div>
   <section class="panel" aria-labelledby="converterTitle">
-    <form id="converterForm">
-      <div>
-        <label id="converterTitle" for="sourceInput">Nombre, palabra o frase breve</label>
-        <input id="sourceInput" name="source" type="text" maxlength="48" autocomplete="off" spellcheck="true" value="amor" placeholder="Ej.: amor, familia, te quiero">
-        <div id="characterCounter" class="counter">4/48 caracteres · máximo 6 palabras</div>
-      </div>
-      <button id="convertButton" type="submit">Adaptar a signos ibéricos</button>
-    </form>
-
-    <div class="examples" aria-label="Ejemplos rápidos">
-      <span>Prueba:</span>
-      <button class="example" type="button" data-example="amor">amor</button>
-      <button class="example" type="button" data-example="familia">familia</button>
-      <button class="example" type="button" data-example="te quiero">te quiero</button>
-      <button class="example" type="button" data-example="amistad">amistad</button>
-      <button class="example" type="button" data-example="hogar">hogar</button>
-    </div>
-    <p class="counter">Ejemplos orientativos. Puedes escribir cualquier nombre, palabra o frase breve.</p>
-
-    <section id="historySection" class="history" aria-labelledby="historyTitle" hidden>
-      <div class="history-head">
-        <h2 id="historyTitle">Recientes en este dispositivo</h2>
-        <button id="clearHistoryButton" class="history-clear" type="button">Borrar historial</button>
-      </div>
-      <div id="historyList" class="history-list"></div>
-      <p class="history-note">Se guardan como máximo cinco entradas y solo en este navegador. IberoLab no recibe este historial.</p>
-    </section>
-
-    <section id="resultSection" class="result" aria-live="polite" aria-labelledby="resultTitle">
-      <div class="result-head">
-        <h2 id="resultTitle">Adaptación fonética experimental</h2>
-        <div class="badges">
-          <span class="badge classification">No es traducción</span>
-          <span id="statusBadge" class="badge direct">Adaptación directa</span>
-        </div>
-      </div>
-
-      <div id="glyphOutput" aria-label="Secuencia adaptada en signos ibéricos"></div>
-
-      <div class="technical-grid">
-        <article class="technical-card">
-          <h3>Entrada normalizada</h3>
-          <p><code id="normalizedText">—</code></p>
-        </article>
-        <article class="technical-card">
-          <h3>Lectura técnica de signos</h3>
-          <p><code id="technicalReading">—</code></p>
-        </article>
-      </div>
-
-      <div class="actions">
-        <button id="speakButton" class="secondary" type="button">Escuchar entrada en español</button>
-        <button id="copyButton" class="secondary" type="button">Copiar lectura técnica</button>
-        <button id="shareButton" class="secondary" type="button">Compartir resultado</button>
-      </div>
-      <div id="actionStatus" class="action-status" role="status" aria-live="polite"></div>
-
-      <div class="explanation">
-        <h3>Qué se ha hecho</h3>
-        <div id="noticeList"></div>
-      </div>
-
-      <div class="boundary">
-        <strong>Sobre la pronunciación:</strong> el audio reproduce la entrada española mediante la voz disponible en tu navegador. No intenta reconstruir cómo habría pronunciado esta secuencia una persona ibérica de la Antigüedad.
-      </div>
-    </section>
+    <form id="converterForm"><div><label id="converterTitle" for="sourceInput">Nombre, palabra o frase breve</label><input id="sourceInput" name="source" type="text" maxlength="48" autocomplete="off" spellcheck="true" value="amor" placeholder="Ej.: amor, familia, te quiero"><div id="characterCounter" class="counter">4/48 caracteres · máximo 6 palabras</div></div><button id="convertButton" type="submit">Adaptar a signos ibéricos</button></form>
+    <div class="examples" aria-label="Ejemplos rápidos"><span>Prueba:</span><button class="example" type="button" data-example="amor">amor</button><button class="example" type="button" data-example="familia">familia</button><button class="example" type="button" data-example="te quiero">te quiero</button><button class="example" type="button" data-example="amistad">amistad</button><button class="example" type="button" data-example="hogar">hogar</button></div><p class="counter">Ejemplos orientativos. Puedes escribir cualquier nombre, palabra o frase breve.</p>
+    <section id="historySection" class="history" aria-labelledby="historyTitle" hidden><div class="history-head"><h2 id="historyTitle">Recientes en este dispositivo</h2><button id="clearHistoryButton" class="history-clear" type="button">Borrar historial</button></div><div id="historyList" class="history-list"></div><p class="history-note">Se guardan como máximo cinco entradas y solo en este navegador. IberoLab no recibe este historial.</p></section>
+    <section id="resultSection" class="result" aria-live="polite" aria-labelledby="resultTitle"><div class="result-head"><h2 id="resultTitle">Adaptación fonética experimental</h2><div class="badges"><span class="badge classification">No es traducción</span><span id="statusBadge" class="badge direct">Adaptación directa</span></div></div><div id="glyphOutput" aria-label="Secuencia adaptada en signos ibéricos"></div><div class="technical-grid"><article class="technical-card"><h3>Entrada normalizada</h3><p><code id="normalizedText">—</code></p></article><article class="technical-card"><h3>Lectura técnica de signos</h3><p><code id="technicalReading">—</code></p></article></div><div class="actions"><button id="speakButton" class="secondary" type="button">Escuchar entrada en español</button><button id="approximateButton" class="secondary" type="button">Escuchar lectura aproximada</button><button id="copyButton" class="secondary" type="button">Copiar lectura técnica</button><button id="shareButton" class="secondary" type="button">Compartir resultado</button></div><div id="actionStatus" class="action-status" role="status" aria-live="polite"></div><div class="explanation"><h3>Qué se ha hecho</h3><div id="noticeList"></div></div><div class="boundary"><strong>Sobre la pronunciación:</strong> «Escuchar entrada» reproduce el español original. «Escuchar lectura aproximada» vocaliza con una voz española moderna la secuencia de signos generada; es un recurso didáctico y no una reconstrucción histórica de la pronunciación ibérica.</div></section>
   </section>
-
-  <footer>
-    Capa gráfica MVP: 38 SVG normalizados de la serie “Sign Iber Noro Dual 01–38”, con procedencia, licencia CC0, tamaño y SHA-256 versionados en un manifiesto independiente del corpus científico. ¿Has detectado una adaptación mejorable? <a href="https://github.com/iberolab-es/IberoLab/issues/new/choose" target="_blank" rel="noopener noreferrer">Enviar una sugerencia</a>.
-  </footer>
+  <footer>Capa gráfica MVP: 38 SVG normalizados, con procedencia, licencia CC0, tamaño y SHA-256 versionados. ¿Has detectado una adaptación mejorable? <a href="https://github.com/iberolab-es/IberoLab/issues/new/choose">Enviar una sugerencia</a>. <a href="historia.html">Historia y contexto</a>.</footer>
 </main>
-
 <script src="mvp-converter.js"></script>
 <script>
 (() => {
   "use strict";
-
-  const form = document.getElementById("converterForm");
-  const input = document.getElementById("sourceInput");
-  const counter = document.getElementById("characterCounter");
-  const output = document.getElementById("glyphOutput");
-  const normalizedText = document.getElementById("normalizedText");
-  const technicalReading = document.getElementById("technicalReading");
-  const statusBadge = document.getElementById("statusBadge");
-  const noticeList = document.getElementById("noticeList");
-  const speakButton = document.getElementById("speakButton");
-  const copyButton = document.getElementById("copyButton");
-  const shareButton = document.getElementById("shareButton");
-  const actionStatus = document.getElementById("actionStatus");
-  const historySection = document.getElementById("historySection");
-  const historyList = document.getElementById("historyList");
-  const clearHistoryButton = document.getElementById("clearHistoryButton");
-  const HISTORY_KEY = "iberolab:mvp:recent:v1";
-  const HISTORY_LIMIT = 5;
-  let currentResult = null;
-
-  function updateCounter() {
-    counter.textContent = `${Array.from(input.value).length}/${window.IberoMvp.MAX_CHARACTERS} caracteres · máximo ${window.IberoMvp.MAX_WORDS} palabras`;
-  }
-
-  function readHistory() {
-    try {
-      const parsed = JSON.parse(window.localStorage.getItem(HISTORY_KEY) || "[]");
-      if (!Array.isArray(parsed)) return [];
-      return parsed.filter(item => typeof item === "string" && item.trim()).slice(0, HISTORY_LIMIT);
-    } catch {
-      return [];
-    }
-  }
-
-  function writeHistory(entries) {
-    try {
-      if (entries.length) window.localStorage.setItem(HISTORY_KEY, JSON.stringify(entries));
-      else window.localStorage.removeItem(HISTORY_KEY);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function renderHistory() {
-    const entries = readHistory();
-    historyList.replaceChildren();
-    historySection.hidden = entries.length === 0;
-    for (const value of entries) {
-      const button = document.createElement("button");
-      button.className = "history-item";
-      button.type = "button";
-      button.dataset.historyValue = value;
-      button.textContent = value;
-      button.addEventListener("click", () => {
-        input.value = value;
-        updateCounter();
-        convert();
-        input.focus();
-      });
-      historyList.append(button);
-    }
-  }
-
-  function rememberResult(result) {
-    if (result.executionStatus !== "success") return;
-    const value = result.original.trim();
-    if (!value) return;
-    const key = value.toLocaleLowerCase("es-ES");
-    const entries = [value, ...readHistory().filter(item => item.toLocaleLowerCase("es-ES") !== key)].slice(0, HISTORY_LIMIT);
-    if (writeHistory(entries)) renderHistory();
-  }
-
-  function createSignCard(token) {
-    const card = document.createElement("div");
-    card.className = "sign-card";
-    card.setAttribute("role", "img");
-    card.setAttribute("aria-label", `Signo ibérico normalizado de referencia para ${token}`);
-
-    const image = document.createElement("img");
-    image.src = window.IberoMvp.SIGN_PATHS[token];
-    image.alt = `Signo ibérico normalizado para ${token}`;
-    image.loading = "eager";
-
-    const fallback = document.createElement("div");
-    fallback.className = "glyph-fallback";
-    fallback.textContent = `${token}\nimagen no cargada`;
-    image.addEventListener("error", () => card.classList.add("failed"), { once: true });
-
-    const label = document.createElement("div");
-    label.className = "sign-token";
-    label.textContent = token;
-    card.append(image, fallback, label);
-    return card;
-  }
-
-  function renderNotices(result) {
-    noticeList.replaceChildren();
-    const combined = [
-      ...result.operations.map(item => ({ ...item, severity: "information" })),
-      ...result.notices
-    ];
-    if (!combined.length) {
-      const item = document.createElement("div");
-      item.className = "empty-explanation";
-      item.textContent = "La entrada se ha representado con correspondencias directas dentro de las convenciones del MVP.";
-      noticeList.append(item);
-      return;
-    }
-    for (const notice of combined) {
-      const item = document.createElement("div");
-      item.className = `notice-item ${notice.severity}`;
-      item.textContent = notice.message;
-      noticeList.append(item);
-    }
-  }
-
-  function renderResult(result) {
-    currentResult = result;
-    output.replaceChildren();
-    document.documentElement.dataset.mvpResult = result.executionStatus;
-    document.documentElement.dataset.mvpStatus = result.status;
-
-    if (result.executionStatus === "blocked") {
-      const message = document.createElement("div");
-      message.className = "blocked-message";
-      message.textContent = result.notices[0].message;
-      output.append(message);
-      normalizedText.textContent = "Entrada bloqueada";
-      technicalReading.textContent = "—";
-      statusBadge.className = "badge blocked";
-      statusBadge.textContent = "No se ha generado una salida";
-      speakButton.disabled = true;
-      copyButton.disabled = true;
-      shareButton.disabled = true;
-      actionStatus.textContent = "";
-      renderNotices(result);
-      return;
-    }
-
-    result.words.forEach((word, wordIndex) => {
-      if (wordIndex > 0) {
-        const separator = document.createElement("span");
-        separator.className = "word-separator";
-        separator.setAttribute("aria-hidden", "true");
-        separator.textContent = "·";
-        output.append(separator);
-      }
-      const group = document.createElement("div");
-      group.className = "word-group";
-      group.dataset.sourceWord = word.source;
-      const wordLabel = document.createElement("div");
-      wordLabel.className = "word-label";
-      wordLabel.textContent = word.source;
-      const signs = document.createElement("div");
-      signs.className = "word-signs";
-      signs.append(...word.tokens.map(createSignCard));
-      group.append(wordLabel, signs);
-      output.append(group);
-    });
-
-    normalizedText.textContent = result.normalized;
-    technicalReading.textContent = result.technicalReading;
-    statusBadge.className = `badge ${result.status}`;
-    statusBadge.textContent = result.status === "direct" ? "Adaptación directa" : "Adaptación con aproximaciones";
-    speakButton.disabled = !("speechSynthesis" in window);
-    copyButton.disabled = false;
-    shareButton.disabled = false;
-    actionStatus.textContent = "";
-    renderNotices(result);
-  }
-
-  function resultUrl(value = input.value) {
-    const url = new URL(window.location.href);
-    const trimmed = value.trim();
-    if (trimmed) url.searchParams.set("q", trimmed);
-    else url.searchParams.delete("q");
-    return url;
-  }
-
-  function convert({ updateUrl = true, remember = true } = {}) {
-    const result = window.IberoMvp.convert(input.value);
-    renderResult(result);
-    if (remember) rememberResult(result);
-    if (updateUrl) {
-      const url = resultUrl();
-      window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
-    }
-  }
-
-  function loadFromUrl() {
-    const sharedInput = new URL(window.location.href).searchParams.get("q");
-    if (sharedInput !== null) input.value = sharedInput;
-    updateCounter();
-    convert({ updateUrl: false, remember: false });
-  }
-
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    convert();
-  });
-  input.addEventListener("input", updateCounter);
-
-  for (const button of document.querySelectorAll("[data-example]")) {
-    button.addEventListener("click", () => {
-      input.value = button.dataset.example;
-      updateCounter();
-      convert();
-      input.focus();
-    });
-  }
-
-  clearHistoryButton.addEventListener("click", () => {
-    if (writeHistory([])) {
-      renderHistory();
-      actionStatus.textContent = "Historial local borrado.";
-      setTimeout(() => { actionStatus.textContent = ""; }, 1600);
-    } else {
-      actionStatus.textContent = "El navegador no ha permitido borrar el historial local.";
-    }
-  });
-
-  speakButton.addEventListener("click", () => {
-    if (!currentResult || currentResult.executionStatus !== "success" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(currentResult.original);
-    utterance.lang = "es-ES";
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
-  });
-
-  copyButton.addEventListener("click", async () => {
-    if (!currentResult || currentResult.executionStatus !== "success") return;
-    try {
-      await navigator.clipboard.writeText(currentResult.technicalReading);
-      copyButton.textContent = "Lectura copiada";
-      actionStatus.textContent = "La lectura técnica se ha copiado.";
-      setTimeout(() => { copyButton.textContent = "Copiar lectura técnica"; actionStatus.textContent = ""; }, 1600);
-    } catch {
-      copyButton.textContent = "No se pudo copiar";
-      actionStatus.textContent = "El navegador no ha permitido copiar la lectura.";
-    }
-  });
-
-  shareButton.addEventListener("click", async () => {
-    if (!currentResult || currentResult.executionStatus !== "success") return;
-    const url = resultUrl(currentResult.original).toString();
-    const text = `IberoLab — ${currentResult.original}\n${currentResult.technicalReading}\nAdaptación fonética experimental; no es una traducción.`;
-    try {
-      if (typeof navigator.share === "function") {
-        await navigator.share({ title: "IberoLab", text, url });
-        actionStatus.textContent = "Resultado compartido.";
-      } else {
-        await navigator.clipboard.writeText(`${text}\n${url}`);
-        actionStatus.textContent = "Enlace y lectura copiados para compartir.";
-      }
-      setTimeout(() => { actionStatus.textContent = ""; }, 2200);
-    } catch (error) {
-      if (error?.name !== "AbortError") actionStatus.textContent = "No se pudo compartir el resultado.";
-    }
-  });
-
-  window.addEventListener("popstate", loadFromUrl);
-  renderHistory();
-  loadFromUrl();
-  document.documentElement.dataset.mvpConverterReady = "true";
+  const form=document.getElementById("converterForm"),input=document.getElementById("sourceInput"),counter=document.getElementById("characterCounter"),output=document.getElementById("glyphOutput"),normalizedText=document.getElementById("normalizedText"),technicalReading=document.getElementById("technicalReading"),statusBadge=document.getElementById("statusBadge"),noticeList=document.getElementById("noticeList"),speakButton=document.getElementById("speakButton"),approximateButton=document.getElementById("approximateButton"),copyButton=document.getElementById("copyButton"),shareButton=document.getElementById("shareButton"),actionStatus=document.getElementById("actionStatus"),historySection=document.getElementById("historySection"),historyList=document.getElementById("historyList"),clearHistoryButton=document.getElementById("clearHistoryButton");
+  const HISTORY_KEY="iberolab:mvp:recent:v1",HISTORY_LIMIT=5;let currentResult=null;
+  function updateCounter(){counter.textContent=`${Array.from(input.value).length}/${window.IberoMvp.MAX_CHARACTERS} caracteres · máximo ${window.IberoMvp.MAX_WORDS} palabras`;}
+  function readHistory(){try{const parsed=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");return Array.isArray(parsed)?parsed.filter(item=>typeof item==="string"&&item.trim()).slice(0,HISTORY_LIMIT):[];}catch{return[];}}
+  function writeHistory(entries){try{if(entries.length)localStorage.setItem(HISTORY_KEY,JSON.stringify(entries));else localStorage.removeItem(HISTORY_KEY);return true;}catch{return false;}}
+  function renderHistory(){const entries=readHistory();historyList.replaceChildren();historySection.hidden=entries.length===0;for(const value of entries){const button=document.createElement("button");button.className="history-item";button.type="button";button.dataset.historyValue=value;button.textContent=value;button.addEventListener("click",()=>{input.value=value;updateCounter();convert();input.focus();});historyList.append(button);}}
+  function rememberResult(result){if(result.executionStatus!=="success")return;const value=result.original.trim();if(!value)return;const key=value.toLocaleLowerCase("es-ES");const entries=[value,...readHistory().filter(item=>item.toLocaleLowerCase("es-ES")!==key)].slice(0,HISTORY_LIMIT);if(writeHistory(entries))renderHistory();}
+  function createSignCard(token){const card=document.createElement("div");card.className="sign-card";card.setAttribute("role","img");card.setAttribute("aria-label",`Signo ibérico normalizado de referencia para ${token}`);const image=document.createElement("img");image.src=window.IberoMvp.SIGN_PATHS[token];image.alt=`Signo ibérico normalizado para ${token}`;image.loading="eager";const fallback=document.createElement("div");fallback.className="glyph-fallback";fallback.textContent=`${token}\nimagen no cargada`;image.addEventListener("error",()=>card.classList.add("failed"),{once:true});const label=document.createElement("div");label.className="sign-token";label.textContent=token;card.append(image,fallback,label);return card;}
+  function renderNotices(result){noticeList.replaceChildren();const combined=[...result.operations.map(item=>({...item,severity:"information"})),...result.notices];if(!combined.length){const item=document.createElement("div");item.className="empty-explanation";item.textContent="La entrada se ha representado con correspondencias directas dentro de las convenciones del MVP.";noticeList.append(item);return;}for(const notice of combined){const item=document.createElement("div");item.className=`notice-item ${notice.severity}`;item.textContent=notice.message;noticeList.append(item);}}
+  function renderResult(result){currentResult=result;output.replaceChildren();document.documentElement.dataset.mvpResult=result.executionStatus;document.documentElement.dataset.mvpStatus=result.status;if(result.executionStatus==="blocked"){const message=document.createElement("div");message.className="blocked-message";message.textContent=result.notices[0].message;output.append(message);normalizedText.textContent="Entrada bloqueada";technicalReading.textContent="—";statusBadge.className="badge blocked";statusBadge.textContent="No se ha generado una salida";speakButton.disabled=true;approximateButton.disabled=true;copyButton.disabled=true;shareButton.disabled=true;actionStatus.textContent="";renderNotices(result);return;}result.words.forEach((word,index)=>{if(index>0){const separator=document.createElement("span");separator.className="word-separator";separator.setAttribute("aria-hidden","true");separator.textContent="·";output.append(separator);}const group=document.createElement("div");group.className="word-group";group.dataset.sourceWord=word.source;const wordLabel=document.createElement("div");wordLabel.className="word-label";wordLabel.textContent=word.source;const signs=document.createElement("div");signs.className="word-signs";signs.append(...word.tokens.map(createSignCard));group.append(wordLabel,signs);output.append(group);});normalizedText.textContent=result.normalized;technicalReading.textContent=result.technicalReading;statusBadge.className=`badge ${result.status}`;statusBadge.textContent=result.status==="direct"?"Adaptación directa":"Adaptación con aproximaciones";const speechAvailable="speechSynthesis" in window;speakButton.disabled=!speechAvailable;approximateButton.disabled=!speechAvailable;copyButton.disabled=false;shareButton.disabled=false;actionStatus.textContent="";renderNotices(result);}
+  function resultUrl(value=input.value){const url=new URL(location.href),trimmed=value.trim();if(trimmed)url.searchParams.set("q",trimmed);else url.searchParams.delete("q");return url;}
+  function convert({updateUrl=true,remember=true}={}){const result=window.IberoMvp.convert(input.value);renderResult(result);if(remember)rememberResult(result);if(updateUrl){const url=resultUrl();history.replaceState(null,"",`${url.pathname}${url.search}${url.hash}`);}}
+  function loadFromUrl(){const sharedInput=new URL(location.href).searchParams.get("q");if(sharedInput!==null)input.value=sharedInput;updateCounter();convert({updateUrl:false,remember:false});}
+  function experimentalReadingText(result){const modernLabels={"ŕ":"r","ś":"s","ń":"n"};return result.words.map(word=>word.tokens.map(token=>modernLabels[token]||token).join("")).join(" ");}
+  form.addEventListener("submit",event=>{event.preventDefault();convert();});input.addEventListener("input",updateCounter);for(const button of document.querySelectorAll("[data-example]")){button.addEventListener("click",()=>{input.value=button.dataset.example;updateCounter();convert();input.focus();});}
+  clearHistoryButton.addEventListener("click",()=>{if(writeHistory([])){renderHistory();actionStatus.textContent="Historial local borrado.";setTimeout(()=>{actionStatus.textContent="";},1600);}else actionStatus.textContent="El navegador no ha permitido borrar el historial local.";});
+  speakButton.addEventListener("click",()=>{if(!currentResult||currentResult.executionStatus!=="success"||!("speechSynthesis" in window))return;speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(currentResult.original);utterance.lang="es-ES";utterance.rate=.9;speechSynthesis.speak(utterance);});
+  approximateButton.addEventListener("click",()=>{if(!currentResult||currentResult.executionStatus!=="success"||!("speechSynthesis" in window))return;speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(experimentalReadingText(currentResult));utterance.lang="es-ES";utterance.rate=.78;speechSynthesis.speak(utterance);actionStatus.textContent="Reproduciendo una lectura moderna aproximada de los signos.";setTimeout(()=>{actionStatus.textContent="";},2200);});
+  copyButton.addEventListener("click",async()=>{if(!currentResult||currentResult.executionStatus!=="success")return;try{await navigator.clipboard.writeText(currentResult.technicalReading);copyButton.textContent="Lectura copiada";actionStatus.textContent="La lectura técnica se ha copiado.";setTimeout(()=>{copyButton.textContent="Copiar lectura técnica";actionStatus.textContent="";},1600);}catch{copyButton.textContent="No se pudo copiar";actionStatus.textContent="El navegador no ha permitido copiar la lectura.";}});
+  shareButton.addEventListener("click",async()=>{if(!currentResult||currentResult.executionStatus!=="success")return;const url=resultUrl(currentResult.original).toString(),text=`IberoLab — ${currentResult.original}\n${currentResult.technicalReading}\nAdaptación fonética experimental; no es una traducción.`;try{if(typeof navigator.share==="function"){await navigator.share({title:"IberoLab",text,url});actionStatus.textContent="Resultado compartido.";}else{await navigator.clipboard.writeText(`${text}\n${url}`);actionStatus.textContent="Enlace y lectura copiados para compartir.";}setTimeout(()=>{actionStatus.textContent="";},2200);}catch(error){if(error?.name!=="AbortError")actionStatus.textContent="No se pudo compartir el resultado.";}});
+  addEventListener("popstate",loadFromUrl);renderHistory();loadFromUrl();document.documentElement.dataset.mvpConverterReady="true";
 })();
 </script>
 </body>
