@@ -4,6 +4,15 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo.
 
 El formato se inspira en Keep a Changelog y el proyecto utilizará versionado semántico cuando exista una primera versión funcional.
 
+## Unreleased — portada pública, historia y audio aproximado
+
+- La raíz pública incorpora una presentación visual de IberoLab por encima del corpus, sin cambiar su URL ni romper los enlaces profundos existentes.
+- Se publican las páginas `historia.html` y `metodologia.html`, preparadas para incorporar divulgación audiovisual y fuentes complementarias.
+- El símbolo oficial se explica como una marca contemporánea inspirada en escritura, memoria y raíces; no se presenta como un signo ibérico antiguo.
+- El demostrador mantiene el audio de la entrada española y añade una lectura técnica aproximada mediante voz española moderna, siempre etiquetada como recurso didáctico y no como pronunciación histórica.
+- La interfaz separa su lógica en módulos propios y añade validación estática y regresión sobre Chromium, Firefox y WebKit.
+- El sitemap incluye Historia y Metodología, y se conservan la página académica, privacidad, citación, metadatos sociales y recursos de identidad existentes.
+
 ## Unreleased — historial local privado
 
 - El demostrador recuerda como máximo cinco adaptaciones exitosas en el navegador.
