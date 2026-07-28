@@ -29,7 +29,25 @@ La página `deep-link-test.html` abre secuencialmente las once URL con fragmento
 
 La prueba utiliza un único marco técnico oculto y procesa las formas de manera secuencial para limitar el consumo de memoria en dispositivos móviles.
 
-## Qué no comprueban estas páginas
+## Regresión automática entre motores
+
+El flujo `Browser smoke tests` ejecuta Playwright sobre un servidor HTTP local y prueba la implementación en tres motores:
+
+- Chromium;
+- Firefox;
+- WebKit.
+
+Para cada motor comprueba las once formas mediante sus identificadores, la selección y lectura visible, el número esperado de tarjetas, la ausencia de tarjetas fallidas y la carga real de cada imagen local. Después ejecuta íntegramente `test.html` y `deep-link-test.html` y exige que ambos informes terminen en `pass`.
+
+La suite utiliza Playwright `1.62.0` fijado, un único trabajador en CI, permisos de solo lectura y conserva trazas y capturas únicamente cuando existe un fallo. Su configuración se encuentra en:
+
+- `.github/workflows/browser-smoke.yml`;
+- `playwright.config.cjs`;
+- `tests/browser/browser-smoke.spec.cjs`.
+
+Esta cobertura detecta regresiones en Chromium, Firefox y WebKit, pero no equivale a una prueba manual de Google Chrome, Microsoft Edge, Mozilla Firefox instalado en un ordenador o Safari/iOS. Tampoco constituye una comparación visual píxel a píxel.
+
+## Qué no comprueban estas pruebas
 
 - la exactitud paleográfica del alógrafo seleccionado;
 - la fidelidad del recurso gráfico a una inscripción concreta;
@@ -86,7 +104,7 @@ Estas ejecuciones se clasifican como pruebas de **iOS en modo de presentación d
 
 ## Privacidad
 
-Las dos pruebas se ejecutan localmente en el navegador. No envían los resultados a ningún servidor de IberoLab. Los informes solo salen del dispositivo cuando la persona los copia y los aporta voluntariamente.
+Las dos páginas públicas se ejecutan localmente en el navegador. No envían los resultados a ningún servidor de IberoLab. Los informes solo salen del dispositivo cuando la persona los copia y los aporta voluntariamente.
 
 Los informes incluyen metadatos técnicos del navegador facilitados voluntariamente para reproducibilidad, pero no incorporan dirección IP, identificadores de cuenta ni datos personales declarados por la aplicación.
 
@@ -99,6 +117,6 @@ Los informes incluyen metadatos técnicos del navegador facilitados voluntariame
 
 ## Criterio de avance
 
-La fase de navegadores no se considera completa hasta registrar pruebas satisfactorias de los dos diagnósticos en Safari iOS y en Chrome, Firefox y Edge ejecutados realmente en un ordenador. Las pruebas de aplicaciones iOS con «sitio de escritorio» amplían la cobertura móvil, pero no cubren los motores ni el entorno de escritorio.
+La fase de navegadores no se considera completa hasta registrar pruebas satisfactorias de los dos diagnósticos en Safari iOS y en Chrome, Firefox y Edge ejecutados realmente en un ordenador. Las pruebas automatizadas entre motores y las aplicaciones iOS con «sitio de escritorio» amplían la cobertura, pero no sustituyen esos entornos manuales.
 
 Superar los diagnósticos técnicos no sustituye la revisión paleográfica externa. El motor para entradas modernas continúa bloqueado hasta completar la revisión mínima de la base gráfica y la verificación multidispositivo de la implementación local.
