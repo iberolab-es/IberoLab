@@ -40,33 +40,51 @@
 - [ ] Crear pruebas automatizadas de regresión visual cuando exista una base visual estable.
 - [ ] Ampliar después, sin mezclar sistemas, a ibérico meridional, greco-ibérico y celtibérico.
 
-## Fase 2 — Motor de similitud y adaptación fonética
+## Fase 2 — Adaptación de entradas modernas
 
-### Especificación permitida antes de implementar
+### Fase 2A — Demostrador MVP práctico
+
+Objetivo limitado: nombres, palabras y frases breves con representación gráfica, reglas deterministas y aproximaciones visibles.
+
+- [x] Mantener separado el corpus científico de la capa gráfica práctica.
+- [x] Integrar una biblioteca independiente con los 38 signos normalizados de la serie nororiental dual.
+- [x] Registrar para los 38 SVG fuente, licencia, ruta, tamaño y SHA-256.
+- [x] Limitar la entrada a 48 caracteres y 6 palabras.
+- [x] Representar vocales y continuantes mediante signos alfabéticos.
+- [x] Representar oclusivas mediante silabogramas y declarar cualquier vocal de apoyo.
+- [x] Definir aproximaciones visibles para sonidos modernos sin equivalente directo.
+- [x] Bloquear símbolos no admitidos y prohibir salidas vacías.
+- [x] Añadir ejemplos contractuales para `amor`, `familia` y `te quiero`.
+- [x] Crear una interfaz responsive separada del corpus atestiguado.
+- [x] Añadir audio opcional exclusivamente para la entrada española.
+- [x] Añadir regresión automática para resultados directos, aproximados y bloqueados.
+- [ ] Repetir manualmente las pruebas del demostrador en Safari/iOS, Chrome, Firefox y Edge.
+- [ ] Revisar con usuarios reales si las explicaciones son comprensibles y suficientemente breves.
+
+El demostrador se etiqueta siempre como **adaptación fonética experimental**. No es una traducción, no atribuye significado ibérico y no activa el motor formal.
+
+### Especificación permitida antes de implementar el motor formal
 
 - [x] Definir un contrato versionado para capas, etapas, candidatos, operaciones, costes, confianza, explicaciones y dependencias.
 - [x] Separar formalmente información lingüística, decisiones de adaptación y resolución gráfica.
 - [x] Definir el esquema machine-readable de un resultado de adaptación experimental sin afirmaciones semánticas.
-- [x] Mantener perfiles, reglas, pesos, confianza calibrada y conversión pública explícitamente desactivados en el contrato inicial.
+- [x] Mantener perfiles, reglas, pesos, confianza calibrada y conversión formal explícitamente desactivados en el contrato inicial.
 - [x] Definir el esquema de perfiles de pronunciación de español europeo y un registro inicial de dimensiones sin perfil por defecto.
 - [ ] Aprobar uno o más perfiles españoles después de revisión interna, revisión externa y delimitación geográfica y de registro.
 - [ ] Aprobar una representación fonética interna y su inventario de rasgos para entradas españolas.
 - [ ] Construir un inventario explícito de sonidos modernos sin equivalente directo.
-- [ ] Definir el esquema de reglas y sus niveles de evidencia.
-- [ ] Preparar casos de prueba contractuales sin inventar salidas lingüísticas.
+- [ ] Definir el esquema formal de reglas y sus niveles de evidencia.
 - [ ] Documentar pesos, empates y calibración solo después de disponer de reglas y evaluación suficientes.
 
-### Implementación bloqueada
+### Implementación bloqueada del motor formal
 
-- [ ] Normalizar ortografía y pronunciación de entradas modernas.
-- [ ] Segmentar en vocales, continuantes y grupos oclusiva-vocal compatibles con el sistema seleccionado.
+- [ ] Normalizar ortografía y pronunciación mediante perfiles formalmente aprobados.
 - [ ] Comparar secuencias modernas con patrones silábicos y grafemáticos documentados.
-- [ ] Generar alternativas cuando exista ambigüedad.
-- [ ] Calcular costes y confianza de forma determinista y reproducible.
-- [ ] Explicar cada sustitución, pérdida o aproximación.
-- [ ] Evitar presentar la adaptación como traducción al idioma ibérico.
+- [ ] Generar alternativas ordenadas cuando exista ambigüedad.
+- [ ] Calcular costes y confianza calibrada de forma reproducible.
+- [ ] Versionar conjuntos formales de reglas y modelos de evaluación.
 
-La especificación estructural está versionada en `data/engine/phonetic-engine-contract.v1.json` y `docs/PHONETIC_ENGINE_SPEC.md`. Las dimensiones españolas se registran en `data/engine/spanish-pronunciation-dimensions.v1.json`, pero todavía no existe ningún perfil aprobado. La implementación y su exposición pública continúan bloqueadas hasta completar las pruebas manuales actuales del renderizador, fijar el modelo mínimo de alógrafos, aprobar el perfil fonético y someter la base inicial a revisión externa.
+La implementación formal continúa bloqueada por las pruebas manuales actuales del renderizador, el modelo mínimo de alógrafos, la revisión externa, el perfil fonético y la evaluación. Estos bloqueos no impiden mantener un demostrador MVP pequeño, explícito y sin pretensión de referencia lingüística universal.
 
 ## Fase 3 — Renderizador
 
@@ -78,30 +96,32 @@ La especificación estructural está versionada en `data/engine/phonetic-engine-
 - [x] Integrar 19 SVG locales controlados y adaptar el autodiagnóstico para identificarlos como `local_repository`.
 - [x] Añadir una prueba pública de los once enlaces profundos.
 - [x] Ejecutar regresión automática en Chromium, Firefox y WebKit.
-- [ ] Repetir ambos diagnósticos en Safari, Chrome, Brave y Edge sobre iPhone después del despliegue local de 19 SVG.
-- [ ] Verificar ambos diagnósticos en Google Chrome, Mozilla Firefox y Microsoft Edge ejecutados realmente en ordenador.
+- [x] Añadir una página independiente para el demostrador de entradas breves.
+- [ ] Repetir ambos diagnósticos del corpus en Safari, Chrome, Brave y Edge sobre iPhone después del despliegue local de 19 SVG.
+- [ ] Verificar el corpus y el demostrador en Google Chrome, Mozilla Firefox y Microsoft Edge ejecutados realmente en ordenador.
 - [ ] Escritura de izquierda a derecha y derecha a izquierda cuando corresponda.
-- [ ] Copia, descarga y exportación accesible.
+- [ ] Descarga o exportación gráfica accesible.
 - [ ] Regresión visual automatizada cuando se estabilice la selección de alógrafos.
 
-## Fase 4 — Beta web
+## Fase 4 — Publicación web
 
 - [x] Publicar una versión pre-alpha gratuita mediante GitHub Pages.
 - [x] Disponer de una interfaz pública responsive con salida inicial visible.
 - [x] Explicar públicamente qué hace y qué no hace la herramienta.
 - [x] Enlazar el buzón estructurado de sugerencias de GitHub.
-- [ ] Confirmar mediante pruebas manuales que todo el corpus se reconstruye con los recursos locales actuales en móvil y escritorio.
-- [ ] Incorporar una adaptación experimental de entradas modernas solo después de aprobar la especificación, las reglas y sus pruebas.
-- [ ] Superar la revisión paleográfica, las pruebas multidispositivo y la revisión externa necesarias para etiquetar una beta.
+- [x] Incorporar un demostrador experimental para entradas modernas breves.
+- [ ] Confirmar manualmente el funcionamiento del corpus y del demostrador en móvil y escritorio.
+- [ ] Mejorar las reglas del MVP solo cuando el cambio pueda explicarse y probarse.
+- [ ] Superar la revisión paleográfica y multidispositivo necesaria antes de etiquetar una beta.
 
-## Fase 5 — Ampliación
+## Fase 5 — Ampliación opcional
 
+- [ ] Exportación de resultados y metadatos.
 - [ ] Comparación entre varios sistemas de escritura.
 - [ ] API o paquete reutilizable.
-- [ ] Exportación de resultados y metadatos.
-- [ ] Revisión externa por especialistas.
 - [ ] Versiones educativas y docentes.
+- [ ] Revisión externa por especialistas cuando el alcance del proyecto la justifique.
 
 ## Criterio de publicación
 
-La pre-alpha puede mostrar formas contrastadas y limitaciones explícitas. No se etiquetará una versión como beta hasta que el renderizador reconstruya de forma visible y reproducible el corpus mediante recursos controlados en móvil y escritorio, la base gráfica haya recibido revisión externa suficiente y cada transformación moderna pueda explicarse paso a paso.
+La pre-alpha puede ofrecer un demostrador breve siempre que identifique la salida como adaptación fonética experimental, explique las aproximaciones, no produzca vacíos silenciosos y mantenga separado el corpus atestiguado. Una futura beta formal exigirá mayor revisión paleográfica, pruebas multidispositivo y reglas lingüísticas versionadas.

@@ -14,6 +14,19 @@ const FORMS = [
   { id: 'ib-ne-ebanen-001', form: 'ebanen', cards: 5, pending: 0 }
 ];
 
+const MVP_CASES = [
+  { input: 'amor', reading: 'a · m · o · r', cards: 4, status: 'direct' },
+  { input: 'familia', reading: 'ba · m · i · l · i · a', cards: 6, status: 'approximate' },
+  { input: 'te quiero', reading: 'te / ki · e · r · o', cards: 5, status: 'direct' },
+  { input: 'Cris', reading: 'ki · r · i · s', cards: 4, status: 'approximate' }
+];
+
+async function imagesAreLoaded(page, selector) {
+  return page.locator(selector).evaluateAll(images =>
+    images.every(image => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0)
+  );
+}
+
 test.describe('renderizador local por enlaces profundos', () => {
   for (const target of FORMS) {
     test(`${target.form} selecciona y carga su salida`, async ({ page }) => {
@@ -26,11 +39,7 @@ test.describe('renderizador local por enlaces profundos', () => {
       await expect(page.locator('#glyphOutput .sign-card.failed')).toHaveCount(0);
       await expect(page.locator('#glyphOutput .sign-card.pending')).toHaveCount(target.pending);
       await expect(page.locator('#glyphOutput img')).toHaveCount(target.cards - target.pending);
-
-      const imagesLoaded = await page.locator('#glyphOutput img').evaluateAll(images =>
-        images.every(image => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0)
-      );
-      expect(imagesLoaded).toBe(true);
+      expect(await imagesAreLoaded(page, '#glyphOutput img')).toBe(true);
       expect(new URL(page.url()).hash).toBe(`#${target.id}`);
     });
   }
@@ -79,4 +88,51 @@ test('el diagnóstico de enlaces profundos supera los once identificadores', asy
   });
   expect(report.links).toHaveLength(11);
   expect(report.links.every(item => item.passed && item.renderer_ready && item.rendered_children > 0)).toBe(true);
+});
+
+test.describe('demostrador MVP de entradas breves', () => {
+  for (const target of MVP_CASES) {
+    test(`${target.input} produce una adaptación visible y explicada`, async ({ page }) => {
+      await page.goto('/convertir.html', { waitUntil: 'load' });
+      await expect(page.locator('html')).toHaveAttribute('data-mvp-converter-ready', 'true');
+
+      await page.locator('#sourceInput').fill(target.input);
+      await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+
+      await expect(page.locator('html')).toHaveAttribute('data-mvp-result', 'success');
+      await expect(page.locator('html')).toHaveAttribute('data-mvp-status', target.status);
+      await expect(page.locator('#technicalReading')).toHaveText(target.reading);
+      await expect(page.locator('#glyphOutput .sign-card')).toHaveCount(target.cards);
+      await expect(page.locator('#glyphOutput .sign-card.failed')).toHaveCount(0);
+      await expect(page.locator('#glyphOutput img')).toHaveCount(target.cards);
+      expect(await imagesAreLoaded(page, '#glyphOutput img')).toBe(true);
+      await expect(page.getByText('No es traducción')).toBeVisible();
+    });
+  }
+
+  test('familia declara la aproximación de f mediante la serie labial', async ({ page }) => {
+    await page.goto('/convertir.html', { waitUntil: 'load' });
+    await page.locator('#sourceInput').fill('familia');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+    await expect(page.locator('#noticeList')).toContainText('f no tiene equivalente directo');
+    await expect(page.locator('#statusBadge')).toHaveText('Adaptación con aproximaciones');
+  });
+
+  test('Cris conserva el grupo consonántico mediante una vocal de apoyo declarada', async ({ page }) => {
+    await page.goto('/convertir.html', { waitUntil: 'load' });
+    await page.locator('#sourceInput').fill('Cris');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+    await expect(page.locator('#noticeList')).toContainText('vocal de apoyo');
+    await expect(page.locator('#technicalReading')).toHaveText('ki · r · i · s');
+  });
+
+  test('una entrada no admitida se bloquea sin signos parciales', async ({ page }) => {
+    await page.goto('/convertir.html', { waitUntil: 'load' });
+    await page.locator('#sourceInput').fill('123');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-mvp-result', 'blocked');
+    await expect(page.locator('#glyphOutput .sign-card')).toHaveCount(0);
+    await expect(page.locator('#technicalReading')).toHaveText('—');
+    await expect(page.locator('#statusBadge')).toHaveText('No se ha generado una salida');
+  });
 });

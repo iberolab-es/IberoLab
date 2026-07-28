@@ -1,79 +1,101 @@
 # IberoLab
 
-**Proyecto abierto y experimental para estudiar la representación fonética de lenguas modernas mediante escrituras paleohispánicas.**
+**Proyecto abierto y experimental para representar fonéticamente nombres, palabras y frases breves mediante escrituras paleohispánicas.**
 
-> Estado: **pre-alpha / fase de fundamentación**. La web pública reconstruye un corpus inicial contrastado, pero todavía no ofrece un conversor de palabras modernas ni un traductor al idioma ibérico.
+> Estado: **pre-alpha con demostrador MVP**. La web pública reconstruye un corpus inicial contrastado y ofrece una adaptación gráfica experimental para entradas modernas breves, pero todavía no ofrece un conversor formal validado ni un traductor al idioma ibérico.
 
 ## Qué es
 
-IberoLab separa dos líneas de trabajo que no deben confundirse:
+IberoLab separa tres capas que no deben confundirse:
 
-1. **Base documental y gráfica:** lectura, segmentación, contexto y representación controlada de formas ya atestiguadas.
-2. **Adaptación moderna futura:** representación fonética experimental de entradas actuales mediante reglas explicables y versionadas.
+1. **Corpus documental:** lecturas, segmentaciones y contextos de formas ibéricas ya atestiguadas.
+2. **Demostrador práctico:** adaptación fonética experimental de nombres, palabras y frases españolas breves mediante reglas deterministas y advertencias visibles.
+3. **Motor formal futuro:** arquitectura versionada para perfiles, reglas, costes, alternativas y confianza, todavía desactivada.
 
-El proyecto distingue siempre entre lectura, interpretación semántica, adaptación fonética y renderizado gráfico.
+La intención práctica es modesta: que una persona pueda escribir algo como `Lara`, `amor`, `familia` o `te quiero` y obtener una representación gráfica razonada, sin fingir una traducción que el conocimiento actual no permite.
 
 ## Qué no es
 
-IberoLab **no traduce literalmente al idioma ibérico**. La lengua ibérica no está descifrada hasta un grado que permita traducir de forma completa y consensuada textos modernos. Cualquier salida futura deberá identificarse con precisión como:
+IberoLab **no traduce literalmente al idioma ibérico**. La lengua ibérica no está descifrada hasta un grado que permita traducir de forma completa y consensuada textos modernos.
 
-- transliteración;
-- representación fonética experimental;
-- reconstrucción hipotética;
-- recreación artística.
+El demostrador MVP produce una **adaptación fonética experimental**. No atribuye significado ibérico a la salida, no reconstruye vocabulario antiguo y no presenta los signos normalizados como facsímiles de una inscripción concreta.
 
 ## Estado verificable actual
 
-La pre-alpha dispone de:
+### Corpus atestiguado
 
 - once formas documentadas en bibliografía epigráfica o numismática;
-- diecinueve tokens de transcripción derivados exclusivamente de ese corpus;
+- diecinueve tokens derivados exclusivamente de ese corpus;
 - diecinueve SVG locales con procedencia, licencia, tamaño y SHA-256 registrados;
 - resolución explícita de `ń` mediante la variante paleográfica `m1`, conservando `m` como transcripción histórica;
 - cero tokens gráficos pendientes en el corpus inicial;
-- renderizador público con navegación, lectura técnica, fuentes y enlaces profundos;
-- diagnóstico público de carga del corpus y los SVG;
-- diagnóstico público de los once enlaces profundos;
-- validaciones automáticas del corpus, inventarios, fuentes, recursos gráficos, matriz y estado transversal;
-- regresión automática sobre Chromium, Firefox y WebKit;
-- contrato estructural machine-readable del futuro motor, con conversión pública, reglas, pesos y confianza calibrada explícitamente desactivados;
-- esquemas mutuamente excluyentes para un resultado válido y para un intento bloqueado sin candidatos;
-- esquema de perfiles de pronunciación `es-ES` y registro de dimensiones documentadas, todavía sin perfil aprobado ni valor por defecto.
+- renderizador, navegación, lectura técnica, fuentes y enlaces profundos;
+- regresión automática sobre Chromium, Firefox y WebKit.
 
-Continúan pendientes las pruebas manuales de la implementación actual en Safari/iOS y en navegadores de ordenador, la selección progresiva de alógrafos específicos, la revisión externa especializada, la aprobación de uno o más perfiles de pronunciación y la aprobación del inventario fonético.
+### Demostrador MVP
+
+- biblioteca gráfica independiente con los 38 signos normalizados de la serie nororiental dual;
+- entradas limitadas a 48 caracteres y 6 palabras;
+- ejemplos contractuales para `amor`, `familia` y `te quiero`;
+- representación directa de vocales y continuantes;
+- uso de silabogramas para las oclusivas;
+- advertencias obligatorias para vocales de apoyo y sonidos modernos sin equivalente directo;
+- bloqueo explícito ante símbolos no admitidos;
+- prohibición de salidas vacías y sustituciones silenciosas;
+- audio opcional únicamente para escuchar la entrada española mediante el navegador.
+
+### Motor formal
+
+- contrato machine-readable en estado `specification_only`;
+- perfiles de pronunciación, reglas lingüísticas, pesos y confianza calibrada sin aprobar;
+- estados `success` y `blocked` definidos de forma mutuamente excluyente;
+- conversión formal pública desactivada.
 
 ## Acceso público
 
-- Corpus y renderizador: <https://iberolab-es.github.io/IberoLab/>
+- Demostrador de entradas breves: <https://iberolab-es.github.io/IberoLab/convertir.html>
+- Corpus y renderizador documentado: <https://iberolab-es.github.io/IberoLab/>
 - Diagnóstico de corpus y SVG: <https://iberolab-es.github.io/IberoLab/test.html>
 - Diagnóstico de enlaces profundos: <https://iberolab-es.github.io/IberoLab/deep-link-test.html>
+
+## Convenciones del MVP
+
+El demostrador utiliza una pronunciación española cuidada como **convención operativa del proyecto**, no como pronunciación universal de España. Las decisiones discutibles se explican en pantalla.
+
+Entre otras:
+
+- `b` y `p` comparten la serie labial ibérica y la pérdida del contraste se advierte;
+- `r` y `ŕ` se emplean como convención gráfica para la vibrante simple y múltiple, sin afirmar identidad fonética histórica;
+- `f`, `ñ`, `ch`, `y/ll`, la fricativa de `j` y el sonido de `z/c` requieren aproximaciones visibles;
+- una oclusiva dentro de un grupo consonántico puede necesitar una vocal de apoyo declarada.
 
 ## Principios
 
 - Rigor terminológico y transparencia sobre los límites del conocimiento.
-- Separación entre datos documentados, hipótesis y decisiones de diseño.
+- Separación entre corpus atestiguado, demostración práctica y motor formal.
 - Trazabilidad de cada signo, variante, transcripción y recurso gráfico.
-- Compatibilidad con móvil y escritorio sin depender de recursos gráficos remotos durante la navegación.
-- Pruebas reproducibles antes de publicar una versión estable.
-- Ausencia de sustituciones silenciosas cuando una equivalencia sea incierta.
-- Versionado conjunto de perfiles, reglas, costes, confianza, corpus e inventarios en cualquier resultado futuro.
-- Ausencia de un perfil de pronunciación implícito bajo etiquetas vagas como «neutral» o «peninsular».
+- Ausencia de traducciones, significados o pronunciaciones antiguas inventadas.
+- Ausencia de sustituciones silenciosas.
+- Funcionamiento local en el navegador sin depender de SVG remotos.
+- Pruebas reproducibles antes de etiquetar una versión estable.
 
 ## Estructura actual
 
 ```text
-.github/     Plantillas, gobernanza y GitHub Actions
-data/        Corpus, inventarios, auditorías, manifiestos, esquemas y contratos del motor
-docs/        Web pública, diagnósticos y documentación metodológica
-scripts/     Validadores, migraciones y utilidades reproducibles
-tests/       Pruebas automatizadas de navegador
+.github/     Plantillas, gobernanza y GitHub Actions de solo lectura
+
+data/        Corpus, inventarios, manifiestos, contratos y esquemas
+
+docs/        Web pública, demostrador, diagnósticos y metodología
+
+scripts/     Validadores y utilidades reproducibles
+
+tests/       Regresión automatizada de navegador
 ```
 
-La especificación estructural del motor ya existe, pero **no contiene reglas lingüísticas aprobadas ni habilita un conversor**. Los futuros módulos de adaptación fonética no se incorporarán hasta superar las puertas documentadas en [PHONETIC_ENGINE_SPEC.md](docs/PHONETIC_ENGINE_SPEC.md). Las dimensiones españolas y la política de ausencia de perfil por defecto se documentan en [SPANISH_PRONUNCIATION_PROFILES.md](docs/SPANISH_PRONUNCIATION_PROFILES.md).
+La especificación estructural del motor ya existe, pero no contiene reglas lingüísticas formalmente aprobadas. El demostrador MVP es una capa deliberadamente menor y auditable. Los futuros módulos de adaptación fonética formal seguirán las puertas de [PHONETIC_ENGINE_SPEC.md](docs/PHONETIC_ENGINE_SPEC.md); las dimensiones españolas se documentan en [SPANISH_PRONUNCIATION_PROFILES.md](docs/SPANISH_PRONUNCIATION_PROFILES.md).
 
 ## Validación local
-
-Las comprobaciones documentales y gráficas utilizan Python sin dependencias de ejecución externas:
 
 ```bash
 python scripts/validate_corpus.py
@@ -85,6 +107,7 @@ python scripts/validate_project_state.py
 python scripts/validate_engine_spec.py
 python scripts/validate_engine_schema_registry.py
 python scripts/validate_pronunciation_profiles.py
+python scripts/validate_mvp_converter.py
 ```
 
 La regresión de navegador se ejecuta con Playwright según `playwright.config.cjs` y `.github/workflows/browser-smoke.yml`.
@@ -99,14 +122,14 @@ Consulta [ROADMAP.md](ROADMAP.md). El seguimiento detallado se concentra actualm
 
 - [fase 1 y base paleográfica](https://github.com/iberolab-es/IberoLab/issues/2);
 - [pruebas multidispositivo](https://github.com/iberolab-es/IberoLab/issues/6);
-- [especificación formal del motor moderno](https://github.com/iberolab-es/IberoLab/issues/3).
+- [demostrador MVP y especificación del motor moderno](https://github.com/iberolab-es/IberoLab/issues/3).
 
 ## Licencia
 
-Código y documentación publicados bajo [Apache License 2.0](LICENSE), salvo que un recurso concreto indique otra licencia. Los recursos gráficos de terceros conservan su propia atribución y licencia en el manifiesto y en `NOTICE`.
+Código y documentación publicados bajo [Apache License 2.0](LICENSE), salvo que un recurso concreto indique otra licencia. Los recursos gráficos de terceros conservan su propia atribución y licencia en los manifiestos y en `NOTICE`.
 
 ---
 
 ### English summary
 
-IberoLab is an open experimental project for phonetic representation of modern languages using ancient Iberian and other Palaeohispanic scripts. Its current pre-alpha reconstructs a documented seed corpus with nineteen controlled local SVG resources. A specification-only engine contract and an unapproved European Spanish pronunciation-dimension registry exist, but no pronunciation profile or conversion rule is approved and public conversion remains disabled. IberoLab does **not** claim to translate modern text into the undeciphered Iberian language.
+IberoLab is an open experimental project for representing short modern Spanish names, words and phrases with normalized ancient Iberian signs. A public MVP demonstrator uses deterministic, explained conventions and a separate 38-sign graphic layer. It is not a translation into the undeciphered Iberian language. The attested research corpus remains separate, and the formal phonetic engine, pronunciation profiles, calibrated confidence and reviewed rule system remain disabled.

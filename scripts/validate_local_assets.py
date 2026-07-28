@@ -10,6 +10,7 @@ from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "signs" / "reference-standard-dual.assets.v1.json"
+MVP_MANIFEST = ROOT / "data" / "signs" / "mvp-standard-signary.assets.v1.json"
 MAPPING = ROOT / "data" / "signs" / "reference-standard-dual.v1.json"
 INDEX = ROOT / "docs" / "index.html"
 SELF_TEST = ROOT / "docs" / "test.html"
@@ -23,14 +24,38 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def validate() -> tuple[int, int]:
+def validate_svg_file(path: Path, item: dict, label: str) -> None:
+    if not path.is_file():
+        raise ValueError(f"{label}: local SVG is missing: {path.relative_to(ROOT)}")
+    data = path.read_bytes()
+    if len(data) != item.get("bytes"):
+        raise ValueError(f"{label}: byte count mismatch")
+    if hashlib.sha256(data).hexdigest() != item.get("sha256"):
+        raise ValueError(f"{label}: SHA-256 mismatch")
+    if item.get("media_type") != "image/svg+xml":
+        raise ValueError(f"{label}: unexpected media type")
+    if item.get("licence") != "CC0-1.0":
+        raise ValueError(f"{label}: asset licence must be CC0-1.0")
+    lowered = data.lower()
+    for marker in FORBIDDEN_MARKERS:
+        if marker in lowered:
+            raise ValueError(f"{label}: forbidden active SVG marker {marker!r}")
+    try:
+        root_element = ElementTree.fromstring(data)
+    except ElementTree.ParseError as exc:
+        raise ValueError(f"{label}: malformed SVG XML") from exc
+    if not root_element.tag.lower().endswith("svg"):
+        raise ValueError(f"{label}: root element is not SVG")
+
+
+def validate() -> tuple[int, int, int]:
     manifest = load_json(MANIFEST)
     mapping = load_json(MAPPING)
     assets = manifest.get("assets", [])
     if manifest.get("schema_version") != "1.1.0":
         raise ValueError("asset manifest must use schema 1.1.0 after resolving m1")
     if manifest.get("asset_count") != 19 or len(assets) != 19:
-        raise ValueError("manifest must declare exactly 19 assets")
+        raise ValueError("attested seed manifest must declare exactly 19 assets")
     if manifest.get("licence") != "CC0-1.0":
         raise ValueError("manifest-level licence must remain CC0-1.0")
 
@@ -45,35 +70,14 @@ def validate() -> tuple[int, int]:
     if set(by_token) != EXPECTED_TOKENS:
         raise ValueError(f"manifest token mismatch: {sorted(set(by_token) ^ EXPECTED_TOKENS)}")
 
-    declared_paths: set[Path] = set()
+    seed_paths: set[Path] = set()
     for token, item in by_token.items():
         relative = item.get("local_path")
         if not isinstance(relative, str) or not relative.startswith("docs/assets/signs/northeastern-dual/"):
             raise ValueError(f"{token!r}: invalid local path")
         path = ROOT / relative
-        declared_paths.add(path.resolve())
-        if not path.is_file():
-            raise ValueError(f"{token!r}: local SVG is missing: {relative}")
-        data = path.read_bytes()
-        if len(data) != item.get("bytes"):
-            raise ValueError(f"{token!r}: byte count mismatch")
-        digest = hashlib.sha256(data).hexdigest()
-        if digest != item.get("sha256"):
-            raise ValueError(f"{token!r}: SHA-256 mismatch")
-        if item.get("media_type") != "image/svg+xml":
-            raise ValueError(f"{token!r}: unexpected media type")
-        if item.get("licence") != "CC0-1.0":
-            raise ValueError(f"{token!r}: asset licence must be CC0-1.0")
-        lowered = data.lower()
-        for marker in FORBIDDEN_MARKERS:
-            if marker in lowered:
-                raise ValueError(f"{token!r}: forbidden active SVG marker {marker!r}")
-        try:
-            root_element = ElementTree.fromstring(data)
-        except ElementTree.ParseError as exc:
-            raise ValueError(f"{token!r}: malformed SVG XML") from exc
-        if not root_element.tag.lower().endswith("svg"):
-            raise ValueError(f"{token!r}: root element is not SVG")
+        seed_paths.add(path.resolve())
+        validate_svg_file(path, item, token)
 
     nasal_asset = by_token["ń"]
     expected_nasal = {
@@ -91,11 +95,27 @@ def validate() -> tuple[int, int]:
         if nasal_asset.get(key) != value:
             raise ValueError(f"ń asset has invalid {key}: {nasal_asset.get(key)!r}")
 
+    mvp = load_json(MVP_MANIFEST)
+    mvp_assets = mvp.get("assets", [])
+    if mvp.get("status") != "mvp_graphic_reference" or mvp.get("asset_count") != 38 or len(mvp_assets) != 38:
+        raise ValueError("MVP manifest must declare its separate 38-sign graphic layer")
+    mvp_paths: set[Path] = set()
+    for item in mvp_assets:
+        relative = item.get("local_path")
+        if not isinstance(relative, str) or not relative.startswith("docs/assets/signs/northeastern-dual/"):
+            raise ValueError(f"MVP token {item.get('token')!r}: invalid local path")
+        path = ROOT / relative
+        mvp_paths.add(path.resolve())
+        validate_svg_file(path, item, f"MVP {item.get('token')!r}")
+    if len(mvp_paths) != 38:
+        raise ValueError("MVP manifest paths must identify 38 unique standard SVGs")
+
     disk_paths = {path.resolve() for path in ASSET_DIR.glob("*.svg")}
-    if disk_paths != declared_paths:
-        extras = sorted(str(path.relative_to(ROOT)) for path in disk_paths - declared_paths)
-        missing = sorted(str(path.relative_to(ROOT)) for path in declared_paths - disk_paths)
-        raise ValueError(f"asset directory differs from manifest; extras={extras}, missing={missing}")
+    declared_union = seed_paths | mvp_paths
+    if disk_paths != declared_union:
+        extras = sorted(str(path.relative_to(ROOT)) for path in disk_paths - declared_union)
+        missing = sorted(str(path.relative_to(ROOT)) for path in declared_union - disk_paths)
+        raise ValueError(f"asset directory differs from the two manifests; extras={extras}, missing={missing}")
 
     signs = {item["token"]: item for item in mapping["signs"]}
     if set(signs) != EXPECTED_TOKENS:
@@ -134,17 +154,17 @@ def validate() -> tuple[int, int]:
     resolved = manifest.get("resolved_tokens", [])
     if len(resolved) != 1 or resolved[0].get("token") != "ń" or resolved[0].get("resolved_as") != "m1":
         raise ValueError("manifest must record the m1 resolution of ń")
-    return len(assets), len(disk_paths)
+    return len(assets), len(mvp_assets), len(disk_paths)
 
 
 if __name__ == "__main__":
     try:
-        declared, stored = validate()
+        seed_declared, mvp_declared, stored = validate()
     except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
         print(f"LOCAL ASSET VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
     print(
         "LOCAL ASSET VALIDATION OK: "
-        f"{declared} manifest assets; {stored} stored SVGs; hashes, provenance and local-only delivery verified; "
-        "ń is resolved as documented variant m1 with transcription history preserved."
+        f"{seed_declared} seed assets; {mvp_declared} MVP standard assets; {stored} unique stored SVGs; "
+        "hashes, provenance and local-only delivery verified; the scientific and practical layers remain separate."
     )
