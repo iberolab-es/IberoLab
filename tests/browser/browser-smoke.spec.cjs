@@ -104,7 +104,7 @@ test.describe('presencia pública y académica', () => {
     for (const path of ['/', '/convertir.html']) {
       await page.goto(path, { waitUntil: 'load' });
       await expect(page.locator('.site-brand img')).toHaveCount(1);
-      await expect(page.getByRole('link', { name: 'Universidades' })).toBeVisible();
+      await expect(page.getByRole('link', { name: 'Universidades', exact: true })).toBeVisible();
       await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
       await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
     }
