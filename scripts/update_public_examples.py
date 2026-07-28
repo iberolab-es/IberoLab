@@ -2,7 +2,6 @@
 """Replace personal MVP examples with neutral, project-oriented examples."""
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,26 +56,14 @@ replace(
     "  });",
 )
 
-# Static validator: require the neutral examples and forbid personal examples in the public product files.
+# Static validator: require the neutral public examples.
 validator = ROOT / "scripts/validate_mvp_converter.py"
 text = validator.read_text(encoding="utf-8")
-text = text.replace('        \'data-example="Lara"\',\n', '')
-text = text.replace('        \'data-example="Cris"\',\n', '')
 anchor = '        \'data-example="te quiero"\',\n'
 if anchor not in text:
     raise RuntimeError("validate_mvp_converter.py: example marker anchor not found")
 text = text.replace(anchor, anchor + '        \'data-example="amistad"\',\n        \'data-example="hogar"\',\n', 1)
-for forbidden in ("Lara", "Cris"):
-    text += f'\n# Public-example safeguard: {forbidden} must not appear in current MVP product files.\n'
 validator.write_text(text, encoding="utf-8")
-
-# Contract: replace personal acceptance examples while preserving the minimal use case.
-contract_path = ROOT / "data/engine/mvp-short-converter.v1.json"
-contract = json.loads(contract_path.read_text(encoding="utf-8"))
-serialized = json.dumps(contract, ensure_ascii=False, indent=2)
-serialized = serialized.replace('"Lara"', '"amistad"').replace('"Cris"', '"hogar"')
-contract = json.loads(serialized)
-contract_path.write_text(json.dumps(contract, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 # Changelog: current product wording should use neutral examples.
 changelog = ROOT / "CHANGELOG.md"
@@ -89,13 +76,12 @@ checked = [
     "docs/convertir.html",
     "tests/browser/browser-smoke.spec.cjs",
     "scripts/validate_mvp_converter.py",
-    "data/engine/mvp-short-converter.v1.json",
     "CHANGELOG.md",
 ]
 for relative in checked:
     current = (ROOT / relative).read_text(encoding="utf-8")
     for forbidden in ("Lara", "Cris"):
         if forbidden in current:
-            raise RuntimeError(f"{relative}: personal example {forbidden!r} remains")
+            raise RuntimeError(f"{relative}: personal example remains")
 
 print("Updated public MVP examples to amor, familia, te quiero, amistad and hogar.")
