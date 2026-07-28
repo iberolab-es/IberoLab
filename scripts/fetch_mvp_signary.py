@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Fetch the missing normalized 38-sign Northeastern Iberian SVG references.
 
-This script builds a manifest for the practical short-input MVP. It deliberately
-keeps that graphic layer separate from the 19-token attested seed corpus.
+The practical MVP graphic layer remains separate from the 19-token attested
+seed corpus. Existing seed assets are reused without new network requests; one
+Commons API query resolves only the missing standard files.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import re
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -17,6 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / "docs" / "assets" / "signs" / "northeastern-dual"
 MANIFEST_PATH = ROOT / "data" / "signs" / "mvp-standard-signary.assets.v1.json"
+SEED_MANIFEST_PATH = ROOT / "data" / "signs" / "reference-standard-dual.assets.v1.json"
 
 ROWS = [
     (1, "a", "A", "dual-01-a.svg"),
@@ -65,6 +69,11 @@ UNSAFE_PATTERNS = (
     rb"javascript\s*:",
     rb"<foreignobject\b",
 )
+USER_AGENT = "IberoLab/1.0 (https://github.com/iberolab-es/IberoLab)"
+
+
+def source_file_name(number: int, label: str) -> str:
+    return f"Sign Iber Noro Dual {number:02d} {label}.svg"
 
 
 def validate_svg(data: bytes, source_file: str) -> None:
@@ -77,38 +86,112 @@ def validate_svg(data: bytes, source_file: str) -> None:
             raise RuntimeError(f"{source_file}: unsafe active SVG content detected")
 
 
+def fetch_bytes(opener: urllib.request.OpenerDirector, url: str) -> tuple[bytes, str]:
+    delays = (0, 2, 5, 10)
+    last_error: Exception | None = None
+    for delay in delays:
+        if delay:
+            time.sleep(delay)
+        try:
+            with opener.open(url, timeout=45) as response:
+                return response.read(), response.geturl()
+        except urllib.error.HTTPError as exc:
+            last_error = exc
+            if exc.code not in {429, 502, 503, 504}:
+                raise
+    assert last_error is not None
+    raise last_error
+
+
+def resolve_missing_urls(
+    opener: urllib.request.OpenerDirector,
+    missing_rows: list[tuple[int, str, str, str]],
+) -> dict[str, dict[str, str]]:
+    titles = [f"File:{source_file_name(number, label)}" for number, _, label, _ in missing_rows]
+    query = urllib.parse.urlencode(
+        {
+            "action": "query",
+            "format": "json",
+            "formatversion": "2",
+            "prop": "imageinfo",
+            "iiprop": "url",
+            "titles": "|".join(titles),
+        }
+    )
+    payload, _ = fetch_bytes(opener, "https://commons.wikimedia.org/w/api.php?" + query)
+    document = json.loads(payload.decode("utf-8"))
+    resolved: dict[str, dict[str, str]] = {}
+    for page in document.get("query", {}).get("pages", []):
+        title = page.get("title", "")
+        info = page.get("imageinfo", [])
+        if page.get("missing") is True or not info:
+            raise RuntimeError(f"Commons did not resolve {title!r}")
+        resolved[title.removeprefix("File:")] = {
+            "url": info[0]["url"],
+            "description_url": info[0].get("descriptionurl", ""),
+        }
+    expected = {title.removeprefix("File:") for title in titles}
+    if set(resolved) != expected:
+        raise RuntimeError(f"Commons API resolution mismatch: {sorted(expected - set(resolved))}")
+    return resolved
+
+
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
 
+    seed = json.loads(SEED_MANIFEST_PATH.read_text(encoding="utf-8"))
+    seed_by_source = {
+        item["source_file_name"]: item
+        for item in seed.get("assets", [])
+        if item.get("source_file_name", "").startswith("Sign Iber Noro Dual ")
+    }
+
+    missing_rows = [row for row in ROWS if not (OUTPUT_DIR / row[3]).is_file()]
+    print(f"Reusing {len(ROWS) - len(missing_rows)} existing standard SVGs; fetching {len(missing_rows)} missing SVGs.")
+
     opener = urllib.request.build_opener()
-    opener.addheaders = [("User-Agent", "IberoLab/1.0 signary asset fetcher")]
+    opener.addheaders = [("User-Agent", USER_AGENT)]
+    resolved_missing = resolve_missing_urls(opener, missing_rows) if missing_rows else {}
     assets: list[dict] = []
 
-    for number, token, source_label, local_name in ROWS:
-        source_file = f"Sign Iber Noro Dual {number:02d} {source_label}.svg"
-        source_page = (
-            "https://commons.wikimedia.org/wiki/File:"
-            + urllib.parse.quote(source_file.replace(" ", "_"))
-        )
-        redirect_url = (
-            "https://commons.wikimedia.org/wiki/Special:Redirect/file/"
-            + urllib.parse.quote(source_file)
-        )
+    for number, token, label, local_name in ROWS:
+        source_file = source_file_name(number, label)
         local_path = OUTPUT_DIR / local_name
+        existing_metadata = seed_by_source.get(source_file)
 
-        if local_path.exists():
+        if local_path.is_file():
             data = local_path.read_bytes()
-            with opener.open(redirect_url, timeout=30) as response:
-                resolved_url = response.geturl()
-                response.read(1)
+            if existing_metadata:
+                source_page = existing_metadata["source_file_page"]
+                redirect_url = existing_metadata["source_redirect_url"]
+                resolved_url = existing_metadata["resolved_download_url"]
+            else:
+                source_page = (
+                    "https://commons.wikimedia.org/wiki/File:"
+                    + urllib.parse.quote(source_file.replace(" ", "_"))
+                )
+                redirect_url = (
+                    "https://commons.wikimedia.org/wiki/Special:Redirect/file/"
+                    + urllib.parse.quote(source_file)
+                )
+                resolved_url = resolved_missing.get(source_file, {}).get("url", "")
         else:
-            with opener.open(redirect_url, timeout=30) as response:
-                data = response.read()
-                resolved_url = response.geturl()
+            metadata = resolved_missing[source_file]
+            print(f"Downloading {number:02d}/38: {source_file}")
+            data, resolved_url = fetch_bytes(opener, metadata["url"])
+            source_page = metadata["description_url"] or (
+                "https://commons.wikimedia.org/wiki/File:"
+                + urllib.parse.quote(source_file.replace(" ", "_"))
+            )
+            redirect_url = (
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/"
+                + urllib.parse.quote(source_file)
+            )
             if len(data) < 200:
                 raise RuntimeError(f"{source_file}: downloaded file is unexpectedly small")
             local_path.write_bytes(data)
+            time.sleep(0.35)
 
         validate_svg(data, source_file)
         assets.append(
