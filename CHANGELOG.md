@@ -37,6 +37,10 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Validador de integridad de los SVG locales, su procedencia, sus hashes y la ausencia de elementos activos inseguros.
 - Validación transversal que contrasta manifiesto, mapeo, inventario mínimo, matriz, autodiagnóstico y documentos de estado.
 - Documentación específica de procedencia y procedimiento reproducible de actualización de los recursos gráficos.
+- Contrato machine-readable `specification_only` para el futuro motor de adaptación fonética.
+- Esquema JSON de resultados que exige versiones, capas, candidatos, operaciones, costes, explicaciones y ausencia de afirmaciones semánticas.
+- Especificación normativa de las etapas, invariantes, ambigüedad, errores, costes, confianza y puertas de implementación.
+- Validador que impide activar conversión pública, perfiles, reglas, pesos o confianza calibrada antes de su aprobación.
 
 ### Changed
 
@@ -53,7 +57,8 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - El inventario mínimo pasa de ser una lista de transcripciones con gráficos pendientes a un dataset enlazado token por token con el mapeo y el manifiesto actuales.
 - La documentación de pruebas separa el diagnóstico gráfico del diagnóstico de enlaces profundos para conservar informes reproducibles y responsabilidades técnicas distintas.
 - Los cambios en `docs/`, la configuración de Playwright o la suite de navegador activan una comprobación automática en tres motores con permisos de solo lectura.
-- La especificación formal del motor moderno puede comenzar, mientras su implementación pública continúa bloqueada por pruebas manuales, modelo de alógrafos y revisión externa.
+- La fase 2 separa el contrato estructural ya aprobado de perfiles, reglas, pesos, calibración e implementación todavía pendientes.
+- Cualquier resultado futuro deberá clasificarse como adaptación fonética experimental, conservar todas las versiones y mantener vacía la colección de afirmaciones semánticas.
 
 ### Verified
 
@@ -63,6 +68,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Descarga reproducible de los dieciocho SVG iniciales y del recurso m1, generación del manifiesto y migración local superadas en GitHub Actions.
 - Validaciones del corpus, inventario mínimo, auditoría documental, integridad gráfica, renderizador, matriz y estado transversal superadas.
 - Ejecución automática completa satisfactoria en Chromium, Firefox y WebKit: once enlaces, diecinueve SVG locales y ambos diagnósticos sin fallos.
+- Contrato del motor validado con ocho etapas no implementadas, ocho tipos estructurales de operación, pesos vacíos y todas las puertas de implementación cerradas.
 
 ### Known limitations
 
@@ -73,6 +79,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - La revisión documental realizada es interna; el corpus necesita revisión externa especializada antes de declararse estable.
 - La selección de alógrafos específicos de cada testimonio sigue pendiente.
 - El motor para entradas modernas todavía no está implementado.
+- No existen todavía perfiles de pronunciación, inventario fonético aprobado, reglas de adaptación, pesos, calibración ni candidatos lingüísticos válidos.
 
 ### Security
 
@@ -83,3 +90,4 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Los SVG se validan como XML, se comparan mediante SHA-256 y se rechazan si contienen marcadores activos como scripts, manejadores de eventos o `foreignObject`.
 - Los flujos temporales con permiso de escritura se eliminan antes de fusionar; los CI ordinarios conservan únicamente permiso de lectura.
 - La regresión de navegador utiliza dependencias y navegadores fijados por la versión de Playwright y conserva evidencias solo cuando una prueba falla.
+- El contrato del motor prohíbe salida pública mientras cualquier puerta permanezca cerrada y exige trazabilidad completa de cada operación futura.
