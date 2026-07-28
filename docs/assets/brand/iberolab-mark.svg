@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Símbolo de IberoLab</title>
+  <desc id="desc">Marca contemporánea geométrica inspirada en la lógica visual de los signarios paleohispánicos; no representa un signo antiguo auténtico.</desc>
+  <circle cx="128" cy="128" r="116" fill="#071019"/>
+  <circle cx="128" cy="128" r="104" fill="none" stroke="#d6a34d" stroke-width="9"/>
+  <g fill="none" stroke="#d6a34d" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 50V202"/>
+    <path d="M128 72L94 104"/>
+    <path d="M128 72L162 104"/>
+    <path d="M128 117L88 157"/>
+    <path d="M128 117L168 157"/>
+    <path d="M128 158L101 185"/>
+    <path d="M128 158L155 185"/>
+  </g>
+  <circle cx="85" cy="105" r="8" fill="#47a9ff"/>
+  <circle cx="171" cy="105" r="8" fill="#47a9ff"/>
+</svg>
