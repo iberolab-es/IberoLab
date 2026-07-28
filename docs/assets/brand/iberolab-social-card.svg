@@ -26,7 +26,7 @@
       <rect x="724" y="404" width="190" height="46" rx="23" fill="#15283b" stroke="#3a5875"/><text x="741" y="433">38 signos locales</text>
       <rect x="926" y="404" width="168" height="46" rx="23" fill="#15283b" stroke="#3a5875"/><text x="943" y="433">Código abierto</text>
     </g>
-    <text x="480" y="516" fill="#d6a34d" font-size="23">No es una traducción al idioma ibérico.</text>
+    <text x="480" y="516" fill="#d6a34d" font-size="23">No es una traducción a la lengua ibérica.</text>
     <text x="480" y="560" fill="#afbdd0" font-size="22">iberolab-es.github.io/IberoLab/</text>
   </g>
 </svg>

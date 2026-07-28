@@ -23,7 +23,7 @@ def main():
     for key,value in expected.items():
         if nasal.get(key)!=value: raise ValueError(f"ń mapping lacks documented {key}={value!r}")
     html=HTML.read_text(encoding="utf-8");script=SCRIPT.read_text(encoding="utf-8");combined=html+"\n"+script
-    required=("renderForm","glyph-fallback","DOMContentLoaded","sourceLink","evidenceText","transcriptionNote","previousButton","nextButton","hashchange","rendererReady","No es una traducción al idioma ibérico","Referencia normalizada","variant-m1-nasal.svg","variante m1","transcripción tradicional era m","no un facsímil",'src="corpus-renderer.js"')
+    required=("renderForm","glyph-fallback","DOMContentLoaded","sourceLink","evidenceText","transcriptionNote","previousButton","nextButton","hashchange","rendererReady","No es una traducción a la lengua ibérica","Referencia normalizada","variant-m1-nasal.svg","variante m1","transcripción tradicional era m","no un facsímil",'src="corpus-renderer.js"')
     absent=[m for m in required if m not in combined]
     if absent: raise ValueError(f"renderer lacks safeguards: {absent}")
     if "Special:Redirect/file" in combined or "COMMONS_REDIRECT" in combined or "upload.wikimedia.org" in combined: raise ValueError("remote SVG dependency detected")

@@ -79,7 +79,7 @@ def validate() -> tuple[int, int]:
         academia,
         (
             "Información para universidades y especialistas",
-            "IberoLab no traduce al idioma ibérico",
+            "IberoLab no traduce a la lengua ibérica",
             "English summary",
             "Hesperia",
             "Palaeohispanica",
@@ -116,8 +116,39 @@ def validate() -> tuple[int, int]:
         if personal_example in active_public:
             fail(f"personal example remains in active public content: {personal_example}")
 
+    terminology_files = (
+        ROOT / "README.md",
+        ROOT / "CITATION.cff",
+        DOCS / "index.html",
+        DOCS / "convertir.html",
+        DOCS / "historia.html",
+        DOCS / "metodologia.html",
+        DOCS / "academia.html",
+        DOCS / "PHONETIC_ENGINE_SPEC.md",
+        ROOT / "data" / "engine" / "mvp-short-converter.v1.json",
+    )
+    forbidden_terms = ("idioma ibérico", "lenguaje ibérico", "idioma íbero", "lenguaje íbero")
+    for path in terminology_files:
+        lowered = path.read_text(encoding="utf-8").casefold()
+        for term in forbidden_terms:
+            if term.casefold() in lowered:
+                fail(f"deprecated terminology {term!r} remains in {path.relative_to(ROOT)}")
+
     outreach = (ROOT / "OUTREACH.md").read_text(encoding="utf-8")
-    require(outreach, ("Valoración de X", "No traduce", "Hesperia", "Palaeohispanica"), "OUTREACH.md")
+    require(
+        outreach,
+        (
+            "Terminología editorial",
+            "lengua ibérica",
+            "envíos masivos",
+            "catorce días",
+            "Valoración de X",
+            "No traduce",
+            "Hesperia",
+            "Palaeohispanica",
+        ),
+        "OUTREACH.md",
+    )
     return len(REQUIRED_FILES), 3
 
 
