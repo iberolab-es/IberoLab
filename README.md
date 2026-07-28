@@ -1,5 +1,7 @@
 # IberoLab
 
+<p align="center"><img src="docs/assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab" width="112"></p>
+
 **Proyecto abierto y experimental para representar fonéticamente nombres, palabras y frases breves mediante escrituras paleohispánicas.**
 
 > Estado: **pre-alpha con demostrador MVP**. La web pública reconstruye un corpus inicial contrastado y ofrece una adaptación gráfica experimental para entradas modernas breves, pero todavía no ofrece un conversor formal validado ni un traductor al idioma ibérico.
@@ -12,7 +14,7 @@ IberoLab separa tres capas que no deben confundirse:
 2. **Demostrador práctico:** adaptación fonética experimental de nombres, palabras y frases españolas breves mediante reglas deterministas y advertencias visibles.
 3. **Motor formal futuro:** arquitectura versionada para perfiles, reglas, costes, alternativas y confianza, todavía desactivada.
 
-La intención práctica es modesta: que una persona pueda escribir algo como `Lara`, `amor`, `familia` o `te quiero` y obtener una representación gráfica razonada, sin fingir una traducción que el conocimiento actual no permite.
+La intención práctica es modesta: que una persona pueda escribir algo como `amor`, `familia`, `hogar` o `te quiero` y obtener una representación gráfica razonada, sin fingir una traducción que el conocimiento actual no permite.
 
 ## Qué no es
 
@@ -55,6 +57,7 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 
 - Demostrador de entradas breves: <https://iberolab-es.github.io/IberoLab/convertir.html>
 - Corpus y renderizador documentado: <https://iberolab-es.github.io/IberoLab/>
+- Información para universidades y especialistas: <https://iberolab-es.github.io/IberoLab/academia.html>
 - Diagnóstico de corpus y SVG: <https://iberolab-es.github.io/IberoLab/test.html>
 - Diagnóstico de enlaces profundos: <https://iberolab-es.github.io/IberoLab/deep-link-test.html>
 
@@ -108,13 +111,14 @@ python scripts/validate_engine_spec.py
 python scripts/validate_engine_schema_registry.py
 python scripts/validate_pronunciation_profiles.py
 python scripts/validate_mvp_converter.py
+python scripts/validate_public_presence.py
 ```
 
 La regresión de navegador se ejecuta con Playwright según `playwright.config.cjs` y `.github/workflows/browser-smoke.yml`.
 
 ## Participar
 
-Las sugerencias y errores se gestionan mediante [GitHub Issues](https://github.com/iberolab-es/IberoLab/issues/new/choose). Antes de contribuir, consulta [CONTRIBUTING.md](CONTRIBUTING.md), la [metodología](docs/METHODOLOGY.md), la [especificación del motor](docs/PHONETIC_ENGINE_SPEC.md), los [perfiles de pronunciación](docs/SPANISH_PRONUNCIATION_PROFILES.md) y la [procedencia de los recursos](docs/ASSET_PROVENANCE.md).
+Las sugerencias y errores se gestionan mediante [GitHub Issues](https://github.com/iberolab-es/IberoLab/issues/new/choose). Antes de contribuir, consulta [CONTRIBUTING.md](CONTRIBUTING.md), la [metodología](docs/METHODOLOGY.md), la [especificación del motor](docs/PHONETIC_ENGINE_SPEC.md), los [perfiles de pronunciación](docs/SPANISH_PRONUNCIATION_PROFILES.md), la [procedencia de los recursos](docs/ASSET_PROVENANCE.md) y el [plan de difusión](OUTREACH.md).
 
 ## Hoja de ruta
 

@@ -11,6 +11,13 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - No se guarda el historial en IberoLab ni se envía a ningún servidor del proyecto.
 - La regresión comprueba persistencia, orden, reutilización y borrado.
 
+## Unreleased — identidad y presencia académica
+
+- Se incorpora una identidad visual propia y explícitamente contemporánea.
+- Se publica una página bilingüe para universidades y especialistas.
+- Se añaden citación, privacidad, sitemap, robots, manifiesto web y metadatos sociales.
+- Corpus y demostrador comparten cabecera, navegación y acceso a revisión académica.
+
 ## Unreleased — resultados compartibles y frases más claras
 
 - Los resultados del demostrador disponen de URL restaurable mediante `?q=`.

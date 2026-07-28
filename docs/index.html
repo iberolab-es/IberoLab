@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark light">
   <meta name="description" content="Corpus inicial de formas ibéricas documentadas y representación gráfica normalizada de referencia.">
+  <link rel="canonical" href="https://iberolab-es.github.io/IberoLab/">
+  <link rel="icon" href="assets/brand/iberolab-mark.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#10253a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="IberoLab · Corpus ibérico documentado">
+  <meta property="og:description" content="Corpus documentado y demostrador de adaptación fonética experimental mediante signos ibéricos normalizados.">
+  <meta property="og:url" content="https://iberolab-es.github.io/IberoLab/">
+  <meta property="og:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.svg">
+  <meta name="twitter:card" content="summary_large_image">
   <title>IberoLab — Corpus ibérico contrastado</title>
   <style>
     :root {
@@ -30,6 +40,13 @@
     }
     main { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 38px 0 64px; }
     header { margin-bottom: 24px; }
+    .site-topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 26px; }
+    .site-brand { display: inline-flex; align-items: center; gap: 11px; color: var(--text); text-decoration: none; font-size: 1.1rem; font-weight: 900; }
+    .site-brand img { width: 46px; height: 46px; }
+    .site-nav { display: flex; flex-wrap: wrap; gap: 12px; }
+    .site-nav a { color: var(--muted); text-decoration: none; font-weight: 750; }
+    .site-nav a:hover { color: var(--text); }
+
     .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; }
     h1 { margin: 8px 0 10px; font-size: clamp(2rem, 6vw, 4.2rem); line-height: .98; }
     .lead { max-width: 820px; color: var(--muted); font-size: 1.05rem; line-height: 1.65; }
@@ -157,6 +174,15 @@
 </head>
 <body>
 <main>
+  <div class="site-topbar">
+    <a class="site-brand" href="./"><img src="assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab"><span>IberoLab</span></a>
+    <nav class="site-nav" aria-label="Navegación principal">
+      <a href="convertir.html">Demostrador</a>
+      <a href="./">Corpus</a>
+      <a href="academia.html">Universidades</a>
+      <a href="https://github.com/iberolab-es/IberoLab">GitHub</a>
+    </nav>
+  </div>
   <header>
     <div class="eyebrow">IberoLab · pre-alpha</div>
     <h1>Formas ibéricas contrastadas</h1>
@@ -228,7 +254,8 @@
 
   <footer>
     Recursos gráficos locales de referencia: 19 SVG CC0 con procedencia, URL resuelta, tamaño y SHA-256 versionados. Dieciocho pertenecen a la serie normalizada “Sign Iber Noro Dual 01–38” de BotaFlo; para ń se usa la variante normalizada m1 de Vriullop, identificada por la publicación de 2025. Ningún recurso se presenta como facsímil del testimonio.<br><br>
-    ¿Has detectado un error o dispones de una fuente que pueda mejorar el proyecto? <a href="https://github.com/iberolab-es/IberoLab/issues/new/choose" target="_blank" rel="noopener noreferrer">Enviar una sugerencia o aportación</a>.
+    ¿Has detectado un error o dispones de una fuente que pueda mejorar el proyecto? <a href="https://github.com/iberolab-es/IberoLab/issues/new/choose" target="_blank" rel="noopener noreferrer">Enviar una sugerencia o aportación</a>.<br><br>
+    <a href="academia.html">Información para universidades y especialistas</a> · <a href="privacidad.html">Privacidad</a>.
   </footer>
 </main>
 
