@@ -1,0 +1,49 @@
+name: Render IberoLab brand PNG
+
+# Temporary one-shot workflow; removed before merge.
+on:
+  push:
+    branches: [feat/public-academic-presence]
+    paths:
+      - docs/assets/brand/iberolab-mark.svg
+      - docs/assets/brand/iberolab-social-card.svg
+      - .github/workflows/render-brand-png.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out working branch
+        uses: actions/checkout@v6
+        with:
+          ref: feat/public-academic-presence
+
+      - name: Install deterministic SVG renderer
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends librsvg2-bin
+
+      - name: Render PNG assets
+        run: |
+          rsvg-convert -w 512 -h 512 docs/assets/brand/iberolab-mark.svg -o docs/assets/brand/iberolab-mark-512.png
+          rsvg-convert -w 1200 -h 630 docs/assets/brand/iberolab-social-card.svg -o docs/assets/brand/iberolab-social-card.png
+          test -s docs/assets/brand/iberolab-mark-512.png
+          test -s docs/assets/brand/iberolab-social-card.png
+
+      - name: Commit generated assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/assets/brand/iberolab-mark-512.png docs/assets/brand/iberolab-social-card.png
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Generar recursos PNG de la identidad visual"
+            git push origin HEAD:feat/public-academic-presence
+          fi
