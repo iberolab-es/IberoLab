@@ -36,7 +36,8 @@ La pre-alpha dispone de:
 - diagnóstico público de los once enlaces profundos;
 - validaciones automáticas del corpus, inventarios, fuentes, recursos gráficos, matriz y estado transversal;
 - regresión automática sobre Chromium, Firefox y WebKit;
-- contrato estructural machine-readable del futuro motor, con conversión pública, perfiles, reglas, pesos y confianza calibrada explícitamente desactivados.
+- contrato estructural machine-readable del futuro motor, con conversión pública, perfiles, reglas, pesos y confianza calibrada explícitamente desactivados;
+- esquemas mutuamente excluyentes para un resultado válido y para un intento bloqueado sin candidatos.
 
 Continúan pendientes las pruebas manuales de la implementación actual en Safari/iOS y en navegadores de ordenador, la selección progresiva de alógrafos específicos, la revisión externa especializada y la aprobación del modelo fonético.
 
@@ -80,6 +81,7 @@ python scripts/validate_renderer.py
 python scripts/validate_browser_matrix.py
 python scripts/validate_project_state.py
 python scripts/validate_engine_spec.py
+python scripts/validate_engine_schema_registry.py
 ```
 
 La regresión de navegador se ejecuta con Playwright según `playwright.config.cjs` y `.github/workflows/browser-smoke.yml`.
