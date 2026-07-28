@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0.0",
+  "converter_id": "iberolab-short-input-mvp",
+  "status": "public_preview_mvp",
+  "classification": "experimental_phonetic_adaptation",
+  "translation_claim": false,
+  "formal_engine_enabled": false,
+  "purpose": "Represent short Spanish names, words and phrases with normalized Northeastern Iberian reference signs through deterministic and explained project conventions.",
+  "scope": {
+    "maximum_characters": 48,
+    "maximum_words": 6,
+    "accepted_use_cases": [
+      "personal_names",
+      "single_words",
+      "short_affective_phrases"
+    ],
+    "excluded_use_cases": [
+      "literal_translation_into_iberian",
+      "semantic_reconstruction",
+      "long_text_conversion",
+      "attestation_specific_facsimile",
+      "historical_pronunciation_reconstruction"
+    ]
+  },
+  "input_convention": {
+    "profile_id": "es-es-careful-project-preview",
+    "status": "project_preview_convention_not_approved_universal_profile",
+    "description": "Careful contemporary Spanish reference used only to make the MVP deterministic. It is not claimed to represent every speaker in Spain.",
+    "orthographic_normalization": [
+      "lowercase",
+      "remove_spanish_accent_marks_after_preserving_letter_identity",
+      "resolve_qu_before_e_or_i_as_k",
+      "resolve_silent_u_in_gu_before_e_or_i",
+      "preserve_word_boundaries"
+    ],
+    "audio_policy": "Browser speech synthesis may read the original Spanish input; it must never be labelled as reconstructed Iberian pronunciation."
+  },
+  "graphic_layer": {
+    "manifest": "data/signs/mvp-standard-signary.assets.v1.json",
+    "sign_count": 38,
+    "script_label": "Northeastern Iberian normalized dual reference",
+    "attested_seed_manifest_remains_separate": "data/signs/reference-standard-dual.assets.v1.json"
+  },
+  "adaptation_policy": {
+    "stops_use_syllabograms": true,
+    "vowels_sibilants_and_sonorants_use_alphabetic_signs": true,
+    "cluster_support_vowels_must_be_reported": true,
+    "unsupported_sound_substitutions_must_be_reported": true,
+    "silent_character_removal_must_be_reported": true,
+    "empty_output_forbidden": true,
+    "unknown_symbol_policy": "block",
+    "confidence_policy": "direct_or_approximate_labels_only_no_numeric_score"
+  },
+  "engineering_conventions": [
+    {
+      "id": "labial_stop_series",
+      "source_units": ["b", "p"],
+      "target_series": ["ba", "be", "bi", "bo", "bu"],
+      "note": "The MVP uses the single labial stop series for Spanish b and p and warns when p loses its voicing contrast."
+    },
+    {
+      "id": "dental_stop_series",
+      "source_units": ["d", "t"],
+      "target_series": ["da", "de", "di", "do", "du", "ta", "te", "ti", "to", "tu"]
+    },
+    {
+      "id": "velar_stop_series",
+      "source_units": ["g", "k"],
+      "target_series": ["ga", "ge", "gi", "go", "gu", "ka", "ke", "ki", "ko", "ku"]
+    },
+    {
+      "id": "spanish_r_project_convention",
+      "source_units": ["tap_r", "trill_r"],
+      "target_tokens": ["r", "ŕ"],
+      "note": "This is an explicit project convention for readability, not a claim that the historical Iberian values were identical to the Spanish tap and trill."
+    },
+    {
+      "id": "unmatched_modern_sounds",
+      "source_units": ["f", "theta", "velar_fricative", "palatal", "palatal_nasal", "affricate", "w"],
+      "policy": "Use a declared nearest graphic approximation and display a warning; never hide the substitution."
+    }
+  ],
+  "acceptance_examples": [
+    {
+      "input": "amor",
+      "expected_words": [["a", "m", "o", "r"]],
+      "expected_status": "direct"
+    },
+    {
+      "input": "familia",
+      "expected_words": [["ba", "m", "i", "l", "i", "a"]],
+      "expected_status": "approximate",
+      "required_warning_code": "f_to_labial_stop"
+    },
+    {
+      "input": "te quiero",
+      "expected_words": [["te"], ["ki", "e", "r", "o"]],
+      "expected_status": "direct"
+    }
+  ],
+  "user_facing_labels": {
+    "primary": "Adaptación fonética experimental",
+    "not_translation": "No es una traducción al idioma ibérico",
+    "pronunciation": "Pronunciación española de referencia",
+    "graphic_note": "Signos normalizados de referencia, no facsímiles arqueológicos"
+  }
+}
