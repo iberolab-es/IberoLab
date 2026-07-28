@@ -48,8 +48,9 @@
 - [x] Separar formalmente información lingüística, decisiones de adaptación y resolución gráfica.
 - [x] Definir el esquema machine-readable de un resultado de adaptación experimental sin afirmaciones semánticas.
 - [x] Mantener perfiles, reglas, pesos, confianza calibrada y conversión pública explícitamente desactivados en el contrato inicial.
+- [x] Definir el esquema de perfiles de pronunciación de español europeo y un registro inicial de dimensiones sin perfil por defecto.
+- [ ] Aprobar uno o más perfiles españoles después de revisión interna, revisión externa y delimitación geográfica y de registro.
 - [ ] Aprobar una representación fonética interna y su inventario de rasgos para entradas españolas.
-- [ ] Definir perfiles de pronunciación de español europeo sin imponer silenciosamente una variedad regional.
 - [ ] Construir un inventario explícito de sonidos modernos sin equivalente directo.
 - [ ] Definir el esquema de reglas y sus niveles de evidencia.
 - [ ] Preparar casos de prueba contractuales sin inventar salidas lingüísticas.
@@ -65,7 +66,7 @@
 - [ ] Explicar cada sustitución, pérdida o aproximación.
 - [ ] Evitar presentar la adaptación como traducción al idioma ibérico.
 
-La especificación estructural está versionada en `data/engine/phonetic-engine-contract.v1.json` y `docs/PHONETIC_ENGINE_SPEC.md`. La implementación y su exposición pública continúan bloqueadas hasta completar las pruebas manuales actuales del renderizador, fijar el modelo mínimo de alógrafos, aprobar el perfil fonético y someter la base inicial a revisión externa.
+La especificación estructural está versionada en `data/engine/phonetic-engine-contract.v1.json` y `docs/PHONETIC_ENGINE_SPEC.md`. Las dimensiones españolas se registran en `data/engine/spanish-pronunciation-dimensions.v1.json`, pero todavía no existe ningún perfil aprobado. La implementación y su exposición pública continúan bloqueadas hasta completar las pruebas manuales actuales del renderizador, fijar el modelo mínimo de alógrafos, aprobar el perfil fonético y someter la base inicial a revisión externa.
 
 ## Fase 3 — Renderizador
 
