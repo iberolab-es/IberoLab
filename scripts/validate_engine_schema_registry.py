@@ -117,13 +117,14 @@ def validate() -> tuple[int, int, int]:
         fail("blocked schema must require blocking reasons")
 
     specification = SPEC_DOC.read_text(encoding="utf-8")
+    specification_casefold = specification.casefold()
     for marker in (
         "un intento bloqueado",
         "no puede presentar candidatos parciales",
         "data/schema/adaptation-blocked.schema.json",
         "data/engine/schema-registry.v1.json",
     ):
-        if marker not in specification:
+        if marker.casefold() not in specification_casefold:
             fail(f"engine specification lacks blocked-state marker {marker!r}")
 
     return len(states), len(success_required), len(blocked_required)
