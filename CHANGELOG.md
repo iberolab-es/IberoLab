@@ -28,6 +28,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Navegación anterior/siguiente, indicador de posición y enlaces profundos mediante el identificador de cada forma.
 - Página pública de autodiagnóstico para comprobar las once formas, la carga de los signos y la ausencia de salidas vacías.
 - Página pública independiente que abre secuencialmente los once enlaces profundos y verifica el hash, la selección, la lectura y la salida gráfica efectiva.
+- Regresión automática con Playwright sobre Chromium, Firefox y WebKit para las once formas y las dos páginas de diagnóstico.
 - Matriz versionada de pruebas en Safari, Chrome, Brave, Firefox y Edge, separando los entornos móviles de los navegadores ejecutados realmente en ordenador.
 - Dieciocho SVG de referencia almacenados dentro del repositorio bajo rutas estables.
 - Manifiesto individual de los recursos gráficos con origen, URL resuelta, autoría, licencia, tamaño y hash SHA-256.
@@ -47,6 +48,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Las pruebas móviles realizadas sobre la implementación remota se conservan como evidencia histórica, pero pasan a estado parcial hasta repetirse con los SVG locales desplegados.
 - El flujo ordinario de GitHub Actions valida ahora también la existencia, el hash, el XML y la trazabilidad de los dieciocho SVG locales.
 - La documentación de pruebas separa el diagnóstico gráfico del diagnóstico de enlaces profundos para conservar informes reproducibles y responsabilidades técnicas distintas.
+- Los cambios en `docs/`, la configuración de Playwright o la suite de navegador activan una comprobación automática en tres motores con permisos de solo lectura.
 
 ### Verified
 
@@ -55,15 +57,17 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - `ń` permanece visible como único token deliberadamente pendiente en `taŕśabań`.
 - Descarga reproducible de los dieciocho SVG CC0, generación del manifiesto y migración local superadas en GitHub Actions.
 - Validaciones del corpus, auditoría documental, integridad gráfica, renderizador y matriz de navegadores superadas en la rama de integración local.
+- Primera ejecución automática completa satisfactoria en Chromium, Firefox y WebKit: once enlaces, SVG locales y ambos diagnósticos sin fallos.
 
 ### Known limitations
 
 - El token `ń` de `taŕśabań` permanece sin signo gráfico asignado hasta verificar la convención de transcripción y la forma exacta en la publicación correspondiente.
 - Las figuras actuales son formas normalizadas de referencia y no facsímiles de los alógrafos originales de cada inscripción.
 - Deben repetirse las pruebas móviles después del despliegue de los SVG locales.
-- Continúan pendientes Chrome, Firefox y Edge ejecutados realmente en ordenador y la ejecución registrada del nuevo diagnóstico de enlaces profundos.
+- Continúan pendientes Google Chrome, Mozilla Firefox y Microsoft Edge ejecutados manualmente en ordenador y la ejecución registrada del diagnóstico de enlaces profundos en esos entornos.
+- La cobertura automática de Chromium, Firefox y WebKit no sustituye navegadores de marca, Safari/iOS ni una regresión visual píxel a píxel.
 - La revisión documental realizada es interna; el corpus necesita revisión externa especializada antes de declararse estable.
-- La regresión visual automatizada y la selección de alógrafos específicos de cada testimonio siguen pendientes.
+- La selección de alógrafos específicos de cada testimonio sigue pendiente.
 
 ### Security
 
@@ -73,3 +77,4 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - La similitud fonética futura no podrá utilizarse para inferir significado ibérico.
 - Los SVG se validan como XML, se comparan mediante SHA-256 y se rechazan si contienen marcadores activos como scripts, manejadores de eventos o `foreignObject`.
 - El flujo temporal con permiso de escritura utilizado para generar los recursos se elimina antes de fusionar la integración; el CI ordinario conserva únicamente permiso de lectura.
+- La regresión de navegador utiliza dependencias y navegadores fijados por la versión de Playwright y conserva evidencias solo cuando una prueba falla.
