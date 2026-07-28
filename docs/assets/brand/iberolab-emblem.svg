@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Emblema contemporáneo de IberoLab</title>
+  <desc id="desc">Símbolo circular con un eje central y ramas geométricas que evocan raíz, escritura, memoria y transmisión del conocimiento.</desc>
+  <circle cx="128" cy="128" r="104" fill="none" stroke="#c89a4b" stroke-width="10"/>
+  <g fill="none" stroke="#c89a4b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 55v142"/>
+    <path d="M128 72l-34 31"/>
+    <path d="M128 72l34 31"/>
+    <path d="M128 110l-43 35"/>
+    <path d="M128 110l43 35"/>
+    <path d="M128 151l-31 35"/>
+    <path d="M128 151l31 35"/>
+  </g>
+  <circle cx="179" cy="74" r="7" fill="#c89a4b"/>
+</svg>
