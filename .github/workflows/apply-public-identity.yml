@@ -1,6 +1,6 @@
 name: Apply public identity and history
 
-# Temporary one-shot workflow; removed before merge.
+# Temporary one-shot workflow; removed before merge. Trigger after PR creation.
 on:
   push:
     branches: [feat/public-identity-history-audio]
