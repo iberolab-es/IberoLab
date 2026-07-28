@@ -1,0 +1,39 @@
+name: Apply public identity and history
+
+# Temporary one-shot workflow; removed before merge.
+on:
+  push:
+    branches: [feat/public-identity-history-audio]
+    paths:
+      - scripts/apply_public_identity.py
+      - .github/workflows/apply-public-identity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check out working branch
+        uses: actions/checkout@v6
+        with:
+          ref: feat/public-identity-history-audio
+
+      - name: Apply public identity iteration
+        run: python scripts/apply_public_identity.py
+
+      - name: Commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html docs/convertir.html docs/historia.html scripts/validate_mvp_converter.py tests/browser/browser-smoke.spec.cjs .github/workflows/validate.yml CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Rediseñar portada y añadir historia y audio aproximado"
+            git push origin HEAD:feat/public-identity-history-audio
+          fi
