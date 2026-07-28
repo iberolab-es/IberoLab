@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "data" / "corpus" / "attested-forms.v1.json"
 MAPPING = ROOT / "data" / "signs" / "reference-standard-dual.v1.json"
-HTML = ROOT / "docs" / "index.html"
+HTML = ROOT / "docs" / "corpus.html"
 LOCAL_STATUSES = {"local_reference_svg_available", "local_attested_variant_svg_available"}
 
 
