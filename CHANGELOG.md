@@ -17,8 +17,9 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Corpus inicial de once formas ibéricas contrastadas en estudios epigráficos o numismáticos.
 - Inventario mínimo de diecinueve tokens de transcripción derivado exclusivamente del corpus.
 - Esquema JSON y validador reproducible para lecturas, segmentaciones, fuentes y estados semánticos.
+- Esquema JSON específico para el inventario mínimo sincronizado con el mapeo gráfico y el manifiesto de recursos.
 - Auditoría del prototipo HTML anterior: se conserva la arquitectura autónoma, pero se descartan sus glifos experimentales como evidencia paleográfica.
-- Mapeo gráfico provisional de dieciocho tokens mediante SVG normalizados de referencia del signario ibérico nororiental dual.
+- Mapeo gráfico inicial de dieciocho tokens mediante SVG normalizados del signario ibérico nororiental dual, ampliado después con la variante m1 documentada.
 - Página HTML preparada en `docs/index.html` para mostrar las once formas contrastadas con lectura técnica y fallback visible.
 - Validador del renderizador para impedir tokens ausentes, referencias SVG inválidas y páginas sin salvaguardas contra salidas vacías.
 - Auditoría documental interna de las once formas, con una entrada verificable por forma y fuentes persistentes.
@@ -31,9 +32,10 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Regresión automática con Playwright sobre Chromium, Firefox y WebKit para las once formas y las dos páginas de diagnóstico.
 - Variante paleográfica m1 normalizada, trazable y licenciada para resolver la transcripción ń del corpus.
 - Matriz versionada de pruebas en Safari, Chrome, Brave, Firefox y Edge, separando los entornos móviles de los navegadores ejecutados realmente en ordenador.
-- Dieciocho SVG de referencia almacenados dentro del repositorio bajo rutas estables.
+- Diecinueve SVG de referencia almacenados dentro del repositorio bajo rutas estables.
 - Manifiesto individual de los recursos gráficos con origen, URL resuelta, autoría, licencia, tamaño y hash SHA-256.
 - Validador de integridad de los SVG locales, su procedencia, sus hashes y la ausencia de elementos activos inseguros.
+- Validación transversal que contrasta manifiesto, mapeo, inventario mínimo, matriz, autodiagnóstico y documentos de estado.
 - Documentación específica de procedencia y procedimiento reproducible de actualización de los recursos gráficos.
 
 ### Changed
@@ -45,36 +47,39 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - La forma `ildiŕda` explica expresamente que el uso de `di/da` es una normalización dual y no un facsímil de la secuencia epigráfica `ti/ta` documentada para un ejemplar.
 - GitHub Pages queda registrado como despliegue pre-alpha, no como beta validada.
 - El renderizador público y el autodiagnóstico cargan los signos exclusivamente desde el propio repositorio y ya no dependen de Wikimedia durante la navegación.
-- El autodiagnóstico pasa a la versión `1.1.0` e identifica explícitamente `asset_mode: local_repository` en sus informes.
-- Las pruebas móviles realizadas sobre la implementación remota se conservan como evidencia histórica, pero pasan a estado parcial hasta repetirse con los SVG locales desplegados.
-- El flujo ordinario de GitHub Actions valida ahora también la existencia, el hash, el XML y la trazabilidad de los dieciocho SVG locales.
+- El autodiagnóstico pasa a la versión `1.2.0`, identifica `asset_mode: local_repository`, espera 19 SVG y no admite tokens gráficos pendientes.
+- Las pruebas móviles realizadas sobre la implementación remota se conservan como evidencia histórica, pero pasan a estado parcial hasta repetirse con los SVG locales actuales.
+- El flujo ordinario de GitHub Actions valida la existencia, el hash, el XML y la trazabilidad de los diecinueve SVG locales.
+- El inventario mínimo pasa de ser una lista de transcripciones con gráficos pendientes a un dataset enlazado token por token con el mapeo y el manifiesto actuales.
 - La documentación de pruebas separa el diagnóstico gráfico del diagnóstico de enlaces profundos para conservar informes reproducibles y responsabilidades técnicas distintas.
 - Los cambios en `docs/`, la configuración de Playwright o la suite de navegador activan una comprobación automática en tres motores con permisos de solo lectura.
+- La especificación formal del motor moderno puede comenzar, mientras su implementación pública continúa bloqueada por pruebas manuales, modelo de alógrafos y revisión externa.
 
 ### Verified
 
 - Publicación correcta desde `main` y `/docs` mediante GitHub Pages.
 - Funcionamiento técnico de las once formas en Safari, Chrome, Brave y Edge sobre iPhone en la implementación remota previa: 11/11 formas, 18/18 SVG y cero salidas vacías.
 - `ń` queda resuelto mediante la variante paleográfica m1 documentada; se conserva `m` como transcripción histórica y el recurso no se presenta como facsímil.
-- Descarga reproducible de los dieciocho SVG CC0, generación del manifiesto y migración local superadas en GitHub Actions.
-- Validaciones del corpus, auditoría documental, integridad gráfica, renderizador y matriz de navegadores superadas en la rama de integración local.
-- Primera ejecución automática completa satisfactoria en Chromium, Firefox y WebKit: once enlaces, SVG locales y ambos diagnósticos sin fallos.
+- Descarga reproducible de los dieciocho SVG iniciales y del recurso m1, generación del manifiesto y migración local superadas en GitHub Actions.
+- Validaciones del corpus, inventario mínimo, auditoría documental, integridad gráfica, renderizador, matriz y estado transversal superadas.
+- Ejecución automática completa satisfactoria en Chromium, Firefox y WebKit: once enlaces, diecinueve SVG locales y ambos diagnósticos sin fallos.
 
 ### Known limitations
 
 - Las figuras actuales son formas normalizadas de referencia y no facsímiles de los alógrafos originales de cada inscripción.
-- Deben repetirse las pruebas móviles después del despliegue de los SVG locales.
+- Deben repetirse las pruebas móviles después del despliegue de los SVG locales actuales.
 - Continúan pendientes Google Chrome, Mozilla Firefox y Microsoft Edge ejecutados manualmente en ordenador y la ejecución registrada del diagnóstico de enlaces profundos en esos entornos.
 - La cobertura automática de Chromium, Firefox y WebKit no sustituye navegadores de marca, Safari/iOS ni una regresión visual píxel a píxel.
 - La revisión documental realizada es interna; el corpus necesita revisión externa especializada antes de declararse estable.
 - La selección de alógrafos específicos de cada testimonio sigue pendiente.
+- El motor para entradas modernas todavía no está implementado.
 
 ### Security
 
 - Se evita publicar como traductor literal una herramienta que solo realice representación fonética o recreación experimental.
 - Se impide incorporar grafías sin fuente, procedencia o licencia verificable a la base científica.
-- Los tokens no resueltos permanecen visibles y etiquetados; no se reemplazan silenciosamente por signos inventados.
+- Cualquier token no resuelto futuro deberá permanecer visible y etiquetado; no podrá reemplazarse silenciosamente por un signo inventado.
 - La similitud fonética futura no podrá utilizarse para inferir significado ibérico.
 - Los SVG se validan como XML, se comparan mediante SHA-256 y se rechazan si contienen marcadores activos como scripts, manejadores de eventos o `foreignObject`.
-- El flujo temporal con permiso de escritura utilizado para generar los recursos se elimina antes de fusionar la integración; el CI ordinario conserva únicamente permiso de lectura.
+- Los flujos temporales con permiso de escritura se eliminan antes de fusionar; los CI ordinarios conservan únicamente permiso de lectura.
 - La regresión de navegador utiliza dependencias y navegadores fijados por la versión de Playwright y conserva evidencias solo cuando una prueba falla.
