@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iberolab-es/IberoLab/blob/main/data/schema/adaptation-result.schema.json",
+  "title": "IberoLab experimental phonetic adaptation result",
+  "description": "Normative result envelope for a future experimental phonetic adaptation. It is not a translation contract and does not activate a public engine.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "classification",
+    "translation_claim",
+    "contract_version",
+    "source_versions",
+    "input",
+    "layers",
+    "candidates",
+    "warnings",
+    "semantic_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "classification": {"const": "experimental_phonetic_adaptation"},
+    "translation_claim": {"const": false},
+    "contract_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "source_versions": {
+      "type": "object",
+      "required": [
+        "engine",
+        "rule_set",
+        "cost_model",
+        "confidence_model",
+        "corpus",
+        "minimum_inventory",
+        "graphic_mapping",
+        "asset_manifest"
+      ],
+      "properties": {
+        "engine": {"type": "string", "minLength": 1},
+        "rule_set": {"type": "string", "minLength": 1},
+        "cost_model": {"type": "string", "minLength": 1},
+        "confidence_model": {"type": "string", "minLength": 1},
+        "corpus": {"type": "string", "minLength": 1},
+        "minimum_inventory": {"type": "string", "minLength": 1},
+        "graphic_mapping": {"type": "string", "minLength": 1},
+        "asset_manifest": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "input": {
+      "type": "object",
+      "required": ["original_text", "language_tag", "pronunciation_profile", "normalization_options"],
+      "properties": {
+        "original_text": {"type": "string", "minLength": 1},
+        "language_tag": {"type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"},
+        "pronunciation_profile": {"type": "string", "minLength": 1},
+        "normalization_options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "integer", "boolean", "null"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "layers": {
+      "type": "object",
+      "required": ["orthographic", "phonetic", "adaptation_constraints"],
+      "properties": {
+        "orthographic": {
+          "type": "object",
+          "required": ["normalized_text", "operations"],
+          "properties": {
+            "normalized_text": {"type": "string", "minLength": 1},
+            "operations": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/explanation_step"}
+            }
+          },
+          "additionalProperties": false
+        },
+        "phonetic": {
+          "type": "object",
+          "required": ["notation", "units", "syllable_boundaries", "stress"],
+          "properties": {
+            "notation": {"enum": ["IPA", "IberoLab_feature_bundle"]},
+            "units": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"$ref": "#/$defs/phonetic_unit"}
+            },
+            "syllable_boundaries": {
+              "type": "array",
+              "items": {"type": "integer", "minimum": 0}
+            },
+            "stress": {
+              "type": "object",
+              "required": ["status", "unit_index"],
+              "properties": {
+                "status": {"enum": ["identified", "ambiguous", "not_applicable", "unknown"]},
+                "unit_index": {"type": ["integer", "null"], "minimum": 0}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "adaptation_constraints": {
+          "type": "object",
+          "required": ["script", "writing_system_model", "allowed_token_inventory", "active_constraints"],
+          "properties": {
+            "script": {"const": "Northeastern Iberian"},
+            "writing_system_model": {"enum": ["dual_reference_seed", "future_allograph_profile"]},
+            "allowed_token_inventory": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "active_constraints": {
+              "type": "array",
+              "items": {"type": "string", "minLength": 3}
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "severity", "message"],
+        "properties": {
+          "code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "severity": {"enum": ["information", "warning", "blocking"]},
+          "message": {"type": "string", "minLength": 5}
+        },
+        "additionalProperties": false
+      }
+    },
+    "semantic_claims": {
+      "type": "array",
+      "maxItems": 0,
+      "description": "Must remain empty: phonetic similarity cannot create Iberian semantic claims."
+    }
+  },
+  "$defs": {
+    "phonetic_unit": {
+      "type": "object",
+      "required": ["index", "symbol", "features", "source_span", "certainty"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0},
+        "symbol": {"type": "string", "minLength": 1},
+        "features": {
+          "type": "object",
+          "properties": {
+            "syllabic": {"type": ["boolean", "null"]},
+            "consonantal": {"type": ["boolean", "null"]},
+            "sonorant": {"type": ["boolean", "null"]},
+            "voice": {"type": ["boolean", "null"]},
+            "place": {"type": ["string", "null"]},
+            "manner": {"type": ["string", "null"]},
+            "height": {"type": ["string", "null"]},
+            "backness": {"type": ["string", "null"]},
+            "rounding": {"type": ["boolean", "null"]}
+          },
+          "additionalProperties": false
+        },
+        "source_span": {
+          "type": "object",
+          "required": ["start", "end"],
+          "properties": {
+            "start": {"type": "integer", "minimum": 0},
+            "end": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "certainty": {"enum": ["certain", "profile_dependent", "ambiguous", "unknown"]}
+      },
+      "additionalProperties": false
+    },
+    "cost_component": {
+      "type": "object",
+      "required": ["category", "value", "reason"],
+      "properties": {
+        "category": {
+          "enum": [
+            "exact_match",
+            "feature_substitution",
+            "segment_insertion",
+            "segment_deletion",
+            "vowel_attachment",
+            "syllable_restructuring",
+            "inventory_gap",
+            "profile_ambiguity",
+            "allograph_choice"
+          ]
+        },
+        "value": {"type": "number", "minimum": 0},
+        "reason": {"type": "string", "minLength": 5}
+      },
+      "additionalProperties": false
+    },
+    "adaptation_operation": {
+      "type": "object",
+      "required": [
+        "operation_id",
+        "operation_type",
+        "source_unit_indices",
+        "target_tokens",
+        "rule_id",
+        "cost_components",
+        "evidence_basis",
+        "explanation"
+      ],
+      "properties": {
+        "operation_id": {"type": "string", "pattern": "^op-[0-9]{3,}$"},
+        "operation_type": {
+          "enum": [
+            "exact_match",
+            "feature_substitution",
+            "segment_insertion",
+            "segment_deletion",
+            "vowel_attachment",
+            "syllable_restructuring",
+            "ambiguity_branch",
+            "allograph_selection"
+          ]
+        },
+        "source_unit_indices": {
+          "type": "array",
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "target_tokens": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rule_id": {"type": "string", "minLength": 3},
+        "cost_components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/cost_component"}
+        },
+        "evidence_basis": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 3}
+        },
+        "explanation": {"type": "string", "minLength": 10}
+      },
+      "additionalProperties": false
+    },
+    "confidence": {
+      "type": "object",
+      "required": ["status", "band", "numeric_score", "basis"],
+      "properties": {
+        "status": {"enum": ["not_calibrated", "calibrated"]},
+        "band": {"enum": ["not_calibrated", "very_low", "low", "medium", "high"]},
+        "numeric_score": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "basis": {"type": "string", "minLength": 5}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "not_calibrated"}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "band": {"const": "not_calibrated"},
+              "numeric_score": {"const": null}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "calibrated"}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "band": {"enum": ["very_low", "low", "medium", "high"]},
+              "numeric_score": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "explanation_step": {
+      "type": "object",
+      "required": ["step_id", "layer", "description"],
+      "properties": {
+        "step_id": {"type": "string", "pattern": "^step-[0-9]{3,}$"},
+        "layer": {
+          "enum": [
+            "input",
+            "orthographic_normalization",
+            "phonetic_normalization",
+            "adaptation",
+            "candidate_scoring",
+            "rendering"
+          ]
+        },
+        "description": {"type": "string", "minLength": 10}
+      },
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "required": [
+        "candidate_id",
+        "rank",
+        "token_sequence",
+        "graphic_reference_ids",
+        "operations",
+        "total_cost",
+        "confidence",
+        "explanation_steps",
+        "render_status"
+      ],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^candidate-[0-9]{3,}$"},
+        "rank": {"type": "integer", "minimum": 1},
+        "token_sequence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "graphic_reference_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 3}
+        },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/adaptation_operation"}
+        },
+        "total_cost": {"type": "number", "minimum": 0},
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "explanation_steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/explanation_step"}
+        },
+        "render_status": {"enum": ["renderable", "blocked_missing_graphic", "not_rendered"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
