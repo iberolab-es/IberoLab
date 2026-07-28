@@ -169,7 +169,7 @@ test.describe('demostrador MVP de entradas breves', () => {
     await expect(page.locator('#historySection')).toBeVisible();
     await expect(page.locator('#historyList .history-item')).toHaveText(['familia', 'hogar']);
 
-    await page.getByRole('button', { name: 'hogar', exact: true }).click();
+    await page.locator('#historyList').getByRole('button', { name: 'hogar', exact: true }).click();
     await expect(page.locator('#sourceInput')).toHaveValue('hogar');
     await expect(page.locator('#technicalReading')).toHaveText('o · ga · r');
 
