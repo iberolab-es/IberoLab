@@ -134,6 +134,8 @@ def validate_web_files() -> tuple[int, int]:
         'data-example="amor"',
         'data-example="familia"',
         'data-example="te quiero"',
+        'data-example="amistad"',
+        'data-example="hogar"',
         'dataset.mvpConverterReady = "true"',
     )
     script_markers = (

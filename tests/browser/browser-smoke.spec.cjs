@@ -18,7 +18,8 @@ const MVP_CASES = [
   { input: 'amor', reading: 'a · m · o · r', cards: 4, status: 'direct' },
   { input: 'familia', reading: 'ba · m · i · l · i · a', cards: 6, status: 'approximate' },
   { input: 'te quiero', reading: 'te / ki · e · r · o', cards: 5, status: 'direct' },
-  { input: 'Cris', reading: 'ki · r · i · s', cards: 4, status: 'approximate' }
+  { input: 'hogar', reading: 'o · ga · r', cards: 3, status: 'direct' },
+  { input: 'amistad', reading: 'a · m · i · s · ta · da', cards: 6, status: 'approximate' }
 ];
 
 async function imagesAreLoaded(page, selector) {
@@ -118,12 +119,12 @@ test.describe('demostrador MVP de entradas breves', () => {
     await expect(page.locator('#statusBadge')).toHaveText('Adaptación con aproximaciones');
   });
 
-  test('Cris conserva el grupo consonántico mediante una vocal de apoyo declarada', async ({ page }) => {
+  test('amistad declara la vocal de apoyo de la oclusiva final', async ({ page }) => {
     await page.goto('/convertir.html', { waitUntil: 'load' });
-    await page.locator('#sourceInput').fill('Cris');
+    await page.locator('#sourceInput').fill('amistad');
     await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
     await expect(page.locator('#noticeList')).toContainText('vocal de apoyo');
-    await expect(page.locator('#technicalReading')).toHaveText('ki · r · i · s');
+    await expect(page.locator('#technicalReading')).toHaveText('a · m · i · s · ta · da');
   });
 
   test('una entrada no admitida se bloquea sin signos parciales', async ({ page }) => {
