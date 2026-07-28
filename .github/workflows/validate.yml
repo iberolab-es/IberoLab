@@ -46,3 +46,6 @@ jobs:
 
       - name: Validate success and blocked execution schemas
         run: python scripts/validate_engine_schema_registry.py
+
+      - name: Validate European Spanish pronunciation profile registry
+        run: python scripts/validate_pronunciation_profiles.py
