@@ -4,6 +4,15 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo.
 
 El formato se inspira en Keep a Changelog y el proyecto utilizará versionado semántico cuando exista una primera versión funcional.
 
+## Unreleased — identidad pública, historia y lectura aproximada
+
+- La raíz del sitio se convierte en una portada visual y el renderizador documentado pasa a `corpus.html`.
+- Los enlaces históricos `/#ib-ne-…` redirigen al corpus conservando su identificador.
+- Se incorpora un emblema contemporáneo con significado oficial y advertencia expresa de que no es un signo arqueológico.
+- Se publican páginas de Historia y Metodología preparadas para futuros contenidos didácticos y de YouTube.
+- El conversor añade una lectura vocal moderna de la secuencia generada, etiquetada como recurso aproximado y no como pronunciación histórica auténtica.
+- Se añaden validación estática y regresión en Chromium, Firefox y WebKit para la nueva capa pública.
+
 ## Unreleased — historial local privado
 
 - El demostrador recuerda como máximo cinco adaptaciones exitosas en el navegador.
@@ -40,10 +49,10 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Contrato `data/engine/mvp-short-converter.v1.json` para nombres, palabras y frases de hasta 48 caracteres y 6 palabras.
 - Adaptador determinista `docs/mvp-converter.js` con correspondencias directas, vocales de apoyo declaradas y aproximaciones visibles.
 - Página responsive `docs/convertir.html` con ejemplos `amor`, `familia`, `te quiero`, `hogar` y `amistad`.
-- Audio opcional para escuchar exclusivamente la entrada española mediante el navegador.
+- Audio para escuchar la entrada española y una lectura moderna aproximada de la secuencia generada.
 - Validador del demostrador que conserva separado el manifiesto científico de 19 recursos.
 - Pruebas de navegador para adaptaciones directas, aproximadas y bloqueadas.
-- Acceso al demostrador desde la portada del corpus y buzón estructurado de sugerencias.
+- Acceso al demostrador desde la portada y buzón estructurado de sugerencias.
 
 ### Changed
 
@@ -74,7 +83,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 
 - Los signos son formas normalizadas de referencia y no facsímiles de alógrafos arqueológicos concretos.
 - El demostrador aplica convenciones de proyecto y no reconstruye vocabulario ni significado ibéricos.
-- El audio reproduce español moderno y no pronunciación ibérica antigua.
+- Ambos audios usan síntesis moderna del navegador; la lectura aproximada no reconstruye la pronunciación ibérica antigua.
 - Las aproximaciones para `f`, `ñ`, `ch`, `y/ll`, `j`, `z/c` y otros sonidos modernos requieren revisión y pueden mejorarse.
 - Deben repetirse manualmente las pruebas actuales en Safari/iOS y en Chrome, Firefox y Edge de ordenador.
 - La cobertura automática no sustituye revisión visual ni evaluación con usuarios.
