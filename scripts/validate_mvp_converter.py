@@ -17,12 +17,9 @@ PAGE = ROOT / "docs" / "convertir.html"
 SCRIPT = ROOT / "docs" / "mvp-converter.js"
 
 EXPECTED_TOKENS = [
-    "a", "e", "i", "o", "u",
-    "ga", "ge", "gi", "go", "gu",
-    "ka", "ke", "ki", "ko", "ku",
-    "ba", "be", "bi", "bo", "bu",
-    "da", "de", "di", "do", "du",
-    "ta", "te", "ti", "to", "tu",
+    "a", "e", "i", "o", "u", "ga", "ge", "gi", "go", "gu",
+    "ka", "ke", "ki", "ko", "ku", "ba", "be", "bi", "bo", "bu",
+    "da", "de", "di", "do", "du", "ta", "te", "ti", "to", "tu",
     "s", "ś", "r", "ŕ", "l", "m", "n", "ḿ",
 ]
 EXPECTED_EXAMPLES = {
@@ -30,12 +27,7 @@ EXPECTED_EXAMPLES = {
     "familia": [["ba", "m", "i", "l", "i", "a"]],
     "te quiero": [["te"], ["ki", "e", "r", "o"]],
 }
-UNSAFE_PATTERNS = (
-    rb"<script\b",
-    rb"\son[a-z]+\s*=",
-    rb"javascript\s*:",
-    rb"<foreignobject\b",
-)
+UNSAFE = (rb"<script\b", rb"\son[a-z]+\s*=", rb"javascript\s*:", rb"<foreignobject\b")
 
 
 def fail(message: str) -> None:
@@ -43,30 +35,24 @@ def fail(message: str) -> None:
 
 
 def load_json(path: Path) -> dict:
-    with path.open(encoding="utf-8") as handle:
-        return json.load(handle)
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def validate_assets() -> tuple[int, int]:
     manifest = load_json(MVP_MANIFEST)
     seed = load_json(SEED_MANIFEST)
+    assets = manifest.get("assets", [])
 
-    if manifest.get("schema_version") != "1.0.0":
-        fail("MVP signary manifest must use version 1.0.0")
-    if manifest.get("status") != "mvp_graphic_reference":
-        fail("MVP signary manifest has an unexpected status")
-    if manifest.get("asset_count") != 38:
+    if manifest.get("schema_version") != "1.0.0" or manifest.get("status") != "mvp_graphic_reference":
+        fail("MVP signary manifest version or status is invalid")
+    if manifest.get("asset_count") != 38 or len(assets) != 38:
         fail("MVP signary manifest must contain 38 assets")
     if manifest.get("tokens") != EXPECTED_TOKENS:
         fail("MVP signary token order differs from the standard 38-sign layer")
-
-    assets = manifest.get("assets", [])
-    if len(assets) != 38:
-        fail("MVP signary assets array must contain 38 entries")
     if [item.get("token") for item in assets] != EXPECTED_TOKENS:
-        fail("MVP signary asset tokens are incomplete, duplicated or out of order")
+        fail("MVP signary asset tokens are incomplete or out of order")
     if [item.get("number") for item in assets] != list(range(1, 39)):
-        fail("MVP signary asset numbers must run consecutively from 1 to 38")
+        fail("MVP asset numbers must run consecutively from 1 to 38")
 
     for item in assets:
         token = item["token"]
@@ -77,43 +63,37 @@ def validate_assets() -> tuple[int, int]:
         if not path.is_file():
             fail(f"{token}: local SVG is missing")
         data = path.read_bytes()
-        if hashlib.sha256(data).hexdigest() != item.get("sha256"):
-            fail(f"{token}: SHA-256 differs from the MVP manifest")
-        if len(data) != item.get("bytes"):
-            fail(f"{token}: byte count differs from the MVP manifest")
+        if hashlib.sha256(data).hexdigest() != item.get("sha256") or len(data) != item.get("bytes"):
+            fail(f"{token}: stored file differs from manifest")
         if item.get("licence") != "CC0-1.0" or item.get("author") != "BotaFlo":
-            fail(f"{token}: expected CC0 attribution metadata is missing")
+            fail(f"{token}: source metadata is incomplete")
         if item.get("graphic_scope") != "normalized_standard_reference_not_attestation_facsimile":
             fail(f"{token}: normalized-reference boundary is missing")
         ET.fromstring(data)
         lowered = data.lower()
-        for pattern in UNSAFE_PATTERNS:
-            if re.search(pattern, lowered, flags=re.IGNORECASE):
-                fail(f"{token}: unsafe active SVG content detected")
+        if any(re.search(pattern, lowered, flags=re.IGNORECASE) for pattern in UNSAFE):
+            fail(f"{token}: unsafe active SVG content detected")
 
     if seed.get("asset_count") != 19 or len(seed.get("assets", [])) != 19:
-        fail("the attested seed manifest must remain at 19 controlled assets")
+        fail("the attested seed manifest must remain at 19 assets")
     if seed.get("unresolved") != []:
         fail("the attested seed manifest must retain zero unresolved graphic tokens")
     boundary = manifest.get("scientific_boundary", {})
     if boundary.get("attested_seed_manifest_unchanged") != "data/signs/reference-standard-dual.assets.v1.json":
-        fail("MVP manifest must explicitly preserve the seed manifest boundary")
+        fail("MVP manifest must preserve the seed-manifest boundary")
     if boundary.get("does_not_claim_translation") is not True:
         fail("MVP manifest must prohibit translation claims")
-
     return len(assets), len(seed.get("assets", []))
 
 
 def validate_contract() -> int:
     contract = load_json(CONTRACT)
     if contract.get("status") != "public_preview_mvp":
-        fail("MVP converter contract must use public_preview_mvp status")
+        fail("MVP contract must use public_preview_mvp status")
     if contract.get("classification") != "experimental_phonetic_adaptation":
-        fail("MVP converter classification is invalid")
-    if contract.get("translation_claim") is not False:
-        fail("MVP converter must prohibit translation claims")
-    if contract.get("formal_engine_enabled") is not False:
-        fail("the formal engine must remain disabled")
+        fail("MVP classification is invalid")
+    if contract.get("translation_claim") is not False or contract.get("formal_engine_enabled") is not False:
+        fail("translation and the formal engine must remain disabled")
 
     scope = contract.get("scope", {})
     if scope.get("maximum_characters") != 48 or scope.get("maximum_words") != 6:
@@ -126,41 +106,36 @@ def validate_contract() -> int:
         "empty_output_forbidden",
     ):
         if policy.get(key) is not True:
-            fail(f"MVP adaptation policy must enforce {key}")
+            fail(f"MVP policy must enforce {key}")
     if policy.get("unknown_symbol_policy") != "block":
-        fail("unknown symbols must block instead of disappearing")
+        fail("unknown symbols must block")
 
     examples = contract.get("acceptance_examples", [])
     by_input = {item.get("input"): item for item in examples}
     if set(by_input) != set(EXPECTED_EXAMPLES):
-        fail("MVP acceptance examples must be exactly amor, familia and te quiero")
+        fail("acceptance examples must be amor, familia and te quiero")
     for source, expected in EXPECTED_EXAMPLES.items():
         if by_input[source].get("expected_words") != expected:
-            fail(f"{source}: expected token sequence differs from the MVP contract")
+            fail(f"{source}: expected token sequence differs from the contract")
     if by_input["familia"].get("required_warning_code") != "f_to_labial_stop":
-        fail("familia must retain the explicit f approximation warning")
+        fail("familia must retain the explicit f warning")
     return len(examples)
 
 
 def validate_web_files() -> tuple[int, int]:
     page = PAGE.read_text(encoding="utf-8")
     script = SCRIPT.read_text(encoding="utf-8")
-
     page_markers = (
         "Adaptación fonética experimental",
         "No es una traducción al idioma ibérico",
         "Escuchar entrada en español",
-        "Signos normalizados de referencia",
+        "Los signos son formas normalizadas de referencia",
         'src="mvp-converter.js"',
         'data-example="amor"',
         'data-example="familia"',
         'data-example="te quiero"',
         'dataset.mvpConverterReady = "true"',
     )
-    for marker in page_markers:
-        if marker not in page:
-            fail(f"converter page lacks required marker {marker!r}")
-
     script_markers = (
         "experimental_phonetic_adaptation",
         "translationClaim: false",
@@ -171,16 +146,17 @@ def validate_web_files() -> tuple[int, int]:
         "empty_word_output",
         "window.IberoMvp",
     )
+    for marker in page_markers:
+        if marker not in page:
+            fail(f"converter page lacks required marker {marker!r}")
     for marker in script_markers:
         if marker not in script:
-            fail(f"converter script lacks required safeguard {marker!r}")
+            fail(f"converter script lacks safeguard {marker!r}")
 
-    manifest = load_json(MVP_MANIFEST)
-    for item in manifest["assets"]:
+    for item in load_json(MVP_MANIFEST)["assets"]:
         browser_path = item["local_path"].removeprefix("docs/")
         if browser_path not in script:
-            fail(f"converter script does not map token {item['token']!r} to its local SVG")
-
+            fail(f"converter script does not map token {item['token']!r}")
     if "upload.wikimedia.org" in page or "upload.wikimedia.org" in script:
         fail("public converter must not depend on remote SVG delivery")
     return len(page_markers), len(script_markers)
@@ -189,8 +165,8 @@ def validate_web_files() -> tuple[int, int]:
 def validate() -> tuple[int, int, int, int, int]:
     asset_count, seed_count = validate_assets()
     example_count = validate_contract()
-    page_marker_count, script_marker_count = validate_web_files()
-    return asset_count, seed_count, example_count, page_marker_count, script_marker_count
+    page_markers, script_markers = validate_web_files()
+    return asset_count, seed_count, example_count, page_markers, script_markers
 
 
 if __name__ == "__main__":
@@ -199,10 +175,8 @@ if __name__ == "__main__":
     except (OSError, json.JSONDecodeError, ET.ParseError, KeyError, TypeError, ValueError) as exc:
         print(f"MVP CONVERTER VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
-
     print(
         "MVP CONVERTER VALIDATION OK: "
         f"{assets} normalized SVGs; seed corpus remains {seed_assets}; "
-        f"{examples} acceptance examples; {page_markers} page markers; "
-        f"{script_markers} script safeguards."
+        f"{examples} examples; {page_markers} page markers; {script_markers} safeguards."
     )
