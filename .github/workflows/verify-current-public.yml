@@ -1,0 +1,34 @@
+name: Verify current public MVP
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/verify-current-public.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify-public-page:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Wait for GitHub Pages and verify current features
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://iberolab-es.github.io/IberoLab/convertir.html?deploy_check=${GITHUB_RUN_ID}"
+          for attempt in $(seq 1 16); do
+            body="$(curl --fail --silent --show-error --location --max-time 20 "$url" || true)"
+            if grep -Fq 'Compartir resultado' <<<"$body" \
+              && grep -Fq 'Recientes en este dispositivo' <<<"$body" \
+              && grep -Fq 'IberoLab no recibe este historial' <<<"$body" \
+              && grep -Fq 'searchParams.set("q", trimmed)' <<<"$body"; then
+              echo "Public MVP deployment verified."
+              exit 0
+            fi
+            echo "Attempt $attempt: deployment not propagated yet."
+            sleep 20
+          done
+          echo "Public deployment did not expose the expected current features in time." >&2
+          exit 1
