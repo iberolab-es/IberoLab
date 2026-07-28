@@ -40,3 +40,9 @@ jobs:
 
       - name: Validate current project state and phase gates
         run: python scripts/validate_project_state.py
+
+      - name: Validate specification-only phonetic engine contract
+        run: python scripts/validate_engine_spec.py
+
+      - name: Validate success and blocked execution schemas
+        run: python scripts/validate_engine_schema_registry.py

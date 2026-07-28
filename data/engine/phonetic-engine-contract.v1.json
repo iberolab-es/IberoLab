@@ -1,0 +1,266 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "iberolab-phonetic-adaptation-contract",
+  "status": "specification_only",
+  "public_conversion_enabled": false,
+  "target_operation": "experimental_phonetic_adaptation",
+  "result_schema": "data/schema/adaptation-result.schema.json",
+  "exclusions": [
+    "translation_into_iberian_language",
+    "semantic_inference_from_sound_similarity",
+    "unqualified_single_answer",
+    "silent_token_substitution",
+    "unversioned_rule_changes",
+    "automatic_allograph_claims"
+  ],
+  "dependencies": {
+    "version_binding_required": true,
+    "corpus": "data/corpus/attested-forms.v1.json",
+    "minimum_inventory": "data/signs/minimum-inventory.v1.json",
+    "graphic_mapping": "data/signs/reference-standard-dual.v1.json",
+    "asset_manifest": "data/signs/reference-standard-dual.assets.v1.json"
+  },
+  "input_profile_status": "pending_approval",
+  "supported_input_profiles": [],
+  "pipeline": [
+    {
+      "order": 1,
+      "id": "input_validation",
+      "input_layer": "raw_input",
+      "output_layer": "validated_input",
+      "responsibility": "Validate encoding, language tag, length, allowed characters and declared pronunciation profile without altering the input silently.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 2,
+      "id": "orthographic_normalization",
+      "input_layer": "validated_input",
+      "output_layer": "normalized_orthography",
+      "responsibility": "Apply explicit, versioned orthographic normalization operations while preserving the original text and an operation log.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 3,
+      "id": "phonetic_normalization",
+      "input_layer": "normalized_orthography",
+      "output_layer": "phonetic_units",
+      "responsibility": "Produce a profile-dependent phonetic representation with source spans, features, syllable boundaries, stress and certainty labels.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 4,
+      "id": "constraint_projection",
+      "input_layer": "phonetic_units",
+      "output_layer": "adaptation_problem",
+      "responsibility": "Project the phonetic sequence onto the representational constraints of the selected Northeastern Iberian model and controlled token inventory.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 5,
+      "id": "candidate_generation",
+      "input_layer": "adaptation_problem",
+      "output_layer": "candidate_operations",
+      "responsibility": "Generate every candidate retained by the active rule set, preserving ambiguity branches and rejecting empty silent output.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 6,
+      "id": "candidate_scoring",
+      "input_layer": "candidate_operations",
+      "output_layer": "ranked_candidates",
+      "responsibility": "Calculate reproducible non-negative costs from versioned components and preserve exact ties or near-ties according to a declared policy.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 7,
+      "id": "explanation_generation",
+      "input_layer": "ranked_candidates",
+      "output_layer": "explained_candidates",
+      "responsibility": "Produce a human-readable trace for every normalization, adaptation, scoring and uncertainty decision without semantic claims.",
+      "implementation_status": "not_implemented"
+    },
+    {
+      "order": 8,
+      "id": "graphic_resolution",
+      "input_layer": "explained_candidates",
+      "output_layer": "adaptation_result",
+      "responsibility": "Resolve tokens to controlled graphic references and report any missing resource without inventing or silently replacing a sign.",
+      "implementation_status": "not_implemented"
+    }
+  ],
+  "layers": [
+    {
+      "id": "raw_input",
+      "immutable": true,
+      "description": "Original user-supplied text and declared language/profile options."
+    },
+    {
+      "id": "normalized_orthography",
+      "immutable": false,
+      "description": "Versioned orthographic normalization with a complete operation log."
+    },
+    {
+      "id": "phonetic_units",
+      "immutable": false,
+      "description": "Ordered units with symbols, feature bundles, source spans, syllable information, stress and certainty."
+    },
+    {
+      "id": "adaptation_operations",
+      "immutable": false,
+      "description": "Explicit operations mapping phonetic units to controlled tokens, each linked to a rule, cost and evidence basis."
+    },
+    {
+      "id": "ranked_candidates",
+      "immutable": false,
+      "description": "One or more candidates ordered by deterministic cost while preserving ties and uncertainty."
+    },
+    {
+      "id": "graphic_output",
+      "immutable": false,
+      "description": "References to controlled local SVG resources; this layer cannot change linguistic content."
+    }
+  ],
+  "operation_types": [
+    {
+      "id": "exact_match",
+      "semantics": "Represent a source unit or licensed source group without feature loss under an approved rule.",
+      "cost_class": "zero_candidate",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "feature_substitution",
+      "semantics": "Replace a source unit with the nearest approved representable class while recording changed features.",
+      "cost_class": "positive_required",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "segment_insertion",
+      "semantics": "Insert a segment required by the writing-system model or an approved phonotactic repair.",
+      "cost_class": "positive_required",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "segment_deletion",
+      "semantics": "Omit an unrepresentable source segment only under an explicit rule and blocking warning policy.",
+      "cost_class": "positive_required",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "vowel_attachment",
+      "semantics": "Associate a vowel with an occlusive series when required by the semisyllabic representation model.",
+      "cost_class": "rule_dependent_positive_or_zero",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "syllable_restructuring",
+      "semantics": "Modify syllable grouping to satisfy an approved representational constraint while retaining an explicit trace.",
+      "cost_class": "positive_required",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "ambiguity_branch",
+      "semantics": "Preserve two or more profile-dependent or rule-equivalent analyses as separate candidates.",
+      "cost_class": "no_intrinsic_cost",
+      "definition_status": "structural_only"
+    },
+    {
+      "id": "allograph_selection",
+      "semantics": "Select a graphic variant only after the linguistic token sequence has been fixed and according to an explicit profile.",
+      "cost_class": "separate_graphic_cost_if_enabled",
+      "definition_status": "structural_only"
+    }
+  ],
+  "cost_model": {
+    "status": "uncalibrated",
+    "domain": "non_negative_real",
+    "aggregation": "additive_provisional",
+    "zero_cost_policy": "Only an approved exact_match may receive zero adaptation cost; graphic selection remains a separate layer.",
+    "weights": {},
+    "tie_policy": {
+      "preserve_exact_ties": true,
+      "near_tie_threshold": null,
+      "threshold_status": "pending_definition"
+    }
+  },
+  "confidence_model": {
+    "status": "uncalibrated",
+    "numeric_percentage_prohibited": true,
+    "allowed_current_band": "not_calibrated",
+    "future_bands": ["very_low", "low", "medium", "high"],
+    "requirements_before_calibration": [
+      "approved_pronunciation_profiles",
+      "reviewed_rule_set",
+      "documented_cost_weights",
+      "evaluation_dataset_beyond_seed_corpus",
+      "external_review"
+    ]
+  },
+  "candidate_policy": {
+    "single_output_not_guaranteed": true,
+    "preserve_exact_ties": true,
+    "preserve_profile_ambiguity": true,
+    "silent_empty_output_forbidden": true,
+    "maximum_candidates": null,
+    "maximum_candidates_status": "pending_definition"
+  },
+  "invariants": [
+    "The original input must remain recoverable and unchanged.",
+    "Every normalized layer must retain an ordered operation trace.",
+    "Every target token must exist in the version-bound minimum inventory.",
+    "Every rendered sign must reference a controlled asset from the version-bound manifest.",
+    "No phonetic or graphic similarity may create an Iberian semantic claim.",
+    "No unrepresentable source unit may disappear without an explicit operation and warning.",
+    "Equivalent-cost candidates must not be collapsed into an unqualified single answer.",
+    "Confidence must remain not_calibrated until the declared calibration gates are met.",
+    "Rule, cost, confidence, corpus, inventory, mapping and asset versions must be included in every result.",
+    "Rendering cannot alter the linguistic token sequence."
+  ],
+  "implementation_gates": {
+    "manual_current_browser_reports": false,
+    "minimum_allograph_model": false,
+    "external_documentary_review": false,
+    "approved_spanish_pronunciation_profile": false,
+    "approved_phonetic_unit_inventory": false,
+    "approved_rule_set": false,
+    "approved_cost_weights": false,
+    "approved_confidence_calibration": false,
+    "public_engine_may_be_enabled": false
+  },
+  "unresolved_decisions": [
+    {
+      "id": "spanish_pronunciation_profiles",
+      "question": "Which European Spanish pronunciation profiles and optional contrasts will be represented without silently imposing one dialect?",
+      "blocking_for_implementation": true
+    },
+    {
+      "id": "phonetic_notation_and_features",
+      "question": "Which exact IPA subset and feature vocabulary will be normative for internal phonetic units?",
+      "blocking_for_implementation": true
+    },
+    {
+      "id": "semisyllabic_constraint_model",
+      "question": "Which constraints are descriptive of the selected signary and which are explicit engineering approximations?",
+      "blocking_for_implementation": true
+    },
+    {
+      "id": "rule_evidence_levels",
+      "question": "How will corpus evidence, comparative scholarship and engineering decisions be separated inside each rule?",
+      "blocking_for_implementation": true
+    },
+    {
+      "id": "cost_weights",
+      "question": "Which non-negative weights and near-tie threshold can be justified and tested reproducibly?",
+      "blocking_for_implementation": true
+    },
+    {
+      "id": "allograph_profiles",
+      "question": "When may a candidate select an attestation-specific allograph rather than the normalized reference layer?",
+      "blocking_for_publication": true
+    },
+    {
+      "id": "confidence_calibration",
+      "question": "Which evaluation set and external review are sufficient before confidence bands or numeric scores are exposed?",
+      "blocking_for_publication": true
+    }
+  ]
+}

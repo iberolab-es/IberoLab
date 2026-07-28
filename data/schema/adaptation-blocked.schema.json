@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iberolab-es/IberoLab/blob/main/data/schema/adaptation-blocked.schema.json",
+  "title": "IberoLab blocked phonetic adaptation attempt",
+  "description": "Normative envelope for an adaptation attempt that cannot produce candidates without violating an approved rule or project gate.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "execution_status",
+    "classification",
+    "translation_claim",
+    "contract_version",
+    "source_versions",
+    "input",
+    "blocking_reasons",
+    "warnings",
+    "candidates",
+    "semantic_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "execution_status": {"const": "blocked"},
+    "classification": {"const": "experimental_phonetic_adaptation"},
+    "translation_claim": {"const": false},
+    "contract_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "source_versions": {
+      "type": "object",
+      "required": [
+        "engine",
+        "rule_set",
+        "cost_model",
+        "confidence_model",
+        "corpus",
+        "minimum_inventory",
+        "graphic_mapping",
+        "asset_manifest"
+      ],
+      "properties": {
+        "engine": {"type": "string", "minLength": 1},
+        "rule_set": {"type": "string", "minLength": 1},
+        "cost_model": {"type": "string", "minLength": 1},
+        "confidence_model": {"type": "string", "minLength": 1},
+        "corpus": {"type": "string", "minLength": 1},
+        "minimum_inventory": {"type": "string", "minLength": 1},
+        "graphic_mapping": {"type": "string", "minLength": 1},
+        "asset_manifest": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "input": {
+      "type": "object",
+      "required": ["original_text", "language_tag", "pronunciation_profile", "normalization_options"],
+      "properties": {
+        "original_text": {"type": "string", "minLength": 1},
+        "language_tag": {"type": "string", "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"},
+        "pronunciation_profile": {"type": ["string", "null"]},
+        "normalization_options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "integer", "boolean", "null"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "blocking_reasons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["code", "stage", "message", "recoverable"],
+        "properties": {
+          "code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "stage": {
+            "enum": [
+              "project_gate",
+              "input_validation",
+              "orthographic_normalization",
+              "phonetic_normalization",
+              "constraint_projection",
+              "candidate_generation",
+              "candidate_scoring",
+              "explanation_generation",
+              "graphic_resolution"
+            ]
+          },
+          "message": {"type": "string", "minLength": 10},
+          "recoverable": {"type": "boolean"},
+          "required_action": {"type": ["string", "null"], "minLength": 5}
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "severity", "message"],
+        "properties": {
+          "code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "severity": {"enum": ["information", "warning", "blocking"]},
+          "message": {"type": "string", "minLength": 5}
+        },
+        "additionalProperties": false
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 0,
+      "description": "A blocked attempt must not expose partial candidates as valid adaptations."
+    },
+    "semantic_claims": {
+      "type": "array",
+      "maxItems": 0,
+      "description": "Must remain empty in every execution state."
+    }
+  },
+  "additionalProperties": false
+}
