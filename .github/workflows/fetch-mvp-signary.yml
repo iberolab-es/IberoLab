@@ -28,9 +28,27 @@ jobs:
           ref: feat/mvp-short-converter
 
       - name: Download missing CC0 SVGs and build the separate MVP manifest
-        run: python scripts/fetch_mvp_signary.py
+        id: fetch
+        shell: bash
+        run: |
+          set +e
+          python -u scripts/fetch_mvp_signary.py > fetch-mvp-signary.log 2>&1
+          status=$?
+          cat fetch-mvp-signary.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload fetch evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mvp-signary-fetch-log
+          path: fetch-mvp-signary.log
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Commit generated assets
+        if: steps.fetch.outputs.status == '0'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -41,3 +59,7 @@ jobs:
             git commit -m "Integrar el signario normalizado completo para el MVP"
             git push origin HEAD:feat/mvp-short-converter
           fi
+
+      - name: Fail when generation failed
+        if: steps.fetch.outputs.status != '0'
+        run: exit 1
