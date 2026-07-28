@@ -49,3 +49,6 @@ jobs:
 
       - name: Validate European Spanish pronunciation profile registry
         run: python scripts/validate_pronunciation_profiles.py
+
+      - name: Validate practical short-input MVP converter
+        run: python scripts/validate_mvp_converter.py
