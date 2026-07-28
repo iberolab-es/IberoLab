@@ -66,7 +66,7 @@ scripts/     Validadores, migraciones y utilidades reproducibles
 tests/       Pruebas automatizadas de navegador
 ```
 
-La especificación estructural del motor ya existe, pero **no contiene reglas lingüísticas aprobadas ni habilita un conversor**. La implementación permanecerá desactivada hasta superar las puertas documentadas en [PHONETIC_ENGINE_SPEC.md](docs/PHONETIC_ENGINE_SPEC.md).
+La especificación estructural del motor ya existe, pero **no contiene reglas lingüísticas aprobadas ni habilita un conversor**. Los futuros módulos de adaptación fonética no se incorporarán hasta superar las puertas documentadas en [PHONETIC_ENGINE_SPEC.md](docs/PHONETIC_ENGINE_SPEC.md).
 
 ## Validación local
 
