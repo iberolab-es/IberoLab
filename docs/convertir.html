@@ -13,8 +13,9 @@
   <meta property="og:title" content="IberoLab · Adaptación fonética experimental">
   <meta property="og:description" content="Escribe un nombre, una palabra o una frase breve y visualízala mediante signos ibéricos normalizados.">
   <meta property="og:url" content="https://iberolab-es.github.io/IberoLab/convertir.html">
-  <meta property="og:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.svg">
+  <meta property="og:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.png">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.png">
   <title>IberoLab — Conversor breve experimental</title>
   <style>
     :root {
@@ -72,6 +73,14 @@
     button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
     .examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 13px; color: var(--muted); }
     .counter { margin-top: 8px; color: var(--muted); font-size: .85rem; }
+    .history { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .history[hidden] { display: none; }
+    .history-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+    .history-head h2 { margin: 0; font-size: 1rem; }
+    .history-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    button.history-item { min-height: 38px; padding: 0 13px; background: rgba(89,211,155,.1); color: var(--ok); }
+    button.history-clear { min-height: 36px; padding: 0 12px; background: transparent; color: var(--muted); }
+    .history-note { margin: 9px 0 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
     .result { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 26px; }
     .result-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
     .result-head h2 { margin: 0; font-size: clamp(1.45rem, 4vw, 2.3rem); }
@@ -186,6 +195,15 @@
     </div>
     <p class="counter">Ejemplos orientativos. Puedes escribir cualquier nombre, palabra o frase breve.</p>
 
+    <section id="historySection" class="history" aria-labelledby="historyTitle" hidden>
+      <div class="history-head">
+        <h2 id="historyTitle">Recientes en este dispositivo</h2>
+        <button id="clearHistoryButton" class="history-clear" type="button">Borrar historial</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+      <p class="history-note">Se guardan como máximo cinco entradas y solo en este navegador. IberoLab no recibe este historial.</p>
+    </section>
+
     <section id="resultSection" class="result" aria-live="polite" aria-labelledby="resultTitle">
       <div class="result-head">
         <h2 id="resultTitle">Adaptación fonética experimental</h2>
@@ -249,10 +267,64 @@
   const copyButton = document.getElementById("copyButton");
   const shareButton = document.getElementById("shareButton");
   const actionStatus = document.getElementById("actionStatus");
+  const historySection = document.getElementById("historySection");
+  const historyList = document.getElementById("historyList");
+  const clearHistoryButton = document.getElementById("clearHistoryButton");
+  const HISTORY_KEY = "iberolab:mvp:recent:v1";
+  const HISTORY_LIMIT = 5;
   let currentResult = null;
 
   function updateCounter() {
     counter.textContent = `${Array.from(input.value).length}/${window.IberoMvp.MAX_CHARACTERS} caracteres · máximo ${window.IberoMvp.MAX_WORDS} palabras`;
+  }
+
+  function readHistory() {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(HISTORY_KEY) || "[]");
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(item => typeof item === "string" && item.trim()).slice(0, HISTORY_LIMIT);
+    } catch {
+      return [];
+    }
+  }
+
+  function writeHistory(entries) {
+    try {
+      if (entries.length) window.localStorage.setItem(HISTORY_KEY, JSON.stringify(entries));
+      else window.localStorage.removeItem(HISTORY_KEY);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function renderHistory() {
+    const entries = readHistory();
+    historyList.replaceChildren();
+    historySection.hidden = entries.length === 0;
+    for (const value of entries) {
+      const button = document.createElement("button");
+      button.className = "history-item";
+      button.type = "button";
+      button.dataset.historyValue = value;
+      button.textContent = value;
+      button.addEventListener("click", () => {
+        input.value = value;
+        updateCounter();
+        convert();
+        input.focus();
+      });
+      historyList.append(button);
+    }
+  }
+
+  function rememberResult(result) {
+    if (result.executionStatus !== "success") return;
+    const value = result.original.trim();
+    if (!value) return;
+    const key = value.toLocaleLowerCase("es-ES");
+    const entries = [value, ...readHistory().filter(item => item.toLocaleLowerCase("es-ES") !== key)].slice(0, HISTORY_LIMIT);
+    if (writeHistory(entries)) renderHistory();
   }
 
   function createSignCard(token) {
@@ -362,8 +434,10 @@
     return url;
   }
 
-  function convert({ updateUrl = true } = {}) {
-    renderResult(window.IberoMvp.convert(input.value));
+  function convert({ updateUrl = true, remember = true } = {}) {
+    const result = window.IberoMvp.convert(input.value);
+    renderResult(result);
+    if (remember) rememberResult(result);
     if (updateUrl) {
       const url = resultUrl();
       window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
@@ -374,7 +448,7 @@
     const sharedInput = new URL(window.location.href).searchParams.get("q");
     if (sharedInput !== null) input.value = sharedInput;
     updateCounter();
-    convert({ updateUrl: false });
+    convert({ updateUrl: false, remember: false });
   }
 
   form.addEventListener("submit", event => {
@@ -391,6 +465,16 @@
       input.focus();
     });
   }
+
+  clearHistoryButton.addEventListener("click", () => {
+    if (writeHistory([])) {
+      renderHistory();
+      actionStatus.textContent = "Historial local borrado.";
+      setTimeout(() => { actionStatus.textContent = ""; }, 1600);
+    } else {
+      actionStatus.textContent = "El navegador no ha permitido borrar el historial local.";
+    }
+  });
 
   speakButton.addEventListener("click", () => {
     if (!currentResult || currentResult.executionStatus !== "success" || !("speechSynthesis" in window)) return;
@@ -433,6 +517,7 @@
   });
 
   window.addEventListener("popstate", loadFromUrl);
+  renderHistory();
   loadFromUrl();
   document.documentElement.dataset.mvpConverterReady = "true";
 })();
