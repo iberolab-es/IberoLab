@@ -27,6 +27,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Fuente documental, evidencia, nota de transcripción y enlace persistente visibles para cada forma en la web pública.
 - Navegación anterior/siguiente, indicador de posición y enlaces profundos mediante el identificador de cada forma.
 - Página pública de autodiagnóstico para comprobar las once formas, la carga de los signos y la ausencia de salidas vacías.
+- Página pública independiente que abre secuencialmente los once enlaces profundos y verifica el hash, la selección, la lectura y la salida gráfica efectiva.
 - Matriz versionada de pruebas en Safari, Chrome, Brave, Firefox y Edge, separando los entornos móviles de los navegadores ejecutados realmente en ordenador.
 - Dieciocho SVG de referencia almacenados dentro del repositorio bajo rutas estables.
 - Manifiesto individual de los recursos gráficos con origen, URL resuelta, autoría, licencia, tamaño y hash SHA-256.
@@ -45,6 +46,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - El autodiagnóstico pasa a la versión `1.1.0` e identifica explícitamente `asset_mode: local_repository` en sus informes.
 - Las pruebas móviles realizadas sobre la implementación remota se conservan como evidencia histórica, pero pasan a estado parcial hasta repetirse con los SVG locales desplegados.
 - El flujo ordinario de GitHub Actions valida ahora también la existencia, el hash, el XML y la trazabilidad de los dieciocho SVG locales.
+- La documentación de pruebas separa el diagnóstico gráfico del diagnóstico de enlaces profundos para conservar informes reproducibles y responsabilidades técnicas distintas.
 
 ### Verified
 
@@ -59,7 +61,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - El token `ń` de `taŕśabań` permanece sin signo gráfico asignado hasta verificar la convención de transcripción y la forma exacta en la publicación correspondiente.
 - Las figuras actuales son formas normalizadas de referencia y no facsímiles de los alógrafos originales de cada inscripción.
 - Deben repetirse las pruebas móviles después del despliegue de los SVG locales.
-- Continúan pendientes Chrome, Firefox y Edge ejecutados realmente en ordenador y la comprobación manual de los enlaces profundos.
+- Continúan pendientes Chrome, Firefox y Edge ejecutados realmente en ordenador y la ejecución registrada del nuevo diagnóstico de enlaces profundos.
 - La revisión documental realizada es interna; el corpus necesita revisión externa especializada antes de declararse estable.
 - La regresión visual automatizada y la selección de alógrafos específicos de cada testimonio siguen pendientes.
 
