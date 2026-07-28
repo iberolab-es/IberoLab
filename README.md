@@ -36,10 +36,11 @@ La pre-alpha dispone de:
 - diagnóstico público de los once enlaces profundos;
 - validaciones automáticas del corpus, inventarios, fuentes, recursos gráficos, matriz y estado transversal;
 - regresión automática sobre Chromium, Firefox y WebKit;
-- contrato estructural machine-readable del futuro motor, con conversión pública, perfiles, reglas, pesos y confianza calibrada explícitamente desactivados;
-- esquemas mutuamente excluyentes para un resultado válido y para un intento bloqueado sin candidatos.
+- contrato estructural machine-readable del futuro motor, con conversión pública, reglas, pesos y confianza calibrada explícitamente desactivados;
+- esquemas mutuamente excluyentes para un resultado válido y para un intento bloqueado sin candidatos;
+- esquema de perfiles de pronunciación `es-ES` y registro de dimensiones documentadas, todavía sin perfil aprobado ni valor por defecto.
 
-Continúan pendientes las pruebas manuales de la implementación actual en Safari/iOS y en navegadores de ordenador, la selección progresiva de alógrafos específicos, la revisión externa especializada y la aprobación del modelo fonético.
+Continúan pendientes las pruebas manuales de la implementación actual en Safari/iOS y en navegadores de ordenador, la selección progresiva de alógrafos específicos, la revisión externa especializada, la aprobación de uno o más perfiles de pronunciación y la aprobación del inventario fonético.
 
 ## Acceso público
 
@@ -55,19 +56,20 @@ Continúan pendientes las pruebas manuales de la implementación actual en Safar
 - Compatibilidad con móvil y escritorio sin depender de recursos gráficos remotos durante la navegación.
 - Pruebas reproducibles antes de publicar una versión estable.
 - Ausencia de sustituciones silenciosas cuando una equivalencia sea incierta.
-- Versionado conjunto de reglas, costes, confianza, corpus e inventarios en cualquier resultado futuro.
+- Versionado conjunto de perfiles, reglas, costes, confianza, corpus e inventarios en cualquier resultado futuro.
+- Ausencia de un perfil de pronunciación implícito bajo etiquetas vagas como «neutral» o «peninsular».
 
 ## Estructura actual
 
 ```text
 .github/     Plantillas, gobernanza y GitHub Actions
-data/        Corpus, inventarios, auditorías, manifiestos, esquemas y contrato del motor
+data/        Corpus, inventarios, auditorías, manifiestos, esquemas y contratos del motor
 docs/        Web pública, diagnósticos y documentación metodológica
 scripts/     Validadores, migraciones y utilidades reproducibles
 tests/       Pruebas automatizadas de navegador
 ```
 
-La especificación estructural del motor ya existe, pero **no contiene reglas lingüísticas aprobadas ni habilita un conversor**. Los futuros módulos de adaptación fonética no se incorporarán hasta superar las puertas documentadas en [PHONETIC_ENGINE_SPEC.md](docs/PHONETIC_ENGINE_SPEC.md).
+La especificación estructural del motor ya existe, pero **no contiene reglas lingüísticas aprobadas ni habilita un conversor**. Los futuros módulos de adaptación fonética no se incorporarán hasta superar las puertas documentadas en [PHONETIC_ENGINE_SPEC.md](docs/PHONETIC_ENGINE_SPEC.md). Las dimensiones españolas y la política de ausencia de perfil por defecto se documentan en [SPANISH_PRONUNCIATION_PROFILES.md](docs/SPANISH_PRONUNCIATION_PROFILES.md).
 
 ## Validación local
 
@@ -82,13 +84,14 @@ python scripts/validate_browser_matrix.py
 python scripts/validate_project_state.py
 python scripts/validate_engine_spec.py
 python scripts/validate_engine_schema_registry.py
+python scripts/validate_pronunciation_profiles.py
 ```
 
 La regresión de navegador se ejecuta con Playwright según `playwright.config.cjs` y `.github/workflows/browser-smoke.yml`.
 
 ## Participar
 
-Las sugerencias y errores se gestionan mediante [GitHub Issues](https://github.com/iberolab-es/IberoLab/issues/new/choose). Antes de contribuir, consulta [CONTRIBUTING.md](CONTRIBUTING.md), la [metodología](docs/METHODOLOGY.md), la [especificación del motor](docs/PHONETIC_ENGINE_SPEC.md) y la [procedencia de los recursos](docs/ASSET_PROVENANCE.md).
+Las sugerencias y errores se gestionan mediante [GitHub Issues](https://github.com/iberolab-es/IberoLab/issues/new/choose). Antes de contribuir, consulta [CONTRIBUTING.md](CONTRIBUTING.md), la [metodología](docs/METHODOLOGY.md), la [especificación del motor](docs/PHONETIC_ENGINE_SPEC.md), los [perfiles de pronunciación](docs/SPANISH_PRONUNCIATION_PROFILES.md) y la [procedencia de los recursos](docs/ASSET_PROVENANCE.md).
 
 ## Hoja de ruta
 
@@ -106,4 +109,4 @@ Código y documentación publicados bajo [Apache License 2.0](LICENSE), salvo qu
 
 ### English summary
 
-IberoLab is an open experimental project for phonetic representation of modern languages using ancient Iberian and other Palaeohispanic scripts. Its current pre-alpha reconstructs a documented seed corpus with nineteen controlled local SVG resources. A specification-only machine-readable engine contract exists, but it contains no approved conversion rules and public conversion remains disabled. IberoLab does **not** claim to translate modern text into the undeciphered Iberian language.
+IberoLab is an open experimental project for phonetic representation of modern languages using ancient Iberian and other Palaeohispanic scripts. Its current pre-alpha reconstructs a documented seed corpus with nineteen controlled local SVG resources. A specification-only engine contract and an unapproved European Spanish pronunciation-dimension registry exist, but no pronunciation profile or conversion rule is approved and public conversion remains disabled. IberoLab does **not** claim to translate modern text into the undeciphered Iberian language.
