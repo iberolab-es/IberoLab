@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate IberoLab's versioned browser matrix and public self-test page."""
+"""Validate IberoLab's browser matrix and public diagnostic pages."""
 from __future__ import annotations
 
 import json
@@ -9,14 +9,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX = ROOT / "data" / "tests" / "browser-matrix.v1.json"
 TEST_PAGE = ROOT / "docs" / "test.html"
+DEEP_LINK_PAGE = ROOT / "docs" / "deep-link-test.html"
 REQUIRED_BROWSERS = {"Safari", "Chrome", "Firefox", "Edge"}
 REQUIRED_DESKTOP_BROWSERS = {"Chrome", "Firefox", "Edge"}
 ALLOWED_STATUS = {"pending", "partial_pass", "pass", "fail"}
 CURRENT_ASSET_MODE = "local_repository"
-EXPECTED_FORMS = {
-    "ildiŕda", "erder", "undikesken", "ars", "ekiar", "egiar",
-    "likine", "taŕśabań", "baisetaś", "seltar", "ebanen",
+EXPECTED_LINKS = {
+    "ib-ne-ildirda-001": "ildiŕda",
+    "ib-ne-erder-001": "erder",
+    "ib-ne-undikesken-001": "undikesken",
+    "ib-ne-ars-001": "ars",
+    "ib-ne-ekiar-001": "ekiar",
+    "ib-ne-egiar-001": "egiar",
+    "ib-ne-likine-001": "likine",
+    "ib-ne-tarsaban-001": "taŕśabań",
+    "ib-ne-baisetas-001": "baisetaś",
+    "ib-ne-seltar-001": "seltar",
+    "ib-ne-ebanen-001": "ebanen",
 }
+EXPECTED_FORMS = set(EXPECTED_LINKS.values())
 
 
 def load_json(path: Path) -> dict:
@@ -78,6 +89,64 @@ def validate_report_core(environment: dict, context: str, expected: dict) -> dic
         if item.get("pending") != expected_pending:
             raise ValueError(f"{context}: {item.get('form')!r} pending state mismatch")
     return report
+
+
+def validate_svg_self_test() -> None:
+    html = TEST_PAGE.read_text(encoding="utf-8")
+    markers = [
+        "Comprobar las 11 formas",
+        "EXPECTED_PENDING",
+        "empty_outputs",
+        "failed_svg_tokens",
+        "navigator.userAgent",
+        "navigator.clipboard",
+        "dataset.selfTest",
+        "No valida la exactitud paleográfica",
+        'asset_mode: "local_repository"',
+        "assets/signs/northeastern-dual/",
+    ]
+    missing_markers = [marker for marker in markers if marker not in html]
+    if missing_markers:
+        raise ValueError(f"self-test page lacks safeguards: {missing_markers}")
+    if "Special:Redirect/file" in html or "const COMMONS" in html:
+        raise ValueError("self-test still contains a remote SVG dependency")
+
+    for form in EXPECTED_FORMS:
+        if form not in html:
+            raise ValueError(f"self-test page lacks form {form!r}")
+
+
+def validate_deep_link_self_test() -> None:
+    html = DEEP_LINK_PAGE.read_text(encoding="utf-8")
+    markers = [
+        "Comprobar los 11 enlaces",
+        "IberoLab deep-link self-test",
+        'asset_mode: "local_repository"',
+        "dataset.deepLinkTest",
+        "rendererReady",
+        "formSelect",
+        "readingText",
+        "glyphOutput",
+        "links_evaluated",
+        "links_failed",
+        "deep-link-state-mismatch",
+        "iframe",
+        "contentDocument",
+        "contentWindow",
+        "No valida la exactitud paleográfica",
+    ]
+    missing_markers = [marker for marker in markers if marker not in html]
+    if missing_markers:
+        raise ValueError(f"deep-link self-test lacks safeguards: {missing_markers}")
+
+    for identifier, form in EXPECTED_LINKS.items():
+        if identifier not in html:
+            raise ValueError(f"deep-link self-test lacks identifier {identifier!r}")
+        if form not in html:
+            raise ValueError(f"deep-link self-test lacks form {form!r}")
+
+    if html.count("{id:") != len(EXPECTED_LINKS):
+        raise ValueError("deep-link self-test target count does not match the eleven expected links")
 
 
 def validate() -> tuple[int, int, int, int, int]:
@@ -157,28 +226,8 @@ def validate() -> tuple[int, int, int, int, int]:
             f"browser matrix lacks explicit desktop targets: {sorted(missing_desktop_targets)}"
         )
 
-    html = TEST_PAGE.read_text(encoding="utf-8")
-    markers = [
-        "Comprobar las 11 formas",
-        "EXPECTED_PENDING",
-        "empty_outputs",
-        "failed_svg_tokens",
-        "navigator.userAgent",
-        "navigator.clipboard",
-        "dataset.selfTest",
-        "No valida la exactitud paleográfica",
-        'asset_mode: "local_repository"',
-        "assets/signs/northeastern-dual/",
-    ]
-    missing_markers = [marker for marker in markers if marker not in html]
-    if missing_markers:
-        raise ValueError(f"self-test page lacks safeguards: {missing_markers}")
-    if "Special:Redirect/file" in html or "const COMMONS" in html:
-        raise ValueError("self-test still contains a remote SVG dependency")
-
-    for form in EXPECTED_FORMS:
-        if form not in html:
-            raise ValueError(f"self-test page lacks form {form!r}")
+    validate_svg_self_test()
+    validate_deep_link_self_test()
 
     return len(environments), len(REQUIRED_BROWSERS), passed, desktop_passed, historical_partial
 
@@ -195,5 +244,5 @@ if __name__ == "__main__":
         f"{environment_count} environments; {browser_count} required browsers; "
         f"{passed_count} current local-asset pass report(s), of which {desktop_passed_count} "
         f"are true desktop environments; {historical_count} historical remote-asset partial pass report(s); "
-        "public self-test covers eleven forms and preserves ń as pending."
+        "the public SVG diagnostic covers eleven forms and the deep-link diagnostic covers eleven identifiers."
     )
