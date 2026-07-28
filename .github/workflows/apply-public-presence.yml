@@ -1,0 +1,39 @@
+name: Apply public academic presence
+
+# Temporary one-shot workflow; removed before merge.
+on:
+  push:
+    branches: [feat/public-academic-presence]
+    paths:
+      - scripts/apply_public_presence.py
+      - .github/workflows/apply-public-presence.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check out working branch
+        uses: actions/checkout@v6
+        with:
+          ref: feat/public-academic-presence
+
+      - name: Apply public presence
+        run: python scripts/apply_public_presence.py
+
+      - name: Commit generated changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html docs/convertir.html tests/browser/browser-smoke.spec.cjs CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Integrar identidad y presencia académica"
+            git push origin HEAD:feat/public-academic-presence
+          fi
