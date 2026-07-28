@@ -94,6 +94,9 @@ def validate() -> tuple[int, int]:
     manifest = json.loads((DOCS / "site.webmanifest").read_text(encoding="utf-8"))
     if manifest.get("name") != "IberoLab" or manifest.get("start_url") != "./":
         fail("web manifest identity or start URL is invalid")
+    icon_types = {item.get("type") for item in manifest.get("icons", [])}
+    if {"image/svg+xml", "image/png"} - icon_types:
+        fail("web manifest must expose SVG and PNG icons")
 
     sitemap = (DOCS / "sitemap.xml").read_text(encoding="utf-8")
     for url in ("/IberoLab/</loc>", "/IberoLab/convertir.html", "/IberoLab/academia.html", "/IberoLab/privacidad.html"):
@@ -102,6 +105,14 @@ def validate() -> tuple[int, int]:
 
     citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
     require(citation, ("cff-version: 1.2.0", "IberoLab contributors", "license: Apache-2.0"), "CITATION.cff")
+
+    active_public = "\n".join(
+        (ROOT / path).read_text(encoding="utf-8")
+        for path in ("README.md", "docs/index.html", "docs/convertir.html", "docs/academia.html")
+    )
+    for personal_example in ("Lara", "Cris"):
+        if personal_example in active_public:
+            fail(f"personal example remains in active public content: {personal_example}")
 
     outreach = (ROOT / "OUTREACH.md").read_text(encoding="utf-8")
     require(outreach, ("Valoración de X", "No traduce", "Hesperia", "Palaeohispanica"), "OUTREACH.md")
