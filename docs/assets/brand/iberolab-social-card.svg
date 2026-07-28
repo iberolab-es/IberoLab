@@ -1,22 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">IberoLab</title>
-  <desc id="desc">Tarjeta social del proyecto IberoLab: adaptación fonética experimental con signos ibéricos normalizados.</desc>
+  <desc id="desc">Tarjeta social del proyecto IberoLab con su monograma-glifo contemporáneo y una adaptación fonética experimental con signos ibéricos normalizados.</desc>
   <rect width="1200" height="630" fill="#071019"/>
   <rect x="35" y="35" width="1130" height="560" rx="34" fill="#10253a" stroke="#31465b" stroke-width="3"/>
   <line x1="438" y1="85" x2="438" y2="545" stroke="#31465b" stroke-width="2"/>
   <g transform="translate(75 135) scale(1.113)">
     <circle cx="128" cy="128" r="116" fill="#071019"/>
     <circle cx="128" cy="128" r="104" fill="none" stroke="#d6a34d" stroke-width="9"/>
-    <g fill="none" stroke="#d6a34d" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M128 50V202"/><path d="M128 72L94 104"/><path d="M128 72L162 104"/>
-      <path d="M128 117L88 157"/><path d="M128 117L168 157"/>
-      <path d="M128 158L101 185"/><path d="M128 158L155 185"/>
+    <g fill="none" stroke="#d6a34d" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M128 48V204"/><path d="M104 72L128 48L152 72"/>
+      <path d="M87 105H169"/><path d="M96 91V119"/><path d="M160 91V119"/>
+      <path d="M128 128L91 165"/><path d="M128 128L165 165"/>
+      <path d="M105 190L128 167L151 190"/>
     </g>
-    <circle cx="85" cy="105" r="8" fill="#47a9ff"/><circle cx="171" cy="105" r="8" fill="#47a9ff"/>
+    <circle cx="83" cy="105" r="8" fill="#47a9ff"/><circle cx="173" cy="105" r="8" fill="#47a9ff"/>
   </g>
   <g font-family="Inter,Segoe UI,Arial,sans-serif">
-    <text x="480" y="160" fill="#eef5ff" font-size="72" font-weight="800">IberoLab</text>
-    <text x="480" y="205" fill="#d6a34d" font-size="25">Patrimonio · Lingüística · Tecnología abierta</text>
+    <text x="480" y="160" fill="#eef5ff" font-family="Georgia,Times New Roman,serif" font-size="72" font-weight="500">Ibero<tspan fill="#d6a34d">Lab</tspan></text>
+    <text x="480" y="205" fill="#d6a34d" font-size="25">Lengua ibérica · Patrimonio · Tecnología</text>
     <text x="480" y="288" fill="#afbdd0" font-size="28">Adaptación fonética experimental de nombres,</text>
     <text x="480" y="330" fill="#afbdd0" font-size="28">palabras y frases breves con signos ibéricos</text>
     <text x="480" y="372" fill="#afbdd0" font-size="28">normalizados.</text>

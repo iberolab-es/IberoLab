@@ -8,7 +8,9 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 
 - La raíz pública incorpora una presentación visual de IberoLab por encima del corpus, sin cambiar su URL ni romper los enlaces profundos existentes.
 - Se publican las páginas `historia.html` y `metodologia.html`, preparadas para incorporar divulgación audiovisual y fuentes complementarias.
-- El símbolo oficial se explica como una marca contemporánea inspirada en escritura, memoria y raíces; no se presenta como un signo ibérico antiguo.
+- El símbolo oficial evoluciona a un monograma-glifo contemporáneo que fusiona eje, travesaño, chevrón y ramificación; no reproduce un signo ibérico antiguo ni posee valor fonético histórico.
+- En la portada móvil, el monograma y la lectura documentada se muestran como elementos separados, sin solapamiento ni huecos verticales artificiales.
+- La página académica incorpora acceso directo a Corpus, Historia, Metodología, Universidades y Conversor.
 - El demostrador mantiene el audio de la entrada española y añade una lectura técnica aproximada mediante voz española moderna, siempre etiquetada como recurso didáctico y no como pronunciación histórica.
 - La interfaz separa su lógica en módulos propios y añade validación estática y regresión sobre Chromium, Firefox y WebKit.
 - El sitemap incluye Historia y Metodología, y se conservan la página académica, privacidad, citación, metadatos sociales y recursos de identidad existentes.
