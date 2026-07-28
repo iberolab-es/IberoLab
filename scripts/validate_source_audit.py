@@ -35,7 +35,6 @@ def validate_https(url: str, context: str) -> None:
 def validate() -> tuple[int, int]:
     corpus = load(CORPUS)
     audit = load(AUDIT)
-
     reviewed_on = audit.get("reviewed_on", "")
     if not DATE_RE.fullmatch(reviewed_on):
         fail("reviewed_on must use YYYY-MM-DD format")
@@ -44,7 +43,6 @@ def validate() -> tuple[int, int]:
     entries = audit.get("entries", [])
     if not forms or not entries:
         fail("corpus and audit must both be non-empty")
-
     corpus_by_id = {item["id"]: item for item in forms}
     if len(corpus_by_id) != len(forms):
         fail("corpus contains duplicate form ids")
@@ -53,33 +51,24 @@ def validate() -> tuple[int, int]:
     for index, entry in enumerate(entries):
         context = f"entries[{index}]"
         form_id = entry.get("form_id")
-        if not isinstance(form_id, str) or not form_id:
-            fail(f"{context}: form_id is required")
-        if form_id in audit_by_id:
-            fail(f"{context}: duplicate audit entry {form_id!r}")
+        if not isinstance(form_id, str) or not form_id or form_id in audit_by_id:
+            fail(f"{context}: missing or duplicate form_id")
         audit_by_id[form_id] = entry
-
         if entry.get("reading_status") not in ALLOWED_READING:
             fail(f"{context}: invalid reading_status")
         if entry.get("context_status") not in ALLOWED_CONTEXT:
             fail(f"{context}: invalid context_status")
         if entry.get("rendering_status") not in ALLOWED_RENDERING:
             fail(f"{context}: rendering must remain explicitly normalized")
-
         findings = entry.get("findings")
-        if not isinstance(findings, list) or not findings or not all(
-            isinstance(item, str) and item.strip() for item in findings
-        ):
+        if not isinstance(findings, list) or not findings or not all(isinstance(item, str) and item.strip() for item in findings):
             fail(f"{context}: at least one non-empty finding is required")
-
         urls = entry.get("source_urls")
         if not isinstance(urls, list) or not urls:
             fail(f"{context}: source_urls must be non-empty")
         for url_index, url in enumerate(urls):
             validate_https(url, f"{context}.source_urls[{url_index}]")
-
-        pending = entry.get("pending_tokens", [])
-        if not isinstance(pending, list):
+        if not isinstance(entry.get("pending_tokens", []), list):
             fail(f"{context}: pending_tokens must be an array")
 
     missing = sorted(corpus_by_id.keys() - audit_by_id.keys())
@@ -95,9 +84,24 @@ def validate() -> tuple[int, int]:
         if unknown:
             fail(f"{form_id}: pending tokens not present in form: {sorted(unknown)}")
         unresolved.update(pending)
+    if unresolved:
+        fail(f"the seed corpus must have no unresolved graphic tokens, got {sorted(unresolved)}")
 
-    if unresolved != {"ń"}:
-        fail(f"expected only the explicitly unresolved token ń, got {sorted(unresolved)}")
+    tarsaban = audit_by_id.get("ib-ne-tarsaban-001", {})
+    resolved = tarsaban.get("resolved_graphic_tokens", [])
+    expected = {
+        "token": "ń",
+        "variant": "m1",
+        "traditional_transcription": "m",
+        "current_transcription": "ń",
+        "graphic_scope": "normalized_variant_reference_not_facsimile",
+    }
+    if resolved != [expected]:
+        fail("taŕśabań audit must record the exact m1/m/ń graphic resolution")
+    joined_findings = " ".join(tarsaban.get("findings", []))
+    for marker in ("m1", "traditional transcription m", "marked, non-labial nasal", "not present it as a facsimile"):
+        if marker not in joined_findings:
+            fail(f"taŕśabań audit lacks finding marker {marker!r}")
 
     return len(forms), len(entries)
 
@@ -108,9 +112,8 @@ if __name__ == "__main__":
     except (OSError, json.JSONDecodeError, KeyError, ValueError) as exc:
         print(f"SOURCE AUDIT VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
-
     print(
         "SOURCE AUDIT VALIDATION OK: "
-        f"{form_count} corpus forms; {audit_count} reviewed entries; "
-        "one explicit unresolved graphic token (ń)."
+        f"{form_count} corpus forms; {audit_count} reviewed entries; no unresolved graphic tokens; "
+        "the m1/m/ń resolution is documented without facsimile claims."
     )
