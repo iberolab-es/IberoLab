@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "manifest_id": "iberolab-reference-standard-dual-local-assets",
   "generated_at": "2026-07-27T23:22:35.802476Z",
   "source_collection": "https://commons.wikimedia.org/wiki/Category:Iberian_letters",
@@ -7,7 +7,7 @@
   "author": "BotaFlo",
   "licence": "CC0-1.0",
   "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-  "asset_count": 18,
+  "asset_count": 19,
   "assets": [
     {
       "token": "a",
@@ -278,13 +278,52 @@
       "author": "BotaFlo",
       "licence": "CC0-1.0",
       "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/"
-    }
-  ],
-  "unresolved": [
+    },
     {
       "token": "ń",
-      "status": "pending_nasal_sign_verification",
-      "reason": "No graphic is assigned until the exact sign and transcription convention are verified against the cited 2025 publication."
+      "reference_id": "variant-m1-nasal",
+      "source_file_name": "NE Iberian m1.svg",
+      "source_file_page": "https://commons.wikimedia.org/wiki/File:NE_Iberian_m1.svg",
+      "source_redirect_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/NE%20Iberian%20m1.svg",
+      "resolved_download_url": "https://upload.wikimedia.org/wikipedia/commons/c/c3/NE_Iberian_m1.svg",
+      "local_path": "docs/assets/signs/northeastern-dual/variant-m1-nasal.svg",
+      "sha256": "3c61024264472d3c410276c709a555a0d6423baf08e70830e0e4a6dc768cdc50",
+      "bytes": 2984,
+      "media_type": "image/svg+xml",
+      "author": "Vriullop",
+      "licence": "CC0-1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "paleographic_variant": "m1",
+      "traditional_transcription": "m",
+      "project_transcription": "ń",
+      "phonological_scope": "marked_nasal_not_labial",
+      "graphic_scope": "normalized_m1_variant_reference_not_facsimile",
+      "scholarly_evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703"
+    }
+  ],
+  "unresolved": [],
+  "source_sets": [
+    {
+      "name": "Sign Iber Noro Dual 01–38",
+      "author": "BotaFlo",
+      "licence": "CC0-1.0",
+      "scope": "normalized signary references"
+    },
+    {
+      "name": "NE Iberian m1.svg",
+      "author": "Vriullop",
+      "licence": "CC0-1.0",
+      "scope": "normalized paleographic variant m1 used for token ń"
+    }
+  ],
+  "resolved_tokens": [
+    {
+      "token": "ń",
+      "resolved_as": "m1",
+      "traditional_transcription": "m",
+      "current_transcription": "ń",
+      "evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703",
+      "resolved_on": "2026-07-28"
     }
   ]
 }
