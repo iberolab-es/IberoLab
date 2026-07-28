@@ -14,7 +14,7 @@ IberoLab separa tres capas que no deben confundirse:
 2. **Demostrador práctico:** adaptación fonética experimental de nombres, palabras y frases españolas breves mediante reglas deterministas y advertencias visibles.
 3. **Motor formal futuro:** arquitectura versionada para perfiles, reglas, costes, alternativas y confianza, todavía desactivada.
 
-La intención práctica es modesta: que una persona pueda escribir algo como `amor`, `familia`, `hogar` o `te quiero` y obtener una representación gráfica razonada, sin fingir una traducción que el conocimiento actual no permite.
+La intención práctica es modesta: que una persona pueda escribir algo como `hogar`, `tierra`, `mundo`, `olivo` o `mar` y obtener una representación gráfica razonada, sin fingir una traducción que el conocimiento actual no permite. También puede introducir nombres, sentimientos o frases breves de su elección.
 
 ## Qué no es
 
@@ -38,7 +38,7 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 
 - biblioteca gráfica independiente con los 38 signos normalizados de la serie nororiental dual;
 - entradas limitadas a 48 caracteres y 6 palabras;
-- ejemplos contractuales para `amor`, `familia` y `te quiero`;
+- pruebas contractuales para salidas directas, aproximaciones y frases de varias palabras;
 - representación directa de vocales y continuantes;
 - uso de silabogramas para las oclusivas;
 - advertencias obligatorias para vocales de apoyo y sonidos modernos sin equivalente directo;

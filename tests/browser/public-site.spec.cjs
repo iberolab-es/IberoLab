@@ -10,6 +10,27 @@ test('la portada presenta la identidad pública sin ocultar el corpus', async ({
   await expect(page.locator('html')).toHaveAttribute('data-renderer-ready', 'true');
   await expect(page.getByRole('link', { name: 'Aprender historia' })).toHaveAttribute('href', 'historia.html');
   await expect(page.getByRole('link', { name: 'Información para universidades' })).toHaveAttribute('href', 'academia.html');
+  await expect(page.getByRole('link', { name: 'Abrir «tierra»' })).toHaveAttribute('href', 'convertir.html?q=tierra');
+});
+
+test('la muestra de tierra alinea cada rótulo con su SVG correcto', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'load' });
+  const cards = page.locator('.sample-reading .sample-sign');
+  await expect(cards.locator('span')).toHaveText(['ti', 'e', 'ŕ', 'a']);
+  await expect(cards.locator('img')).toHaveCount(4);
+  expect(await cards.locator('img').evaluateAll(images =>
+    images.map(image => new URL(image.src).pathname.split('/').pop())
+  )).toEqual(['dual-28-ti.svg', 'dual-02-e.svg', 'dual-34-r2.svg', 'dual-01-a.svg']);
+  expect(await cards.locator('img').evaluateAll(images =>
+    images.every(image => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0)
+  )).toBe(true);
+});
+
+test('el conversor propone vocabulario general y permite sentimientos libres', async ({ page }) => {
+  await page.goto('/convertir.html', { waitUntil: 'load' });
+  await expect(page.locator('#sourceInput')).toHaveValue('hogar');
+  await expect(page.locator('.examples .example')).toHaveText(['hogar', 'tierra', 'mundo', 'olivo', 'mar']);
+  await expect(page.getByText('Puedes escribir cualquier nombre, sentimiento, palabra o frase breve.')).toBeVisible();
 });
 
 test('la portada móvil separa el monograma de la lectura documentada', async ({ page }) => {

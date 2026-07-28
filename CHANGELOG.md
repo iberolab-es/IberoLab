@@ -6,6 +6,8 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 
 ## Unreleased — portada pública, historia y audio aproximado
 
+- La muestra principal usa ahora `tierra` y el conversor propone `hogar`, `tierra`, `mundo`, `olivo` y `mar`, dejando explícito que admite también nombres, sentimientos y frases breves.
+- Se corrige la referencia visual errónea que etiquetaba como `te` un recurso gráfico inexistente con numeración de `to`, y se añade una regresión entre rótulos y SVG.
 - La raíz pública incorpora una presentación visual de IberoLab por encima del corpus, sin cambiar su URL ni romper los enlaces profundos existentes.
 - Se publican las páginas `historia.html` y `metodologia.html`, preparadas para incorporar divulgación audiovisual y fuentes complementarias.
 - El símbolo oficial evoluciona a un monograma-glifo contemporáneo que fusiona eje, travesaño, chevrón y ramificación; no reproduce un signo ibérico antiguo ni posee valor fonético histórico.
