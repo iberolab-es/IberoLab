@@ -127,6 +127,37 @@ test.describe('demostrador MVP de entradas breves', () => {
     await expect(page.locator('#technicalReading')).toHaveText('a · m · i · s · ta · da');
   });
 
+  test('una URL compartida restaura la entrada y su resultado', async ({ page }) => {
+    await page.goto('/convertir.html?q=te%20quiero', { waitUntil: 'load' });
+    await expect(page.locator('#sourceInput')).toHaveValue('te quiero');
+    await expect(page.locator('#technicalReading')).toHaveText('te / ki · e · r · o');
+    await expect(page.locator('.word-label')).toHaveText(['te', 'quiero']);
+  });
+
+  test('al adaptar se actualiza la URL compartible', async ({ page }) => {
+    await page.goto('/convertir.html', { waitUntil: 'load' });
+    await page.locator('#sourceInput').fill('amistad');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+    expect(new URL(page.url()).searchParams.get('q')).toBe('amistad');
+  });
+
+  test('compartir usa la hoja nativa con lectura y enlace restaurable', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.__iberoShared = null;
+      Object.defineProperty(navigator, 'share', {
+        configurable: true,
+        value: async payload => { window.__iberoShared = payload; }
+      });
+    });
+    await page.goto('/convertir.html', { waitUntil: 'load' });
+    await page.locator('#sourceInput').fill('amor');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+    await page.getByRole('button', { name: 'Compartir resultado' }).click();
+    const payload = await page.evaluate(() => window.__iberoShared);
+    expect(payload.text).toContain('a · m · o · r');
+    expect(new URL(payload.url).searchParams.get('q')).toBe('amor');
+  });
+
   test('una entrada no admitida se bloquea sin signos parciales', async ({ page }) => {
     await page.goto('/convertir.html', { waitUntil: 'load' });
     await page.locator('#sourceInput').fill('123');

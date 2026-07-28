@@ -4,6 +4,13 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo.
 
 El formato se inspira en Keep a Changelog y el proyecto utilizará versionado semántico cuando exista una primera versión funcional.
 
+## Unreleased — resultados compartibles y frases más claras
+
+- Los resultados del demostrador disponen de URL restaurable mediante `?q=`.
+- Se añade compartir nativo en móvil con copia al portapapeles como alternativa.
+- Las frases muestran el rótulo de cada palabra sobre su grupo de signos.
+- La regresión comprueba restauración, actualización de URL y contenido compartido.
+
 ## [Unreleased]
 
 ### Added

@@ -129,6 +129,11 @@ def validate_web_files() -> tuple[int, int]:
         "Adaptación fonética experimental",
         "No es una traducción al idioma ibérico",
         "Escuchar entrada en español",
+        "Compartir resultado",
+        'id="actionStatus"',
+        'wordLabel.className = "word-label"',
+        'searchParams.set("q", trimmed)',
+        "navigator.share",
         "Los signos son formas normalizadas de referencia",
         'src="mvp-converter.js"',
         'data-example="amor"',
@@ -180,5 +185,5 @@ if __name__ == "__main__":
     print(
         "MVP CONVERTER VALIDATION OK: "
         f"{assets} normalized SVGs; seed corpus remains {seed_assets}; "
-        f"{examples} examples; {page_markers} page markers; {script_markers} safeguards."
+        f"{examples} contract examples; {page_markers} page markers; {script_markers} script safeguards."
     )

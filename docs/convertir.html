@@ -77,7 +77,9 @@
       gap: 11px;
       align-items: center;
     }
-    .word-group { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; padding: 4px 0; }
+    .word-group { display: grid; gap: 7px; align-items: start; padding: 4px 0; }
+    .word-label { color: var(--accent); font-size: .76rem; font-weight: 850; letter-spacing: .04em; }
+    .word-signs { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
     .word-separator { color: var(--muted); font-size: 1.5rem; padding: 0 3px; }
     .sign-card {
       width: 78px;
@@ -104,6 +106,7 @@
     .technical-card p { margin: 0; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
     .technical-card code { color: var(--text); }
     .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+    .action-status { min-height: 1.35em; margin-top: 8px; color: var(--muted); font-size: .85rem; }
     .explanation { margin-top: 20px; display: grid; gap: 10px; }
     .explanation h3 { margin: 0; }
     .notice-item { border-left: 3px solid var(--line); padding: 9px 12px; color: var(--muted); line-height: 1.5; background: rgba(7,16,25,.45); border-radius: 0 10px 10px 0; }
@@ -183,7 +186,9 @@
       <div class="actions">
         <button id="speakButton" class="secondary" type="button">Escuchar entrada en español</button>
         <button id="copyButton" class="secondary" type="button">Copiar lectura técnica</button>
+        <button id="shareButton" class="secondary" type="button">Compartir resultado</button>
       </div>
+      <div id="actionStatus" class="action-status" role="status" aria-live="polite"></div>
 
       <div class="explanation">
         <h3>Qué se ha hecho</h3>
@@ -216,6 +221,8 @@
   const noticeList = document.getElementById("noticeList");
   const speakButton = document.getElementById("speakButton");
   const copyButton = document.getElementById("copyButton");
+  const shareButton = document.getElementById("shareButton");
+  const actionStatus = document.getElementById("actionStatus");
   let currentResult = null;
 
   function updateCounter() {
@@ -283,6 +290,8 @@
       statusBadge.textContent = "No se ha generado una salida";
       speakButton.disabled = true;
       copyButton.disabled = true;
+      shareButton.disabled = true;
+      actionStatus.textContent = "";
       renderNotices(result);
       return;
     }
@@ -298,7 +307,13 @@
       const group = document.createElement("div");
       group.className = "word-group";
       group.dataset.sourceWord = word.source;
-      group.append(...word.tokens.map(createSignCard));
+      const wordLabel = document.createElement("div");
+      wordLabel.className = "word-label";
+      wordLabel.textContent = word.source;
+      const signs = document.createElement("div");
+      signs.className = "word-signs";
+      signs.append(...word.tokens.map(createSignCard));
+      group.append(wordLabel, signs);
       output.append(group);
     });
 
@@ -308,11 +323,32 @@
     statusBadge.textContent = result.status === "direct" ? "Adaptación directa" : "Adaptación con aproximaciones";
     speakButton.disabled = !("speechSynthesis" in window);
     copyButton.disabled = false;
+    shareButton.disabled = false;
+    actionStatus.textContent = "";
     renderNotices(result);
   }
 
-  function convert() {
+  function resultUrl(value = input.value) {
+    const url = new URL(window.location.href);
+    const trimmed = value.trim();
+    if (trimmed) url.searchParams.set("q", trimmed);
+    else url.searchParams.delete("q");
+    return url;
+  }
+
+  function convert({ updateUrl = true } = {}) {
     renderResult(window.IberoMvp.convert(input.value));
+    if (updateUrl) {
+      const url = resultUrl();
+      window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+    }
+  }
+
+  function loadFromUrl() {
+    const sharedInput = new URL(window.location.href).searchParams.get("q");
+    if (sharedInput !== null) input.value = sharedInput;
+    updateCounter();
+    convert({ updateUrl: false });
   }
 
   form.addEventListener("submit", event => {
@@ -344,14 +380,34 @@
     try {
       await navigator.clipboard.writeText(currentResult.technicalReading);
       copyButton.textContent = "Lectura copiada";
-      setTimeout(() => { copyButton.textContent = "Copiar lectura técnica"; }, 1600);
+      actionStatus.textContent = "La lectura técnica se ha copiado.";
+      setTimeout(() => { copyButton.textContent = "Copiar lectura técnica"; actionStatus.textContent = ""; }, 1600);
     } catch {
       copyButton.textContent = "No se pudo copiar";
+      actionStatus.textContent = "El navegador no ha permitido copiar la lectura.";
     }
   });
 
-  updateCounter();
-  convert();
+  shareButton.addEventListener("click", async () => {
+    if (!currentResult || currentResult.executionStatus !== "success") return;
+    const url = resultUrl(currentResult.original).toString();
+    const text = `IberoLab — ${currentResult.original}\n${currentResult.technicalReading}\nAdaptación fonética experimental; no es una traducción.`;
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share({ title: "IberoLab", text, url });
+        actionStatus.textContent = "Resultado compartido.";
+      } else {
+        await navigator.clipboard.writeText(`${text}\n${url}`);
+        actionStatus.textContent = "Enlace y lectura copiados para compartir.";
+      }
+      setTimeout(() => { actionStatus.textContent = ""; }, 2200);
+    } catch (error) {
+      if (error?.name !== "AbortError") actionStatus.textContent = "No se pudo compartir el resultado.";
+    }
+  });
+
+  window.addEventListener("popstate", loadFromUrl);
+  loadFromUrl();
   document.documentElement.dataset.mvpConverterReady = "true";
 })();
 </script>
