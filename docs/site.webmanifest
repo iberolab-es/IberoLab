@@ -1,0 +1,19 @@
+{
+  "name": "IberoLab",
+  "short_name": "IberoLab",
+  "description": "Adaptación fonética experimental y corpus documentado de formas ibéricas.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071019",
+  "theme_color": "#10253a",
+  "icons": [
+    {
+      "src": "assets/brand/iberolab-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
