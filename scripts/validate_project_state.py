@@ -2,8 +2,8 @@
 """Validate consistency between IberoLab's current data and current-state docs.
 
 Historical reports and changelog entries may legitimately describe older
-18-asset states. This validator therefore targets only documents that claim to
-describe the present architecture and roadmap.
+18-asset states. This validator targets only datasets and documents that claim
+to describe the present architecture and roadmap.
 """
 from __future__ import annotations
 
@@ -14,16 +14,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "signs" / "reference-standard-dual.assets.v1.json"
 MAPPING = ROOT / "data" / "signs" / "reference-standard-dual.v1.json"
+INVENTORY = ROOT / "data" / "signs" / "minimum-inventory.v1.json"
 MATRIX = ROOT / "data" / "tests" / "browser-matrix.v1.json"
 SELF_TEST = ROOT / "docs" / "test.html"
 README = ROOT / "README.md"
 ROADMAP = ROOT / "ROADMAP.md"
 METHODOLOGY = ROOT / "docs" / "METHODOLOGY.md"
+CORPUS_DOC = ROOT / "docs" / "ATTESTED_CORPUS.md"
 
 CURRENT_DOCS = {
     "README": README,
     "ROADMAP": ROADMAP,
     "METHODOLOGY": METHODOLOGY,
+    "ATTESTED_CORPUS": CORPUS_DOC,
 }
 
 STALE_CURRENT_STATE_PHRASES = (
@@ -32,6 +35,8 @@ STALE_CURRENT_STATE_PHRASES = (
     "Resolver paleográficamente `ń` o mantenerlo formalmente pendiente",
     "`ń` como token explícitamente pendiente",
     "`ń` permanece sin signo gráfico asignado",
+    '"graphic_status":"pending_verified_svg"',
+    '"allograph_status":"not_selected"',
 )
 
 
@@ -45,9 +50,10 @@ def require_markers(label: str, text: str, markers: tuple[str, ...]) -> None:
         raise ValueError(f"{label} lacks current-state markers: {missing}")
 
 
-def validate() -> tuple[int, int, int]:
+def validate() -> tuple[int, int, int, int]:
     manifest = load_json(MANIFEST)
     mapping = load_json(MAPPING)
+    inventory = load_json(INVENTORY)
     matrix = load_json(MATRIX)
 
     assets = manifest.get("assets", [])
@@ -60,9 +66,35 @@ def validate() -> tuple[int, int, int]:
         raise ValueError("current manifest token set must contain nineteen unique tokens including ń")
 
     signs = {item.get("token"): item for item in mapping.get("signs", [])}
-    if set(signs) != asset_tokens:
-        raise ValueError("mapping and manifest token sets differ")
+    inventory_signs = {item.get("transliteration"): item for item in inventory.get("signs", [])}
+    if set(signs) != asset_tokens or set(inventory_signs) != asset_tokens:
+        raise ValueError("inventory, mapping and manifest token sets differ")
+    if inventory.get("schema_version") != "1.1.0":
+        raise ValueError("minimum inventory must use schema 1.1.0")
+    if inventory.get("status") != "transcription_inventory_with_graphic_references":
+        raise ValueError("minimum inventory status is obsolete")
+    if len(inventory_signs) != 19:
+        raise ValueError("minimum inventory must contain nineteen unique token entries")
+
+    for token in asset_tokens:
+        inventory_item = inventory_signs[token]
+        mapping_item = signs[token]
+        asset_item = next(item for item in assets if item.get("token") == token)
+        if inventory_item.get("graphic_reference_id") != mapping_item.get("reference_id"):
+            raise ValueError(f"{token!r}: inventory and mapping reference IDs differ")
+        if inventory_item.get("graphic_reference_id") != asset_item.get("reference_id"):
+            raise ValueError(f"{token!r}: inventory and manifest reference IDs differ")
+        if inventory_item.get("local_path") != mapping_item.get("local_path"):
+            raise ValueError(f"{token!r}: inventory and mapping paths differ")
+        if inventory_item.get("local_path") != asset_item.get("local_path"):
+            raise ValueError(f"{token!r}: inventory and manifest paths differ")
+        if inventory_item.get("graphic_status") != mapping_item.get("graphic_status"):
+            raise ValueError(f"{token!r}: inventory and mapping graphic statuses differ")
+        if str(inventory_item.get("graphic_status", "")).startswith("pending_"):
+            raise ValueError(f"{token!r}: inventory retains a pending graphic status")
+
     nasal = signs["ń"]
+    nasal_inventory = inventory_signs["ń"]
     expected_nasal = {
         "graphic_status": "local_attested_variant_svg_available",
         "paleographic_variant": "m1",
@@ -70,8 +102,8 @@ def validate() -> tuple[int, int, int]:
         "project_transcription": "ń",
     }
     for key, value in expected_nasal.items():
-        if nasal.get(key) != value:
-            raise ValueError(f"current ń mapping has invalid {key}: {nasal.get(key)!r}")
+        if nasal.get(key) != value or nasal_inventory.get(key) != value:
+            raise ValueError(f"current ń data has invalid {key}")
 
     expected = matrix.get("expected", {})
     if matrix.get("schema_version") != "1.3.0":
@@ -131,18 +163,28 @@ def validate() -> tuple[int, int, int]:
             "no sustituyen las pruebas manuales",
         ),
     )
+    require_markers(
+        "ATTESTED_CORPUS",
+        current_texts["ATTESTED_CORPUS"],
+        (
+            "diecinueve tokens",
+            "diecinueve recursos SVG locales",
+            "variante paleográfica `m1`",
+            "no son facsímiles",
+        ),
+    )
 
-    return len(assets), len(signs), len(CURRENT_DOCS)
+    return len(assets), len(signs), len(inventory_signs), len(CURRENT_DOCS)
 
 
 if __name__ == "__main__":
     try:
-        asset_count, mapping_count, document_count = validate()
+        asset_count, mapping_count, inventory_count, document_count = validate()
     except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
         print(f"PROJECT STATE VALIDATION FAILED: {exc}", file=sys.stderr)
         raise SystemExit(1)
     print(
         "PROJECT STATE VALIDATION OK: "
-        f"{asset_count} manifest assets; {mapping_count} mapped tokens; "
+        f"{asset_count} manifest assets; {mapping_count} mapped tokens; {inventory_count} inventory entries; "
         f"{document_count} current-state documents aligned with the m1/m/ń resolution and phase gates."
     )

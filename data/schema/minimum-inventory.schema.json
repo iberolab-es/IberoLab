@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iberolab-es/IberoLab/blob/main/data/schema/minimum-inventory.schema.json",
+  "title": "IberoLab minimum transcription and graphic inventory",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "status",
+    "derived_from",
+    "graphic_mapping",
+    "asset_manifest",
+    "policy",
+    "signs"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.1.0"},
+    "dataset_id": {"const": "iberolab-minimum-sign-inventory-seed"},
+    "status": {"const": "transcription_inventory_with_graphic_references"},
+    "derived_from": {"const": "data/corpus/attested-forms.v1.json"},
+    "graphic_mapping": {"const": "data/signs/reference-standard-dual.v1.json"},
+    "asset_manifest": {"const": "data/signs/reference-standard-dual.assets.v1.json"},
+    "policy": {
+      "type": "object",
+      "required": ["description", "svg_policy", "allograph_policy", "legacy_html"],
+      "properties": {
+        "description": {"type": "string", "minLength": 20},
+        "svg_policy": {"type": "string", "minLength": 20},
+        "allograph_policy": {"type": "string", "minLength": 20},
+        "legacy_html": {"type": "string", "minLength": 20}
+      },
+      "additionalProperties": false
+    },
+    "signs": {
+      "type": "array",
+      "minItems": 19,
+      "maxItems": 19,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "transliteration",
+          "class",
+          "script",
+          "corpus_required",
+          "graphic_status",
+          "allograph_status",
+          "evidence_level",
+          "graphic_reference_id",
+          "local_path",
+          "notes"
+        ],
+        "properties": {
+          "id": {"type": "string", "pattern": "^ib-ne-sign-[a-z]+-[0-9]{2}$"},
+          "transliteration": {"type": "string", "minLength": 1},
+          "class": {
+            "enum": [
+              "vowel",
+              "continuant",
+              "labial_syllabogram",
+              "dental_syllabogram",
+              "velar_syllabogram"
+            ]
+          },
+          "script": {"const": "Northeastern Iberian"},
+          "corpus_required": {"const": true},
+          "graphic_status": {
+            "enum": [
+              "local_reference_svg_available",
+              "local_attested_variant_svg_available"
+            ]
+          },
+          "allograph_status": {
+            "enum": [
+              "normalized_reference_only",
+              "documented_variant_m1_normalized_reference"
+            ]
+          },
+          "evidence_level": {
+            "enum": [
+              "transcription_attested_graphic_reference_controlled",
+              "transcription_and_variant_attested_graphic_reference_controlled"
+            ]
+          },
+          "graphic_reference_id": {"type": "string", "minLength": 3},
+          "local_path": {
+            "type": "string",
+            "pattern": "^docs/assets/signs/northeastern-dual/.+\\.svg$"
+          },
+          "paleographic_variant": {"type": "string"},
+          "traditional_transcription": {"type": "string"},
+          "project_transcription": {"type": "string"},
+          "evidence": {"type": "string", "pattern": "^https://"},
+          "notes": {"type": "string", "minLength": 20}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"transliteration": {"const": "ń"}},
+              "required": ["transliteration"]
+            },
+            "then": {
+              "required": [
+                "paleographic_variant",
+                "traditional_transcription",
+                "project_transcription",
+                "evidence"
+              ],
+              "properties": {
+                "graphic_status": {"const": "local_attested_variant_svg_available"},
+                "allograph_status": {"const": "documented_variant_m1_normalized_reference"},
+                "evidence_level": {"const": "transcription_and_variant_attested_graphic_reference_controlled"},
+                "paleographic_variant": {"const": "m1"},
+                "traditional_transcription": {"const": "m"},
+                "project_transcription": {"const": "ń"},
+                "evidence": {"const": "https://doi.org/10.36707/palaeohispanica.v25i1.703"}
+              }
+            },
+            "else": {
+              "properties": {
+                "graphic_status": {"const": "local_reference_svg_available"},
+                "allograph_status": {"const": "normalized_reference_only"},
+                "evidence_level": {"const": "transcription_attested_graphic_reference_controlled"}
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
