@@ -43,7 +43,7 @@ def main() -> int:
         "Un signo-raíz contemporáneo",
         "No es un signo ibérico antiguo",
         "Para la comunidad académica",
-        "location.replace(`corpus.html",
+        "location.replace(`corpus.html${location.search}${location.hash}`)",
     ), "home")
     require(corpus, (
         "Formas ibéricas contrastadas",
@@ -79,7 +79,29 @@ def main() -> int:
     if "signo ibérico histórico" in index.lower():
         raise ValueError("home must not present the contemporary emblem as an ancient sign")
 
-    print("PUBLIC SITE VALIDATION OK: home, corpus routing, history, methodology, contemporary emblem and approximate-reading safeguards present.")
+    public_pages = {
+        "home": index,
+        "corpus": corpus,
+        "history": history,
+        "methodology": methodology,
+        "converter": converter,
+    }
+    remote_asset_markers = ('<img src="http', '<script src="http', '<link rel="stylesheet" href="http')
+    for label, text in public_pages.items():
+        found = [marker for marker in remote_asset_markers if marker in text.lower()]
+        if found:
+            raise ValueError(f"{label} contains uncontrolled remote presentation assets: {found}")
+
+    lowered_logo = logo.lower()
+    unsafe_logo_markers = ("<script", "javascript:", "<foreignobject", "onload=")
+    unsafe = [marker for marker in unsafe_logo_markers if marker in lowered_logo]
+    if unsafe:
+        raise ValueError(f"brand emblem contains active SVG content: {unsafe}")
+
+    print(
+        "PUBLIC SITE VALIDATION OK: home, legacy corpus routing, local presentation assets, "
+        "history, methodology, contemporary emblem and approximate-reading safeguards present."
+    )
     return 0
 
 
