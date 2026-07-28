@@ -1,0 +1,53 @@
+name: Vendor resolved nasal m1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/vendor_nasal_m1.py
+      - .github/workflows/vendor-nasal-m1.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendor-m1:
+    if: github.actor != 'github-actions[bot]' && github.head_ref == 'feat/resolve-nasal-m1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v6
+        with:
+          ref: feat/resolve-nasal-m1
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Download and inventory the m1 nasal asset
+        run: python scripts/vendor_nasal_m1.py
+
+      - name: Validate generated files
+        run: |
+          test -f docs/assets/signs/northeastern-dual/variant-m1-nasal.svg
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('data/signs/reference-standard-dual.assets.v1.json').read_text())
+          assert data['asset_count'] == 19
+          assert data['unresolved'] == []
+          assert [item['token'] for item in data['assets']].count('ń') == 1
+          PY
+          git diff --check
+
+      - name: Commit generated asset and manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/assets/signs/northeastern-dual/variant-m1-nasal.svg data/signs/reference-standard-dual.assets.v1.json
+          git commit -m "Vendor resolved m1 nasal asset [skip ci]"
+          git push origin HEAD:feat/resolve-nasal-m1
