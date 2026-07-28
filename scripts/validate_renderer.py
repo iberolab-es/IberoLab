@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate coverage and public safeguards of the provisional renderer."""
+"""Validate coverage and public safeguards of the reference renderer."""
 from __future__ import annotations
 
 import json
@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "data" / "corpus" / "attested-forms.v1.json"
 MAPPING = ROOT / "data" / "signs" / "reference-standard-dual.v1.json"
 HTML = ROOT / "docs" / "index.html"
+LOCAL_STATUSES = {"local_reference_svg_available", "local_attested_variant_svg_available"}
 
 
 def main() -> int:
@@ -21,13 +22,16 @@ def main() -> int:
     missing = sorted(used - signs.keys())
     if missing:
         raise ValueError(f"Tokens absent from renderer mapping: {missing}")
+    extras = sorted(signs.keys() - used)
+    if extras:
+        raise ValueError(f"Renderer mapping contains tokens unused by the corpus: {extras}")
 
     available = 0
     unresolved: list[str] = []
     for token in sorted(used):
         item = signs[token]
         status = item.get("graphic_status")
-        if status == "local_reference_svg_available":
+        if status in LOCAL_STATUSES:
             local_path = item.get("local_path")
             if not isinstance(local_path, str) or not local_path.endswith(".svg"):
                 raise ValueError(f"{token!r}: invalid local SVG path")
@@ -40,6 +44,20 @@ def main() -> int:
             unresolved.append(token)
         else:
             raise ValueError(f"{token!r}: unknown graphic status {status!r}")
+
+    nasal = signs["ń"]
+    expected_nasal = {
+        "graphic_status": "local_attested_variant_svg_available",
+        "paleographic_variant": "m1",
+        "traditional_transcription": "m",
+        "project_transcription": "ń",
+        "phonological_scope": "marked_nasal_not_labial",
+        "graphic_scope": "normalized_m1_variant_reference_not_facsimile",
+        "evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703",
+    }
+    for key, value in expected_nasal.items():
+        if nasal.get(key) != value:
+            raise ValueError(f"ń mapping lacks documented {key}={value!r}")
 
     html = HTML.read_text(encoding="utf-8")
     required_markers = [
@@ -56,6 +74,10 @@ def main() -> int:
         "No es una traducción al idioma ibérico",
         "Referencia normalizada",
         "Recursos gráficos locales de referencia",
+        "variant-m1-nasal.svg",
+        "variante paleográfica m1",
+        "transcripción tradicional era m",
+        "no un facsímil",
     ]
     absent = [marker for marker in required_markers if marker not in html]
     if absent:
@@ -68,14 +90,15 @@ def main() -> int:
     if absent_forms:
         raise ValueError(f"HTML lacks corpus entries: {absent_forms}")
 
-    if unresolved != ["ń"]:
-        raise ValueError(f"expected only explicit unresolved token ń, got {unresolved}")
+    if unresolved:
+        raise ValueError(f"the seed corpus must have no unresolved graphic tokens, got {unresolved}")
+    if available != len(used) or available != 19:
+        raise ValueError(f"expected nineteen available SVG mappings, got {available}")
 
     print(
         "RENDERER VALIDATION OK: "
-        f"{len(corpus['forms'])} forms; {available} local SVG mappings; "
-        f"{len(unresolved)} explicit unresolved token(s): "
-        f"{', '.join(unresolved) or 'none'}; evidence, navigation and local-only delivery safeguards present."
+        f"{len(corpus['forms'])} forms; {available} local SVG mappings; no unresolved graphic tokens; "
+        "m1/m/ń transcription history, evidence, navigation and local-only delivery safeguards present."
     )
     return 0
 

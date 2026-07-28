@@ -8,7 +8,7 @@ const FORMS = [
   { id: 'ib-ne-ekiar-001', form: 'ekiar', cards: 4, pending: 0 },
   { id: 'ib-ne-egiar-001', form: 'egiar', cards: 4, pending: 0 },
   { id: 'ib-ne-likine-001', form: 'likine', cards: 5, pending: 0 },
-  { id: 'ib-ne-tarsaban-001', form: 'taŕśabań', cards: 6, pending: 1 },
+  { id: 'ib-ne-tarsaban-001', form: 'taŕśabań', cards: 6, pending: 0 },
   { id: 'ib-ne-baisetas-001', form: 'baisetaś', cards: 6, pending: 0 },
   { id: 'ib-ne-seltar-001', form: 'seltar', cards: 5, pending: 0 },
   { id: 'ib-ne-ebanen-001', form: 'ebanen', cards: 5, pending: 0 }
@@ -43,17 +43,17 @@ test('el diagnóstico gráfico supera las once formas con SVG locales', async ({
 
   const report = JSON.parse(await page.locator('#report').inputValue());
   expect(report.application).toBe('IberoLab browser self-test');
-  expect(report.version).toBe('1.1.0');
+  expect(report.version).toBe('1.2.0');
   expect(report.asset_mode).toBe('local_repository');
   expect(report.result).toBe('pass');
   expect(report.metrics).toMatchObject({
     forms_evaluated: 11,
     forms_total: 11,
-    svg_loaded: 18,
-    svg_total: 18,
+    svg_loaded: 19,
+    svg_total: 19,
     failed_svg_tokens: [],
     empty_outputs: 0,
-    pending_tokens: ['ń'],
+    pending_tokens: [],
     unexpected_pending: [],
     missing_expected_pending: []
   });

@@ -21,8 +21,8 @@
 
 ## Fase 1B — Inventario paleográfico y SVG verificados
 
-- [x] Crear un mapeo gráfico provisional con formas normalizadas de referencia para 18 de los 19 tokens del corpus.
-- [x] Mantener `ń` como token explícitamente pendiente, sin sustituirlo por `n`, `m` o `ḿ`.
+- [x] Crear un mapeo gráfico provisional con formas normalizadas de referencia para los 19 tokens del corpus.
+- [x] Resolver `ń` como transcripción de la variante paleográfica m1, conservando `m` como transcripción histórica y sin confundirla con `n` o `ḿ`.
 - [x] Integrar los dieciocho SVG de referencia dentro del repositorio y eliminar su dependencia remota durante la navegación.
 - [x] Registrar para cada SVG la fuente, la autoría, la licencia, la ruta local, el tamaño y el hash SHA-256.
 - [x] Añadir pruebas automáticas de existencia, integridad criptográfica, XML válido y ausencia de marcadores activos inseguros.

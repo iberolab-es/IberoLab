@@ -14,7 +14,8 @@ MAPPING = ROOT / "data" / "signs" / "reference-standard-dual.v1.json"
 INDEX = ROOT / "docs" / "index.html"
 SELF_TEST = ROOT / "docs" / "test.html"
 ASSET_DIR = ROOT / "docs" / "assets" / "signs" / "northeastern-dual"
-EXPECTED_TOKENS = {"a", "e", "i", "u", "gi", "ke", "ki", "ba", "da", "de", "di", "ta", "s", "ś", "r", "ŕ", "l", "n"}
+EXPECTED_TOKENS = {"a", "e", "i", "u", "gi", "ke", "ki", "ba", "da", "de", "di", "ta", "s", "ś", "r", "ŕ", "l", "n", "ń"}
+LOCAL_STATUSES = {"local_reference_svg_available", "local_attested_variant_svg_available"}
 FORBIDDEN_MARKERS = (b"<script", b"javascript:", b"onload=", b"onerror=", b"<foreignobject")
 
 
@@ -26,10 +27,19 @@ def validate() -> tuple[int, int]:
     manifest = load_json(MANIFEST)
     mapping = load_json(MAPPING)
     assets = manifest.get("assets", [])
-    if manifest.get("asset_count") != 18 or len(assets) != 18:
-        raise ValueError("manifest must declare exactly 18 assets")
-    if manifest.get("licence") != "CC0-1.0" or manifest.get("author") != "BotaFlo":
-        raise ValueError("manifest author or licence is not the expected reference source")
+    if manifest.get("schema_version") != "1.1.0":
+        raise ValueError("asset manifest must use schema 1.1.0 after resolving m1")
+    if manifest.get("asset_count") != 19 or len(assets) != 19:
+        raise ValueError("manifest must declare exactly 19 assets")
+    if manifest.get("licence") != "CC0-1.0":
+        raise ValueError("manifest-level licence must remain CC0-1.0")
+
+    source_sets = manifest.get("source_sets", [])
+    source_names = {item.get("name") for item in source_sets}
+    if source_names != {"Sign Iber Noro Dual 01–38", "NE Iberian m1.svg"}:
+        raise ValueError("manifest source sets do not document both normalized sources")
+    if any(item.get("licence") != "CC0-1.0" for item in source_sets):
+        raise ValueError("every source set must be CC0-1.0")
 
     by_token = {item.get("token"): item for item in assets}
     if set(by_token) != EXPECTED_TOKENS:
@@ -52,6 +62,8 @@ def validate() -> tuple[int, int]:
             raise ValueError(f"{token!r}: SHA-256 mismatch")
         if item.get("media_type") != "image/svg+xml":
             raise ValueError(f"{token!r}: unexpected media type")
+        if item.get("licence") != "CC0-1.0":
+            raise ValueError(f"{token!r}: asset licence must be CC0-1.0")
         lowered = data.lower()
         for marker in FORBIDDEN_MARKERS:
             if marker in lowered:
@@ -63,6 +75,22 @@ def validate() -> tuple[int, int]:
         if not root_element.tag.lower().endswith("svg"):
             raise ValueError(f"{token!r}: root element is not SVG")
 
+    nasal_asset = by_token["ń"]
+    expected_nasal = {
+        "reference_id": "variant-m1-nasal",
+        "source_file_name": "NE Iberian m1.svg",
+        "author": "Vriullop",
+        "paleographic_variant": "m1",
+        "traditional_transcription": "m",
+        "project_transcription": "ń",
+        "phonological_scope": "marked_nasal_not_labial",
+        "graphic_scope": "normalized_m1_variant_reference_not_facsimile",
+        "scholarly_evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703",
+    }
+    for key, value in expected_nasal.items():
+        if nasal_asset.get(key) != value:
+            raise ValueError(f"ń asset has invalid {key}: {nasal_asset.get(key)!r}")
+
     disk_paths = {path.resolve() for path in ASSET_DIR.glob("*.svg")}
     if disk_paths != declared_paths:
         extras = sorted(str(path.relative_to(ROOT)) for path in disk_paths - declared_paths)
@@ -70,15 +98,22 @@ def validate() -> tuple[int, int]:
         raise ValueError(f"asset directory differs from manifest; extras={extras}, missing={missing}")
 
     signs = {item["token"]: item for item in mapping["signs"]}
+    if set(signs) != EXPECTED_TOKENS:
+        raise ValueError("mapping token set must equal the nineteen corpus tokens")
     for token in EXPECTED_TOKENS:
         sign = signs.get(token)
-        if not sign or sign.get("graphic_status") != "local_reference_svg_available":
-            raise ValueError(f"{token!r}: mapping is not marked as a local SVG")
+        if not sign or sign.get("graphic_status") not in LOCAL_STATUSES:
+            raise ValueError(f"{token!r}: mapping is not marked as an accepted local SVG")
         if sign.get("local_path") != by_token[token]["local_path"]:
             raise ValueError(f"{token!r}: mapping path differs from manifest")
-    pending = signs.get("ń")
-    if not pending or not pending.get("graphic_status", "").startswith("pending_") or pending.get("local_path"):
-        raise ValueError("ń must remain pending and must not have a local graphic")
+
+    nasal_sign = signs["ń"]
+    for key in ("paleographic_variant", "traditional_transcription", "project_transcription", "phonological_scope", "graphic_scope", "evidence"):
+        expected_key = "scholarly_evidence" if key == "evidence" else key
+        if nasal_sign.get(key) != nasal_asset.get(expected_key):
+            raise ValueError(f"ń mapping differs from manifest for {key}")
+    if nasal_sign.get("graphic_status") != "local_attested_variant_svg_available":
+        raise ValueError("ń must be marked as a documented local variant")
 
     index = INDEX.read_text(encoding="utf-8")
     self_test = SELF_TEST.read_text(encoding="utf-8")
@@ -91,10 +126,14 @@ def validate() -> tuple[int, int]:
                 raise ValueError(f"{label} does not declare local path {web_path}")
     if 'asset_mode: "local_repository"' not in self_test:
         raise ValueError("self-test does not report local_repository asset mode")
+    if 'version: "1.2.0"' not in self_test:
+        raise ValueError("self-test must report version 1.2.0 after resolving m1")
 
-    unresolved = manifest.get("unresolved", [])
-    if len(unresolved) != 1 or unresolved[0].get("token") != "ń":
-        raise ValueError("manifest must retain ń as the only unresolved graphic token")
+    if manifest.get("unresolved") != []:
+        raise ValueError("manifest must not retain unresolved graphic tokens")
+    resolved = manifest.get("resolved_tokens", [])
+    if len(resolved) != 1 or resolved[0].get("token") != "ń" or resolved[0].get("resolved_as") != "m1":
+        raise ValueError("manifest must record the m1 resolution of ń")
     return len(assets), len(disk_paths)
 
 
@@ -106,5 +145,6 @@ if __name__ == "__main__":
         raise SystemExit(1)
     print(
         "LOCAL ASSET VALIDATION OK: "
-        f"{declared} manifest assets; {stored} stored SVGs; hashes, provenance and local-only delivery verified; ń remains pending."
+        f"{declared} manifest assets; {stored} stored SVGs; hashes, provenance and local-only delivery verified; "
+        "ń is resolved as documented variant m1 with transcription history preserved."
     )

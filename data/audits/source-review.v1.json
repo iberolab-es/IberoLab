@@ -19,7 +19,9 @@
         "The cited study uses ildiŕda in its title and discussion.",
         "The article also prints a dotted epigraphic sequence i.l.ti.ŕ.ta for one coin legend; the current di/da tokens are a dual-value normalization and must not be presented as a facsimile."
       ],
-      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "source_urls": [
+        "https://doi.org/10.36707/palaeohispanica.v0i7.277"
+      ],
       "pending_tokens": []
     },
     {
@@ -32,7 +34,9 @@
         "erder is explicitly analysed as a monetary value expression.",
         "Its proposed value of one half is a scholarly hypothesis supported by context, not a universally secure lexical translation."
       ],
-      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "source_urls": [
+        "https://doi.org/10.36707/palaeohispanica.v0i7.277"
+      ],
       "pending_tokens": []
     },
     {
@@ -44,7 +48,9 @@
         "undikesken is used in the cited numismatic comparison.",
         "Conventional publications may also preserve forms such as untikesken; IberoLab follows the spelling used in the cited study and records variants rather than silently merging them."
       ],
-      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "source_urls": [
+        "https://doi.org/10.36707/palaeohispanica.v0i7.277"
+      ],
       "pending_tokens": []
     },
     {
@@ -56,7 +62,9 @@
         "ars is used by the cited study as the mint or monetary comparator associated with a hemidrachm.",
         "The entry must not imply that ars alone reproduces the complete legend of every cited specimen."
       ],
-      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i7.277"],
+      "source_urls": [
+        "https://doi.org/10.36707/palaeohispanica.v0i7.277"
+      ],
       "pending_tokens": []
     },
     {
@@ -85,7 +93,9 @@
         "egiar is explicitly presented together with ekiar as a documented formulaic variant.",
         "The current renderer represents the conventional reading, not the exact ductus of a specific vessel."
       ],
-      "source_urls": ["https://hdl.handle.net/2445/217431"],
+      "source_urls": [
+        "https://hdl.handle.net/2445/217431"
+      ],
       "pending_tokens": []
     },
     {
@@ -98,7 +108,9 @@
         "The Caminreal research review treats likine as one of the central anthroponymic elements of the mosaic inscription.",
         "The page renders an isolated scholarly form and does not reconstruct the complete mosaic inscription."
       ],
-      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v0i15.39"],
+      "source_urls": [
+        "https://doi.org/10.36707/palaeohispanica.v0i15.39"
+      ],
       "pending_tokens": []
     },
     {
@@ -109,10 +121,22 @@
       "rendering_status": "normalized_reference_only",
       "findings": [
         "The 2025 publication gives the complete sequence taŕśabańar and isolates the owner's name taŕśabań.",
-        "The transcription ń is verified as part of the scholarly reading, but the current generic sign series does not provide a safely assignable ń SVG."
+        "The publication identifies the relevant sign as paleographic variant m1; it records traditional transcription m and adopts ń for Iberian as a marked, non-labial nasal.",
+        "IberoLab uses a normalized CC0 m1 SVG and does not present it as a facsimile of either skyphos."
       ],
-      "source_urls": ["https://doi.org/10.36707/palaeohispanica.v25i1.703"],
-      "pending_tokens": ["ń"]
+      "source_urls": [
+        "https://doi.org/10.36707/palaeohispanica.v25i1.703"
+      ],
+      "pending_tokens": [],
+      "resolved_graphic_tokens": [
+        {
+          "token": "ń",
+          "variant": "m1",
+          "traditional_transcription": "m",
+          "current_transcription": "ń",
+          "graphic_scope": "normalized_variant_reference_not_facsimile"
+        }
+      ]
     },
     {
       "form_id": "ib-ne-baisetas-001",
@@ -124,7 +148,9 @@
         "The updated Sinarcas study explicitly discusses baisetaś in the funerary text.",
         "Its status as a personal name is supported, while the precise role of the named person within the syntactic analysis remains debated."
       ],
-      "source_urls": ["https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4"],
+      "source_urls": [
+        "https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4"
+      ],
       "pending_tokens": []
     },
     {
@@ -153,7 +179,9 @@
         "ebanen is explicitly discussed in the updated Sinarcas study.",
         "Competing analyses treat it as a possible filiation marker or as a verbal form; no translation is assigned by IberoLab."
       ],
-      "source_urls": ["https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4"],
+      "source_urls": [
+        "https://producciocientifica.uv.es/documentos/67a1170c710c1715040398e4"
+      ],
       "pending_tokens": []
     }
   ]

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Vendor the provisional CC0 northeastern-dual reference SVGs.
+"""Vendor the controlled northeastern Iberian reference SVG set.
 
-The script downloads the exact Wikimedia Commons SVG files declared by
-IberoLab, rejects unsafe or malformed SVG input, stores each resource under a
-stable repository path and writes a machine-readable provenance manifest.
+The standard series supplies eighteen normalized signary references. The
+nineteenth corpus token, ń, is supplied by the separately documented m1
+variant and is preserved when this script refreshes the standard series.
 """
 from __future__ import annotations
 
@@ -30,8 +30,10 @@ MAX_BYTES = 1_000_000
 MAX_ATTEMPTS = 5
 REQUEST_INTERVAL_SECONDS = 7.0
 RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
+NASAL_TOKEN = "ń"
+NASAL_PATH = ASSET_DIR / "variant-m1-nasal.svg"
 
-SIGN_SPECS = [
+STANDARD_SIGN_SPECS = [
     ("a", "dual-01-a", "Sign Iber Noro Dual 01 A.svg"),
     ("e", "dual-02-e", "Sign Iber Noro Dual 02 E.svg"),
     ("i", "dual-03-i", "Sign Iber Noro Dual 03 I.svg"),
@@ -52,13 +54,7 @@ SIGN_SPECS = [
     ("n", "dual-37-n", "Sign Iber Noro Dual 37 N.svg"),
 ]
 
-FORBIDDEN_MARKERS = (
-    b"<script",
-    b"javascript:",
-    b"onload=",
-    b"onerror=",
-    b"<foreignobject",
-)
+FORBIDDEN_MARKERS = (b"<script", b"javascript:", b"onload=", b"onerror=", b"<foreignobject")
 
 
 def retry_delay(exc: HTTPError | URLError, attempt: int) -> float:
@@ -81,7 +77,6 @@ def retry_delay(exc: HTTPError | URLError, attempt: int) -> float:
 def fetch_svg(file_name: str) -> tuple[bytes, str, str | None]:
     source_url = SOURCE_BASE + quote(file_name)
     last_error: HTTPError | URLError | None = None
-
     for attempt in range(1, MAX_ATTEMPTS + 1):
         request = Request(
             source_url,
@@ -107,15 +102,9 @@ def fetch_svg(file_name: str) -> tuple[bytes, str, str | None]:
             last_error = exc
             if attempt == MAX_ATTEMPTS:
                 raise
-
         delay = retry_delay(last_error, attempt)
-        print(
-            f"retry {attempt}/{MAX_ATTEMPTS} for {file_name} after {delay:.0f}s: {last_error}",
-            file=sys.stderr,
-            flush=True,
-        )
+        print(f"retry {attempt}/{MAX_ATTEMPTS} for {file_name} after {delay:.0f}s: {last_error}", file=sys.stderr, flush=True)
         time.sleep(delay)
-
     raise RuntimeError(f"{file_name}: exhausted retries: {last_error}")
 
 
@@ -134,17 +123,31 @@ def validate_svg(data: bytes, file_name: str) -> None:
         raise ValueError(f"{file_name}: root element is not SVG")
 
 
+def load_nasal_record() -> dict[str, object]:
+    if not MANIFEST.is_file() or not NASAL_PATH.is_file():
+        raise ValueError("resolved m1 asset is missing; run scripts/vendor_nasal_m1.py first")
+    current = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    record = next((item for item in current.get("assets", []) if item.get("token") == NASAL_TOKEN), None)
+    if not record or record.get("paleographic_variant") != "m1":
+        raise ValueError("manifest lacks the documented m1 record for ń")
+    data = NASAL_PATH.read_bytes()
+    validate_svg(data, "NE Iberian m1.svg")
+    refreshed = dict(record)
+    refreshed["bytes"] = len(data)
+    refreshed["sha256"] = hashlib.sha256(data).hexdigest()
+    refreshed["media_type"] = "image/svg+xml"
+    return refreshed
+
+
 def main() -> int:
     ASSET_DIR.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, object]] = []
-
-    for index, (token, reference_id, file_name) in enumerate(SIGN_SPECS):
+    for index, (token, reference_id, file_name) in enumerate(STANDARD_SIGN_SPECS):
         if index:
             time.sleep(REQUEST_INTERVAL_SECONDS)
         data, final_url, media_type = fetch_svg(file_name)
         validate_svg(data, file_name)
-        local_name = f"{reference_id}.svg"
-        local_path = ASSET_DIR / local_name
+        local_path = ASSET_DIR / f"{reference_id}.svg"
         local_path.write_bytes(data)
         digest = hashlib.sha256(data).hexdigest()
         records.append(
@@ -164,32 +167,36 @@ def main() -> int:
                 "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
             }
         )
-        print(
-            f"vendored {token:>2} -> {local_path.relative_to(ROOT)} "
-            f"({len(data)} bytes, {digest[:12]})",
-            flush=True,
-        )
+        print(f"vendored {token:>2} -> {local_path.relative_to(ROOT)} ({len(data)} bytes, {digest[:12]})", flush=True)
 
+    records.append(load_nasal_record())
     manifest = {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "manifest_id": "iberolab-reference-standard-dual-local-assets",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source_collection": "https://commons.wikimedia.org/wiki/Category:Iberian_letters",
-        "source_series": "Sign Iber Noro Dual 01–38",
-        "author": "BotaFlo",
+        "source_series": "Sign Iber Noro Dual 01–38 plus documented NE Iberian m1 variant",
+        "author": "multiple CC0 contributors; see source_sets and asset records",
         "licence": "CC0-1.0",
         "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
         "asset_count": len(records),
         "assets": records,
-        "unresolved": [
+        "unresolved": [],
+        "source_sets": [
+            {"name": "Sign Iber Noro Dual 01–38", "author": "BotaFlo", "licence": "CC0-1.0", "scope": "normalized signary references"},
+            {"name": "NE Iberian m1.svg", "author": "Vriullop", "licence": "CC0-1.0", "scope": "normalized paleographic variant m1 used for token ń"},
+        ],
+        "resolved_tokens": [
             {
                 "token": "ń",
-                "status": "pending_nasal_sign_verification",
-                "reason": "No graphic is assigned until the exact sign and transcription convention are verified against the cited 2025 publication.",
+                "resolved_as": "m1",
+                "traditional_transcription": "m",
+                "current_transcription": "ń",
+                "evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703",
+                "resolved_on": "2026-07-28",
             }
         ],
     }
-    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     ERROR_LOG.unlink(missing_ok=True)
     print(f"manifest written: {MANIFEST.relative_to(ROOT)} ({len(records)} assets)")

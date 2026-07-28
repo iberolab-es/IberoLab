@@ -47,7 +47,7 @@
 <main>
   <div class="eyebrow">IberoLab · diagnóstico local</div>
   <h1>Comprobación del corpus</h1>
-  <p class="lead">Esta página prueba, en el navegador actual, que las once formas están declaradas, que sus signos normalizados pueden cargarse y que el único token deliberadamente pendiente es <code>ń</code>.</p>
+  <p class="lead">Esta página prueba, en el navegador actual, que las once formas están declaradas, que sus diecinueve signos de referencia pueden cargarse y que la transcripción <code>ń</code> utiliza la variante paleográfica m1 documentada.</p>
 
   <div class="notice"><strong>No valida la exactitud paleográfica.</strong> Comprueba funcionamiento técnico, carga de recursos y ausencia de salidas vacías. La forma exacta de cada alógrafo sigue requiriendo revisión especializada.</div>
 
@@ -61,7 +61,7 @@
     <div id="globalStatus" class="status">Prueba todavía no ejecutada.</div>
     <div class="summary">
       <div class="metric"><strong id="formsMetric">0/11</strong><span>formas evaluadas</span></div>
-      <div class="metric"><strong id="signsMetric">0/18</strong><span>SVG cargados</span></div>
+      <div class="metric"><strong id="signsMetric">0/19</strong><span>SVG cargados</span></div>
       <div class="metric"><strong id="emptyMetric">0</strong><span>salidas vacías</span></div>
       <div class="metric"><strong id="pendingMetric">0</strong><span>tokens pendientes</span></div>
     </div>
@@ -97,7 +97,8 @@
     "r": "assets/signs/northeastern-dual/dual-33-r.svg",
     "ŕ": "assets/signs/northeastern-dual/dual-34-r2.svg",
     "l": "assets/signs/northeastern-dual/dual-35-l.svg",
-    "n": "assets/signs/northeastern-dual/dual-37-n.svg"
+    "n": "assets/signs/northeastern-dual/dual-37-n.svg",
+    "ń": "assets/signs/northeastern-dual/variant-m1-nasal.svg"
   };
   const FORMS = [
     ["ildiŕda",["i","l","di","ŕ","da"]],
@@ -112,7 +113,7 @@
     ["seltar",["s","e","l","ta","r"]],
     ["ebanen",["e","ba","n","e","n"]]
   ];
-  const EXPECTED_PENDING = new Set(["ń"]);
+  const EXPECTED_PENDING = new Set([]);
   const runButton = document.getElementById("runButton");
   const copyButton = document.getElementById("copyButton");
   const globalStatus = document.getElementById("globalStatus");
@@ -188,12 +189,12 @@
 
     globalStatus.className = `status ${passed ? "ok" : "error"}`;
     globalStatus.textContent = passed
-      ? "Prueba técnica superada: 11 formas evaluadas, 18 SVG locales cargados, ninguna salida vacía y ń permanece explícitamente pendiente."
+      ? "Prueba técnica superada: 11 formas evaluadas, 19 SVG locales cargados, ninguna salida vacía y ń resuelto mediante la variante m1 documentada."
       : "La prueba ha detectado incidencias. Consulta las filas y copia el informe para documentarlas.";
 
     const payload = {
       application: "IberoLab browser self-test",
-      version: "1.1.0",
+      version: "1.2.0",
       asset_mode: "local_repository",
       executed_at: new Date().toISOString(),
       page: location.href,
