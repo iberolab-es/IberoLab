@@ -19,7 +19,7 @@
   <style>
     :root{color-scheme:dark;--bg:#071019;--panel:#10253a;--panel2:#0a1621;--text:#eef5ff;--muted:#afbdd0;--line:#31465b;--accent:#47a9ff;--gold:#d6a34d;--ok:#5adca5;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#17334e 0,var(--bg) 46rem);color:var(--text)}
-    main{width:min(1040px,calc(100% - 28px));margin:0 auto;padding:32px 0 64px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none;font-weight:900;font-size:1.2rem}.brand img{width:48px;height:48px}.nav{display:flex;flex-wrap:wrap;gap:12px}.nav a{color:var(--muted);text-decoration:none;font-weight:750}.nav a:hover{color:var(--text)}
+    main{width:min(1040px,calc(100% - 28px));margin:0 auto;padding:32px 0 64px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none;font-weight:900}.brand img{width:48px;height:48px}.brand-name{font-family:Georgia,"Times New Roman",serif;font-size:1.55rem;letter-spacing:-.03em}.brand-name span{color:var(--gold)}.nav{display:flex;flex-wrap:wrap;gap:12px}.nav a{color:var(--muted);text-decoration:none;font-weight:750}.nav a:hover{color:var(--text)}.nav a[aria-current="page"]{color:var(--text)}
     header{padding:56px 0 30px}.eyebrow{color:var(--gold);font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem}h1{margin:14px 0 16px;font-size:clamp(2.5rem,7vw,5.3rem);line-height:.98;letter-spacing:-.05em}.lead{max-width:860px;color:var(--muted);font-size:clamp(1.05rem,2.8vw,1.35rem);line-height:1.7}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.button{display:inline-flex;align-items:center;min-height:48px;padding:0 17px;border-radius:14px;text-decoration:none;font-weight:850;background:linear-gradient(135deg,var(--accent),#2b75d6);color:white}.button.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}
     .notice{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:18px;background:rgba(10,22,33,.85);padding:18px 20px;color:var(--muted);line-height:1.65}.notice strong{color:var(--text)}
     section{margin-top:24px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{border:1px solid var(--line);border-radius:20px;background:rgba(16,37,58,.85);padding:22px}.card h2,.card h3{margin:0 0 12px}.card h2{font-size:1.55rem}.card h3{color:var(--accent);font-size:.86rem;letter-spacing:.08em;text-transform:uppercase}.card p,.card li{color:var(--muted);line-height:1.65}.card ul{padding-left:20px;margin-bottom:0}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{border:1px solid var(--line);border-radius:17px;background:var(--panel2);padding:17px}.metric strong{display:block;font-size:1.9rem}.metric span{color:var(--muted);line-height:1.4}.full{grid-column:1/-1}.links{display:grid;gap:10px}.links a{color:var(--accent);overflow-wrap:anywhere}.english{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.small{font-size:.92rem;color:var(--muted)}footer{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);line-height:1.65}footer a{color:var(--accent)}
@@ -29,8 +29,8 @@
 <body>
 <main>
   <div class="topbar">
-    <a class="brand" href="./"><img src="assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab"><span>IberoLab</span></a>
-    <nav class="nav" aria-label="Navegación principal"><a href="convertir.html">Demostrador</a><a href="./">Corpus</a><a href="https://github.com/iberolab-es/IberoLab">GitHub</a></nav>
+    <a class="brand" href="./"><img src="assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab"><span class="brand-name">Ibero<span>Lab</span></span></a>
+    <nav class="nav" aria-label="Navegación principal"><a href="./#corpus">Corpus</a><a href="historia.html">Historia</a><a href="metodologia.html">Metodología</a><a href="academia.html" aria-current="page">Universidades</a><a href="convertir.html">Conversor</a><a href="https://github.com/iberolab-es/IberoLab">GitHub</a></nav>
   </div>
 
   <header>
@@ -63,7 +63,7 @@
     <article class="card full" lang="en"><h3>English summary</h3><h2>IberoLab for academic review</h2><p>IberoLab is an independent open project combining a small, source-traceable corpus of attested Iberian forms with a practical demonstrator for short modern Spanish inputs. The demonstrator is explicitly classified as an experimental phonetic adaptation: it is not a translation into the Iberian language, does not reconstruct ancient pronunciation, and does not infer semantics from phonetic resemblance.</p><p class="english">The repository contains versioned data, local graphic assets, provenance records, static validators and browser regression tests. Specialist review is invited on readings, segmentation, palaeographic choices, transcription conventions, adaptation rules and public wording.</p></article>
   </section>
 
-  <footer>Identidad visual: el símbolo de IberoLab es una marca contemporánea inspirada en geometrías paleohispánicas; no representa un signo antiguo auténtico. Proyecto abierto y sin afiliación institucional. <a href="privacidad.html">Privacidad</a>.</footer>
+  <footer>Identidad visual: el monograma-glifo de IberoLab fusiona trazos inspirados en geometrías paleohispánicas; es una marca contemporánea sin valor fonético histórico. Proyecto abierto y sin afiliación institucional. <a href="privacidad.html">Privacidad</a>.</footer>
 </main>
 </body>
 </html>

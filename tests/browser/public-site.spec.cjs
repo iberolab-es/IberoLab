@@ -5,10 +5,29 @@ test('la portada presenta la identidad pública sin ocultar el corpus', async ({
   await expect(page.getByRole('heading', { name: 'IberoLab' })).toBeVisible();
   await expect(page.getByText('Lengua ibérica · Patrimonio · Tecnología')).toBeVisible();
   await expect(page.getByText('No es un signo ibérico antiguo.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Un monograma-glifo contemporáneo.' })).toBeVisible();
   await expect(page.locator('#corpus')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-renderer-ready', 'true');
   await expect(page.getByRole('link', { name: 'Aprender historia' })).toHaveAttribute('href', 'historia.html');
   await expect(page.getByRole('link', { name: 'Información para universidades' })).toHaveAttribute('href', 'academia.html');
+});
+
+test('la portada móvil separa el monograma de la lectura documentada', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'load' });
+  const mark = await page.locator('.hero-mark').boundingBox();
+  const tablet = await page.locator('.hero-tablet').boundingBox();
+  expect(mark).not.toBeNull();
+  expect(tablet).not.toBeNull();
+  expect(mark.y + mark.height).toBeLessThanOrEqual(tablet.y);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});
+
+test('la página académica ofrece acceso directo a Historia', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/academia.html', { waitUntil: 'load' });
+  await expect(page.getByRole('link', { name: 'Historia', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Universidades', exact: true })).toHaveAttribute('aria-current', 'page');
 });
 
 test('historia mantiene la distinción entre lectura y traducción y prepara YouTube', async ({ page }) => {
@@ -21,6 +40,7 @@ test('historia mantiene la distinción entre lectura y traducción y prepara You
 test('metodología identifica el símbolo como contemporáneo y explica los audios', async ({ page }) => {
   await page.goto('/metodologia.html', { waitUntil: 'load' });
   await expect(page.getByText('No es un signo ibérico arqueológico.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Una fusión gráfica, no un signo antiguo.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Dos audios con alcances distintos.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Lectura aproximada' })).toBeVisible();
 });

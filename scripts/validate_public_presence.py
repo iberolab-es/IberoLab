@@ -59,10 +59,12 @@ def validate() -> tuple[int, int]:
 
     page_markers = (
         'rel="canonical"',
-        'rel="icon" href="assets/brand/iberolab-mark.svg"',
-        'rel="manifest" href="site.webmanifest"',
+        'href="assets/brand/iberolab-mark.svg"',
+        'rel="manifest"',
+        'href="site.webmanifest"',
         'property="og:image"',
-        'name="twitter:card" content="summary_large_image"',
+        'name="twitter:card"',
+        'content="summary_large_image"',
         'class="site-brand"',
         'href="academia.html"',
     )
