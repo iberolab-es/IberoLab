@@ -1,0 +1,41 @@
+name: Verify public academic deploy
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-public-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Wait for GitHub Pages and verify public presence
+        run: |
+          set -euo pipefail
+          base="https://iberolab-es.github.io/IberoLab"
+          for attempt in $(seq 1 18); do
+            academia=$(curl -fsSL "$base/academia.html" || true)
+            converter=$(curl -fsSL "$base/convertir.html" || true)
+            corpus=$(curl -fsSL "$base/" || true)
+            if grep -q "Información para universidades y especialistas" <<<"$academia" \
+              && grep -q "IberoLab no traduce al idioma ibérico" <<<"$academia" \
+              && grep -q "site-brand" <<<"$converter" \
+              && grep -q "Recientes en este dispositivo" <<<"$converter" \
+              && grep -q "academia.html" <<<"$corpus"; then
+              break
+            fi
+            if [ "$attempt" -eq 18 ]; then
+              echo "GitHub Pages did not expose the expected public version in time" >&2
+              exit 1
+            fi
+            sleep 10
+          done
+
+          curl -fsSL "$base/assets/brand/iberolab-mark.svg" | grep -q '<svg'
+          curl -fsSL "$base/assets/brand/iberolab-social-card.png" -o /tmp/social-card.png
+          test "$(stat -c%s /tmp/social-card.png)" -gt 10000
+          file /tmp/social-card.png | grep -q 'PNG image data'
