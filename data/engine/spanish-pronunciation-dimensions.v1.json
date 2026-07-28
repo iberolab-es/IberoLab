@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "iberolab-spanish-pronunciation-dimensions",
+  "status": "specification_only",
+  "language_tag": "es-ES",
+  "public_profile_selection_enabled": false,
+  "default_profile_id": null,
+  "approved_profiles": [],
+  "profile_schema": "data/schema/pronunciation-profile.schema.json",
+  "policy": {
+    "no_silent_default": true,
+    "variation_must_be_declared": true,
+    "orthography_is_not_pronunciation": true,
+    "reference_description_is_not_universal_profile": true,
+    "unknown_word_guessing_enabled": false,
+    "profile_version_required_in_results": true,
+    "description": "European Spanish contains systematic pronunciation variation. IberoLab will not collapse it into an unnamed default or infer a speaker profile from spelling alone."
+  },
+  "documented_dimensions": [
+    {
+      "dimension_id": "sibilant_system",
+      "scope": "profile_level",
+      "status": "documented_variation_requires_explicit_choice",
+      "description": "Relationship among the phonological values associated with written s, z and c before e/i.",
+      "options": [
+        {
+          "option_id": "distinction",
+          "description": "Maintain a phonological contrast between /s/ and the interdental sibilant used for z and c before e/i."
+        },
+        {
+          "option_id": "seseo",
+          "description": "Use /s/ for both orthographic series. This is a fully accepted pronunciation in the areas where it is established."
+        },
+        {
+          "option_id": "ceceo",
+          "description": "Use the interdental sibilant for both orthographic series; this option requires an explicitly scoped profile and sociolinguistic review."
+        }
+      ],
+      "default_option": null,
+      "sources": [
+        {
+          "citation": "Real Academia Española y Asociación de Academias de la Lengua Española, El seseo y el ceceo, El buen uso del español.",
+          "url": "https://www.rae.es/buen-uso-espa%C3%B1ol/el-seseo-y-el-ceceo",
+          "source_type": "academy_reference",
+          "scope": "Geographic distribution, contrast, seseo, ceceo and sociolinguistic qualification."
+        },
+        {
+          "citation": "Martínez-Celdrán, Fernández-Planas and Carrera-Sabaté, Castilian Spanish, Journal of the International Phonetic Association 33(2), 2003.",
+          "url": "https://doi.org/10.1017/S0025100303001373",
+          "source_type": "peer_reviewed_phonetic_description",
+          "scope": "Formal Castilian reference description with distinction; not a universal European Spanish profile."
+        }
+      ]
+    },
+    {
+      "dimension_id": "palatal_lateral_system",
+      "scope": "profile_level",
+      "status": "documented_variation_requires_explicit_choice",
+      "description": "Whether orthographic y and ll share one consonantal phoneme or preserve a contrast involving the palatal lateral.",
+      "options": [
+        {
+          "option_id": "yeismo",
+          "description": "Treat consonantal y and ll as the same phonological category, without fixing a single allophonic realization."
+        },
+        {
+          "option_id": "y_ll_distinction",
+          "description": "Preserve a contrast between consonantal y and the palatal lateral represented by ll."
+        }
+      ],
+      "default_option": null,
+      "sources": [
+        {
+          "citation": "Real Academia Española y Asociación de Academias de la Lengua Española, Ortografía básica de la lengua española, section on y, ll and yeísmo.",
+          "url": "https://www.rae.es/diccionario-estudiante/docs/ortografia.pdf",
+          "source_type": "academy_reference",
+          "scope": "Definition of yeísmo and acknowledgment that it predominates across much of the Spanish-speaking territory."
+        },
+        {
+          "citation": "Martínez-Celdrán, Fernández-Planas and Carrera-Sabaté, Castilian Spanish, Journal of the International Phonetic Association 33(2), 2003.",
+          "url": "https://doi.org/10.1017/S0025100303001373",
+          "source_type": "peer_reviewed_phonetic_description",
+          "scope": "Reference description of a formal Castilian variety and its palatal categories."
+        }
+      ]
+    },
+    {
+      "dimension_id": "vowel_sequence_interpretation",
+      "scope": "lexical_or_token_level",
+      "status": "documented_variation_requires_lexical_policy",
+      "description": "Whether adjacent vowels are realized within one syllable or across a hiatus when actual pronunciation can vary among speakers or words.",
+      "options": [
+        {
+          "option_id": "lexically_fixed_diphthong",
+          "description": "A reviewed lexical entry specifies a diphthongal realization."
+        },
+        {
+          "option_id": "lexically_fixed_hiatus",
+          "description": "A reviewed lexical entry specifies a hiatus."
+        },
+        {
+          "option_id": "profile_conditioned",
+          "description": "A reviewed profile rule supplies the realization for a delimited environment."
+        },
+        {
+          "option_id": "ambiguity_branch",
+          "description": "Preserve both analyses without ranking when pronunciation is not fixed by approved evidence."
+        }
+      ],
+      "default_option": null,
+      "sources": [
+        {
+          "citation": "Real Academia Española y Asociación de Academias de la Lengua Española, Ortografía de la lengua española, treatment of diphthongs, triphthongs and hiatuses.",
+          "url": "https://www.rae.es/sites/default/files/1ortografia_espanola_2010.pdf",
+          "source_type": "academy_reference",
+          "scope": "Distinction between orthographic conventions and actual pronunciation, including variable vowel sequences."
+        }
+      ]
+    },
+    {
+      "dimension_id": "stress_assignment_source",
+      "scope": "lexical_or_word_level",
+      "status": "structural_policy_requires_reviewed_lexicon",
+      "description": "Source used to identify lexical stress before phonetic adaptation.",
+      "options": [
+        {
+          "option_id": "orthography_and_reviewed_lexicon",
+          "description": "Use explicit accent marks and a reviewed lexical entry, recording any exception."
+        },
+        {
+          "option_id": "user_supplied_pronunciation",
+          "description": "Require a user-supplied pronunciation when the input is exceptional, foreign, abbreviated or otherwise unresolved."
+        },
+        {
+          "option_id": "ambiguity_branch",
+          "description": "Preserve multiple stress analyses without ranking when no approved source resolves them."
+        }
+      ],
+      "default_option": null,
+      "sources": [
+        {
+          "citation": "Real Academia Española y Asociación de Academias de la Lengua Española, Ortografía de la lengua española, sections on prosodic and graphic accent.",
+          "url": "https://www.rae.es/sites/default/files/1ortografia_espanola_2010.pdf",
+          "source_type": "academy_reference",
+          "scope": "Prosodic stress, graphic accent and the limits of deriving pronunciation from spelling alone."
+        }
+      ]
+    }
+  ],
+  "reference_descriptions": [
+    {
+      "reference_id": "formal_castilian_jipa_2003",
+      "status": "reference_only_not_approved_profile",
+      "description": "Peer-reviewed illustration of a formal Castilian variety. It may inform notation and testing but must not be treated as the unnamed default for all European Spanish speakers.",
+      "citation": "Martínez-Celdrán, Fernández-Planas and Carrera-Sabaté, Castilian Spanish, Journal of the International Phonetic Association 33(2), 2003.",
+      "url": "https://doi.org/10.1017/S0025100303001373"
+    }
+  ],
+  "pending_dimensions": [
+    {
+      "dimension_id": "coda_s_realization",
+      "reason": "Requires geographically scoped primary sources and a decision about lexical versus connected-speech depth."
+    },
+    {
+      "dimension_id": "intervocalic_d_reduction",
+      "reason": "Requires register, lexical and geographic scope before options can be normalized."
+    },
+    {
+      "dimension_id": "velar_fricative_realization",
+      "reason": "Requires a reviewed European Spanish regional model and explicit phonetic notation."
+    },
+    {
+      "dimension_id": "word_final_n_realization",
+      "reason": "Requires geographic and connected-speech scope."
+    },
+    {
+      "dimension_id": "rhotic_coda_and_cluster_realization",
+      "reason": "Requires a separate treatment of phonemic contrast, allophony and reduction."
+    },
+    {
+      "dimension_id": "loanword_and_proper_name_pronunciation",
+      "reason": "Requires a reviewed lexicon and a user-supplied pronunciation policy."
+    }
+  ],
+  "approval_gates": {
+    "internal_phonetic_review": false,
+    "external_phonetic_review": false,
+    "profile_schema_validated": true,
+    "dimension_sources_reviewed": false,
+    "default_profile_approved": false,
+    "public_profile_selection_may_be_enabled": false
+  }
+}
