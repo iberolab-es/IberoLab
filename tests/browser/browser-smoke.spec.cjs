@@ -158,6 +158,26 @@ test.describe('demostrador MVP de entradas breves', () => {
     expect(new URL(payload.url).searchParams.get('q')).toBe('amor');
   });
 
+  test('el historial local conserva, reutiliza y borra entradas recientes', async ({ page }) => {
+    await page.goto('/convertir.html', { waitUntil: 'load' });
+    await page.locator('#sourceInput').fill('hogar');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+    await page.locator('#sourceInput').fill('familia');
+    await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+
+    await page.reload({ waitUntil: 'load' });
+    await expect(page.locator('#historySection')).toBeVisible();
+    await expect(page.locator('#historyList .history-item')).toHaveText(['familia', 'hogar']);
+
+    await page.locator('#historyList').getByRole('button', { name: 'hogar', exact: true }).click();
+    await expect(page.locator('#sourceInput')).toHaveValue('hogar');
+    await expect(page.locator('#technicalReading')).toHaveText('o · ga · r');
+
+    await page.getByRole('button', { name: 'Borrar historial' }).click();
+    await expect(page.locator('#historySection')).toBeHidden();
+    expect(await page.evaluate(() => localStorage.getItem('iberolab:mvp:recent:v1'))).toBeNull();
+  });
+
   test('una entrada no admitida se bloquea sin signos parciales', async ({ page }) => {
     await page.goto('/convertir.html', { waitUntil: 'load' });
     await page.locator('#sourceInput').fill('123');

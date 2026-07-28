@@ -4,6 +4,13 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo.
 
 El formato se inspira en Keep a Changelog y el proyecto utilizará versionado semántico cuando exista una primera versión funcional.
 
+## Unreleased — historial local privado
+
+- El demostrador recuerda como máximo cinco adaptaciones exitosas en el navegador.
+- Las entradas recientes pueden reutilizarse con un toque y borrarse por completo.
+- No se guarda el historial en IberoLab ni se envía a ningún servidor del proyecto.
+- La regresión comprueba persistencia, orden, reutilización y borrado.
+
 ## Unreleased — resultados compartibles y frases más claras
 
 - Los resultados del demostrador disponen de URL restaurable mediante `?q=`.
