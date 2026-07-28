@@ -64,7 +64,7 @@ También es razonable reutilizar el contenido en Bluesky o Mastodon si se crean 
 
 ### Demostración
 
-> ¿Cómo podría representarse «te quiero» mediante signos ibéricos normalizados? IberoLab ofrece una aproximación gráfica explicada y un enlace compartible. No es una traducción ni una reconstrucción de pronunciación antigua. [enlace restaurable]
+> ¿Cómo podría representarse «tierra» mediante signos ibéricos normalizados? IberoLab ofrece una aproximación gráfica explicada y un enlace compartible. No es una traducción ni una reconstrucción de pronunciación antigua. [enlace restaurable]
 
 ### Metodología
 
