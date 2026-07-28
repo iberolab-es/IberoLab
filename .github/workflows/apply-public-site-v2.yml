@@ -1,6 +1,6 @@
 name: Apply public site v2
 
-# Temporary one-shot workflow; removed before merge.
+# Temporary one-shot workflow; removed before merge. Triggered after PR creation.
 on:
   push:
     branches: [feat/public-site-v2]
