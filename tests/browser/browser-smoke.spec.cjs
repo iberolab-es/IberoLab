@@ -95,7 +95,7 @@ test.describe('presencia pública y académica', () => {
   test('la página académica publica límites y vías de revisión', async ({ page }) => {
     await page.goto('/academia.html', { waitUntil: 'load' });
     await expect(page.getByRole('heading', { name: /Un proyecto pequeño/ })).toBeVisible();
-    await expect(page.getByText('IberoLab no traduce al idioma ibérico')).toBeVisible();
+    await expect(page.getByText('IberoLab no traduce a la lengua ibérica')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Enviar una aportación' })).toBeVisible();
     await expect(page.getByText('English summary')).toBeVisible();
   });

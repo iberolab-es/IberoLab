@@ -54,7 +54,7 @@ test('la página académica ofrece acceso directo a Historia', async ({ page }) 
 test('historia mantiene la distinción entre lectura y traducción y prepara YouTube', async ({ page }) => {
   await page.goto('/historia.html', { waitUntil: 'load' });
   await expect(page.getByRole('heading', { name: 'Comprender el mundo ibérico antes de intentar representarlo.' })).toBeVisible();
-  await expect(page.getByText('Leer signos no significa traducir el idioma.')).toBeVisible();
+  await expect(page.getByText('Leer signos no significa traducir la lengua.')).toBeVisible();
   await expect(page.getByText('Una sección preparada para crecer con YouTube.')).toBeVisible();
 });
 

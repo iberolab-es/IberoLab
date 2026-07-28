@@ -6,6 +6,8 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 
 ## Unreleased — portada pública, historia y audio aproximado
 
+- Se adopta de forma sistemática «lengua ibérica» en la web, los contratos, la documentación, la tarjeta social y las pruebas; se mantiene «escritura/signario/signos ibéricos» para los sistemas gráficos.
+- El plan de difusión exige mensajes individuales, contactos verificados en fuentes oficiales, motivos personalizados, solicitud de correcciones concretas y ausencia de afiliación institucional implícita.
 - La muestra principal usa ahora `tierra` y el conversor propone `hogar`, `tierra`, `mundo`, `olivo` y `mar`, dejando explícito que admite también nombres, sentimientos y frases breves.
 - Se corrige la referencia visual errónea que etiquetaba como `te` un recurso gráfico inexistente con numeración de `to`, y se añade una regresión entre rótulos y SVG.
 - La raíz pública incorpora una presentación visual de IberoLab por encima del corpus, sin cambiar su URL ni romper los enlaces profundos existentes.

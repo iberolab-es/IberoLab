@@ -35,7 +35,7 @@ El motor deberá:
 
 El contrato no pretende:
 
-- traducir español al idioma ibérico;
+- traducir español a la lengua ibérica;
 - reconstruir vocabulario ibérico no documentado;
 - atribuir significado a una secuencia por parecido fonético;
 - elegir automáticamente un alógrafo arqueológico exacto;

@@ -4,7 +4,7 @@
 
 **Proyecto abierto y experimental para representar fonéticamente nombres, palabras y frases breves mediante escrituras paleohispánicas.**
 
-> Estado: **pre-alpha con demostrador MVP**. La web pública reconstruye un corpus inicial contrastado y ofrece una adaptación gráfica experimental para entradas modernas breves, pero todavía no ofrece un conversor formal validado ni un traductor al idioma ibérico.
+> Estado: **pre-alpha con demostrador MVP**. La web pública reconstruye un corpus inicial contrastado y ofrece una adaptación gráfica experimental para entradas modernas breves, pero todavía no ofrece un conversor formal validado ni traducciones a la lengua ibérica.
 
 ## Qué es
 
@@ -18,7 +18,7 @@ La intención práctica es modesta: que una persona pueda escribir algo como `ho
 
 ## Qué no es
 
-IberoLab **no traduce literalmente al idioma ibérico**. La lengua ibérica no está descifrada hasta un grado que permita traducir de forma completa y consensuada textos modernos.
+IberoLab **no ofrece traducciones literales a la lengua ibérica**. La lengua ibérica no está descifrada hasta un grado que permita traducir de forma completa y consensuada textos modernos.
 
 El demostrador MVP produce una **adaptación fonética experimental**. No atribuye significado ibérico a la salida, no reconstruye vocabulario antiguo y no presenta los signos normalizados como facsímiles de una inscripción concreta.
 

@@ -10,6 +10,13 @@ La difusión de IberoLab no busca presentar el proyecto como un desciframiento n
 4. acercar el patrimonio paleohispánico a personas no especialistas;
 5. construir una pequeña comunidad de colaboradores.
 
+## Terminología editorial
+
+- Usar **lengua ibérica** para la lengua histórica.
+- Usar **escritura ibérica**, **signario ibérico** y **signos ibéricos** para los sistemas y recursos gráficos correspondientes.
+- Reservar **adaptación fonética experimental** para la operación del demostrador moderno.
+- Evitar **idioma ibérico**, **lenguaje ibérico**, **traducción al ibérico**, **desciframiento** y cualquier formulación que atribuya significado histórico a una salida moderna.
+
 ## Orden recomendado
 
 ### 1. Presentación académica discreta
@@ -30,6 +37,16 @@ Primeros ámbitos institucionales relevantes:
 - Instituto de Patrimonio y Humanidades de la Universidad de Zaragoza: `https://iph.unizar.es/`
 
 IberoLab no debe insinuar afiliación con ninguna institución contactada.
+
+Cada presentación se enviará de forma individual y contendrá:
+
+- un motivo de contacto específico para la institución o persona destinataria;
+- los enlaces a la página académica y al repositorio, sin adjuntos en el primer mensaje;
+- una solicitud de correcciones concretas, no de aprobación o respaldo institucional;
+- la indicación expresa de que IberoLab es un proyecto independiente;
+- una única propuesta de seguimiento, no antes de catorce días y solo si no existe respuesta.
+
+No se utilizarán envíos masivos, copias visibles entre instituciones ni direcciones obtenidas fuera de fuentes oficiales. El registro interno conservará institución, destinatario, dirección verificada, fecha, respuesta y acciones derivadas; no se publicará correspondencia privada sin permiso.
 
 ### 2. Lanzamiento público controlado
 
@@ -60,7 +77,7 @@ También es razonable reutilizar el contenido en Bluesky o Mastodon si se crean 
 
 ### Presentación
 
-> IberoLab es un proyecto abierto para explorar formas ibéricas documentadas y representar palabras modernas mediante una adaptación fonética experimental. No traduce al idioma ibérico y explica cada aproximación. [enlace]
+> IberoLab es un proyecto abierto para explorar formas ibéricas documentadas y representar palabras modernas mediante una adaptación fonética experimental. No traduce a la lengua ibérica y explica cada aproximación. [enlace]
 
 ### Demostración
 
@@ -76,19 +93,23 @@ También es razonable reutilizar el contenido en Bluesky o Mastodon si se crean 
 
 ## Plantilla breve para universidades y grupos de investigación
 
-**Asunto:** Presentación de IberoLab para revisión académica
+**Asunto:** IberoLab: proyecto abierto para revisión sobre escritura ibérica
 
-Estimado equipo:
+Estimado equipo de [institución o proyecto]:
 
-Les presentamos IberoLab, un proyecto independiente y abierto que combina un pequeño corpus de formas ibéricas documentadas con un demostrador de adaptación fonética experimental para palabras y frases modernas.
+Me pongo en contacto con ustedes por [motivo específico y verificable].
 
-El proyecto no se presenta como traductor ni como reconstrucción del idioma ibérico. Su interés reside en la transparencia: fuentes, segmentaciones, recursos gráficos, reglas, limitaciones y pruebas están versionados y disponibles para revisión.
+IberoLab es un proyecto independiente y abierto que combina un pequeño corpus de formas ibéricas documentadas con un demostrador de adaptación fonética experimental para palabras y frases modernas.
+
+El proyecto no se presenta como traductor ni como reconstrucción de la lengua ibérica. Su interés reside en la transparencia: fuentes, segmentaciones, recursos gráficos, reglas, limitaciones y pruebas están versionados y disponibles para revisión.
 
 Información académica: `https://iberolab-es.github.io/IberoLab/academia.html`
 
 Repositorio: `https://github.com/iberolab-es/IberoLab`
 
 Agradeceríamos especialmente observaciones sobre lecturas, segmentación, convenciones paleográficas, formulación de límites y reglas de adaptación que puedan inducir a error.
+
+No solicitamos aprobación ni afiliación institucional. Si este no fuera el canal adecuado, agradeceríamos que nos indicaran el contacto más pertinente.
 
 Atentamente,
 IberoLab
