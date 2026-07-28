@@ -1,0 +1,30 @@
+name: Fix public corpus links
+
+# Temporary one-shot workflow; removed before merge.
+on:
+  push:
+    branches: [feat/public-site-v2]
+    paths:
+      - scripts/fix_public_corpus_links.py
+      - .github/workflows/fix-public-corpus-links.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feat/public-site-v2
+      - run: python scripts/fix_public_corpus_links.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/historia.html docs/metodologia.html scripts/validate_public_site.py
+          git commit -m "Corregir enlaces internos al corpus"
+          git push origin HEAD:feat/public-site-v2
