@@ -44,11 +44,16 @@
 
 ### Especificación permitida antes de implementar
 
-- [ ] Definir una representación fonética interna versionada para entradas españolas.
-- [ ] Documentar qué información será lingüística, qué será decisión de adaptación y qué será solo renderizado.
-- [ ] Definir el formato de reglas, alternativas, costes, confianza y explicaciones.
+- [x] Definir un contrato versionado para capas, etapas, candidatos, operaciones, costes, confianza, explicaciones y dependencias.
+- [x] Separar formalmente información lingüística, decisiones de adaptación y resolución gráfica.
+- [x] Definir el esquema machine-readable de un resultado de adaptación experimental sin afirmaciones semánticas.
+- [x] Mantener perfiles, reglas, pesos, confianza calibrada y conversión pública explícitamente desactivados en el contrato inicial.
+- [ ] Aprobar una representación fonética interna y su inventario de rasgos para entradas españolas.
+- [ ] Definir perfiles de pronunciación de español europeo sin imponer silenciosamente una variedad regional.
 - [ ] Construir un inventario explícito de sonidos modernos sin equivalente directo.
-- [ ] Preparar casos de prueba sin convertir similitud sonora en significado ibérico.
+- [ ] Definir el esquema de reglas y sus niveles de evidencia.
+- [ ] Preparar casos de prueba contractuales sin inventar salidas lingüísticas.
+- [ ] Documentar pesos, empates y calibración solo después de disponer de reglas y evaluación suficientes.
 
 ### Implementación bloqueada
 
@@ -60,7 +65,7 @@
 - [ ] Explicar cada sustitución, pérdida o aproximación.
 - [ ] Evitar presentar la adaptación como traducción al idioma ibérico.
 
-La especificación formal puede avanzar sin publicar un conversor. La implementación y su exposición pública continúan bloqueadas hasta completar las pruebas manuales actuales del renderizador, fijar el modelo mínimo de alógrafos y someter la base inicial a revisión externa.
+La especificación estructural está versionada en `data/engine/phonetic-engine-contract.v1.json` y `docs/PHONETIC_ENGINE_SPEC.md`. La implementación y su exposición pública continúan bloqueadas hasta completar las pruebas manuales actuales del renderizador, fijar el modelo mínimo de alógrafos, aprobar el perfil fonético y someter la base inicial a revisión externa.
 
 ## Fase 3 — Renderizador
 
@@ -85,7 +90,7 @@ La especificación formal puede avanzar sin publicar un conversor. La implementa
 - [x] Explicar públicamente qué hace y qué no hace la herramienta.
 - [x] Enlazar el buzón estructurado de sugerencias de GitHub.
 - [ ] Confirmar mediante pruebas manuales que todo el corpus se reconstruye con los recursos locales actuales en móvil y escritorio.
-- [ ] Incorporar una adaptación experimental de entradas modernas solo después de aprobar la especificación y sus pruebas.
+- [ ] Incorporar una adaptación experimental de entradas modernas solo después de aprobar la especificación, las reglas y sus pruebas.
 - [ ] Superar la revisión paleográfica, las pruebas multidispositivo y la revisión externa necesarias para etiquetar una beta.
 
 ## Fase 5 — Ampliación
