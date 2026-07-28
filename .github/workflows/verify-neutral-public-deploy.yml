@@ -1,0 +1,39 @@
+name: Verify neutral public deploy
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-neutral-public-deploy.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-public-page:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wait for GitHub Pages and verify neutral examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://iberolab-es.github.io/IberoLab/convertir.html"
+          for attempt in $(seq 1 20); do
+            echo "Attempt ${attempt}/20"
+            html="$(curl --fail --silent --show-error --location --max-time 20 "$url" || true)"
+            if [[ -n "$html" ]] \
+              && grep -q 'data-example="amistad"' <<<"$html" \
+              && grep -q 'data-example="hogar"' <<<"$html" \
+              && ! grep -q 'data-example="Lara"' <<<"$html" \
+              && ! grep -q 'data-example="Cris"' <<<"$html" \
+              && grep -q 'Ejemplos orientativos' <<<"$html"; then
+              echo "PUBLIC DEPLOYMENT VERIFIED"
+              echo "$url"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Public deployment did not expose the expected neutral examples within the wait window." >&2
+          exit 1
