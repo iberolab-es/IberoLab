@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "iberolab-phonetic-engine-schema-registry",
+  "contract": "data/engine/phonetic-engine-contract.v1.json",
+  "execution_states": [
+    {
+      "status": "success",
+      "schema": "data/schema/adaptation-result.schema.json",
+      "candidate_policy": "one_or_more_candidates_required",
+      "semantic_claims_policy": "must_be_empty"
+    },
+    {
+      "status": "blocked",
+      "schema": "data/schema/adaptation-blocked.schema.json",
+      "candidate_policy": "no_candidates_allowed",
+      "semantic_claims_policy": "must_be_empty"
+    }
+  ],
+  "selection_rule": "Exactly one execution-state schema must apply to a serialized engine response.",
+  "public_conversion_enabled": false
+}
