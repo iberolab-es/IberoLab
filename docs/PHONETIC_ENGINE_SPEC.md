@@ -7,7 +7,9 @@ Este documento define el **contrato estructural** de un futuro motor de adaptaci
 Estado normativo actual:
 
 - contrato: `data/engine/phonetic-engine-contract.v1.json`;
-- esquema de salida: `data/schema/adaptation-result.schema.json`;
+- esquema de resultado satisfactorio: `data/schema/adaptation-result.schema.json`;
+- esquema de intento bloqueado: `data/schema/adaptation-blocked.schema.json`;
+- registro de estados: `data/engine/schema-registry.v1.json`;
 - estado: `specification_only`;
 - conversión pública: desactivada;
 - pesos, perfiles de pronunciación y confianza: no aprobados.
@@ -321,3 +323,20 @@ Esta primera especificación se considera estructuralmente válida cuando:
 - cada candidato exige operaciones, costes, versiones y explicaciones;
 - el CI comprueba estas condiciones;
 - la documentación pública continúa indicando que no existe un conversor validado.
+
+## 16. Estados de ejecución excluyentes
+
+El registro `data/engine/schema-registry.v1.json` declara dos estados mutuamente excluyentes:
+
+1. **resultado satisfactorio**, regido por `data/schema/adaptation-result.schema.json`, con uno o más candidatos completos;
+2. **intento bloqueado**, regido por `data/schema/adaptation-blocked.schema.json`, con al menos una razón de bloqueo y ningún candidato.
+
+Un intento bloqueado no es un resultado lingüístico degradado. Por tanto, no puede presentar candidatos parciales como si fueran adaptaciones válidas. Debe conservar la entrada, las versiones y las razones del bloqueo, pero las colecciones `candidates` y `semantic_claims` permanecerán vacías.
+
+Esta separación evita tres fallos:
+
+- que una entrada no representable produzca una secuencia incompleta;
+- que una puerta de proyecto cerrada se convierta en una salida provisional engañosa;
+- que una excepción técnica se confunda con una adaptación de baja confianza.
+
+Exactamente uno de los dos esquemas deberá validar cada respuesta serializada del futuro motor.
