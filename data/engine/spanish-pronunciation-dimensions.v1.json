@@ -13,7 +13,7 @@
     "orthography_is_not_pronunciation": true,
     "reference_description_is_not_universal_profile": true,
     "unknown_word_guessing_enabled": false,
-    "profile_version_required_in_results": true,
+    "profile_version_required_before_implementation": true,
     "description": "European Spanish contains systematic pronunciation variation. IberoLab will not collapse it into an unnamed default or infer a speaker profile from spelling alone."
   },
   "documented_dimensions": [
