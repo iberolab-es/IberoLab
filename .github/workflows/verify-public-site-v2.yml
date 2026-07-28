@@ -1,0 +1,39 @@
+name: Verify public site v2
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-public-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Wait for GitHub Pages and verify new public layer
+        env:
+          ROOT_URL: https://iberolab-es.github.io/IberoLab/
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 24); do
+            stamp="${GITHUB_SHA}-${attempt}"
+            root="$(curl -fsSL --retry 2 "${ROOT_URL}?verify=${stamp}" || true)"
+            history="$(curl -fsSL --retry 2 "${ROOT_URL}historia.html?verify=${stamp}" || true)"
+            method="$(curl -fsSL --retry 2 "${ROOT_URL}metodologia.html?verify=${stamp}" || true)"
+            converter="$(curl -fsSL --retry 2 "${ROOT_URL}convertir.html?verify=${stamp}" || true)"
+            if grep -Fq 'Lengua ibérica · Patrimonio · Tecnología' <<<"$root" \
+              && grep -Fq 'Una sección preparada para crecer con YouTube' <<<"$history" \
+              && grep -Fq 'Dos audios con alcances distintos' <<<"$method" \
+              && grep -Fq 'Escuchar lectura aproximada' <<<"$converter" \
+              && grep -Fq 'converter-ui.js' <<<"$converter"; then
+              echo "Public site v2 is deployed."
+              exit 0
+            fi
+            echo "Attempt ${attempt}: deployment not fully propagated yet."
+            sleep 15
+          done
+          echo "Public site v2 did not propagate within the verification window." >&2
+          exit 1
