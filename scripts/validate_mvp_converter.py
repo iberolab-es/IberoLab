@@ -131,7 +131,7 @@ def validate_web_files() -> tuple[int, int]:
         "Escuchar entrada en español",
         "Compartir resultado",
         'id="actionStatus"',
-        'class="word-label"',
+        'wordLabel.className = "word-label"',
         'searchParams.set("q", trimmed)',
         "navigator.share",
         "Los signos son formas normalizadas de referencia",
@@ -185,5 +185,5 @@ if __name__ == "__main__":
     print(
         "MVP CONVERTER VALIDATION OK: "
         f"{assets} normalized SVGs; seed corpus remains {seed_assets}; "
-        f"{examples} examples; {page_markers} page markers; {script_markers} safeguards."
+        f"{examples} contract examples; {page_markers} page markers; {script_markers} script safeguards."
     )
