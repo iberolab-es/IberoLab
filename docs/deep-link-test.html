@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <title>IberoLab — Diagnóstico de enlaces profundos</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#071019; --panel:#101b26; --panel2:#0a141e; --line:#2b3c4f;
+      --text:#eef5ff; --muted:#a9b8ca; --accent:#35a7ff; --ok:#59d39b;
+      --warn:#f4c86a; --error:#ff7b7b;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#142538 0,var(--bg) 45rem);color:var(--text)}
+    main{width:min(980px,calc(100% - 28px));margin:0 auto;padding:36px 0 70px}
+    a{color:var(--accent)}
+    .eyebrow{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+    h1{font-size:clamp(2rem,7vw,3.8rem);line-height:1;margin:8px 0 14px}
+    .lead{color:var(--muted);line-height:1.65;max-width:790px}
+    .panel{margin-top:22px;border:1px solid var(--line);background:var(--panel);border-radius:24px;padding:clamp(18px,4vw,30px)}
+    .notice{border-left:4px solid var(--warn);padding:12px 14px;background:var(--panel2);color:var(--muted);line-height:1.55;border-radius:10px}
+    button{min-height:52px;border:1px solid var(--line);border-radius:14px;padding:0 18px;font:inherit;font-weight:800;color:white;background:linear-gradient(135deg,var(--accent),#1962c4);cursor:pointer}
+    button.secondary{background:var(--panel2)}
+    button:disabled{opacity:.55;cursor:wait}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;align-items:center}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+    .metric{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:14px}
+    .metric strong{display:block;font-size:1.55rem}
+    .metric span{color:var(--muted);font-size:.85rem}
+    .status{font-weight:800;padding:10px 12px;border-radius:10px;background:var(--panel2)}
+    .status.ok{color:var(--ok)} .status.error{color:var(--error)}
+    .results{display:grid;gap:10px;margin-top:16px}
+    .row{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:13px 14px;display:grid;grid-template-columns:minmax(170px,1fr) 2fr auto;gap:12px;align-items:center}
+    .row code{color:var(--text);overflow-wrap:anywhere}.row .detail{color:var(--muted);overflow-wrap:anywhere}
+    .pill{border-radius:999px;padding:5px 9px;font-size:.78rem;font-weight:850;white-space:nowrap}
+    .pill.ok{color:var(--ok);border:1px solid var(--ok)} .pill.error{color:var(--error);border:1px solid var(--error)}
+    textarea{width:100%;min-height:290px;background:#050b11;color:var(--text);border:1px solid var(--line);border-radius:14px;padding:14px;font:500 .84rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+    .privacy{color:var(--muted);font-size:.9rem;line-height:1.55}
+    #probeFrame{position:fixed;width:1px;height:1px;left:-10000px;top:-10000px;border:0;opacity:0;pointer-events:none}
+    @media(max-width:700px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr}.pill{justify-self:start}.actions button{width:100%}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">IberoLab · diagnóstico local</div>
+  <h1>Comprobación de enlaces profundos</h1>
+  <p class="lead">Esta página abre de forma secuencial las once URL con identificador, espera a que el renderizador termine y comprueba que el selector, la lectura y la salida gráfica correspondan a la forma solicitada.</p>
+
+  <div class="notice"><strong>No valida la exactitud paleográfica.</strong> Comprueba el enrutamiento mediante fragmentos <code>#id</code>, la selección efectiva de la forma y que el contenedor gráfico no quede vacío.</div>
+
+  <section class="panel">
+    <h2>Prueba automática</h2>
+    <div class="actions">
+      <button id="runButton" type="button">Comprobar los 11 enlaces</button>
+      <button id="copyButton" class="secondary" type="button" disabled>Copiar informe</button>
+      <a href="test.html">Diagnóstico de SVG</a>
+      <a href="./">Volver al corpus</a>
+    </div>
+    <div id="globalStatus" class="status">Prueba todavía no ejecutada.</div>
+    <div class="summary">
+      <div class="metric"><strong id="linksMetric">0/11</strong><span>enlaces evaluados</span></div>
+      <div class="metric"><strong id="passedMetric">0</strong><span>enlaces correctos</span></div>
+      <div class="metric"><strong id="failedMetric">0</strong><span>enlaces fallidos</span></div>
+      <div class="metric"><strong id="emptyMetric">0</strong><span>salidas vacías</span></div>
+    </div>
+    <div id="results" class="results" aria-live="polite"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Informe reproducible</h2>
+    <p class="privacy">La prueba se ejecuta íntegramente en tu dispositivo y solo carga páginas del mismo despliegue de IberoLab. No envía el navegador, la dirección IP ni los resultados. El informe únicamente sale del dispositivo cuando lo copias voluntariamente.</p>
+    <textarea id="report" readonly aria-label="Informe técnico de enlaces profundos">Ejecuta primero la comprobación.</textarea>
+    <p><a href="https://github.com/iberolab-es/IberoLab/issues/6" target="_blank" rel="noopener noreferrer">Abrir la tarea de pruebas multidispositivo</a></p>
+  </section>
+</main>
+
+<iframe id="probeFrame" title="Marco técnico para comprobar enlaces profundos" aria-hidden="true"></iframe>
+
+<script>
+(() => {
+  "use strict";
+
+  const TARGETS = [
+    {id:"ib-ne-ildirda-001", form:"ildiŕda"},
+    {id:"ib-ne-erder-001", form:"erder"},
+    {id:"ib-ne-undikesken-001", form:"undikesken"},
+    {id:"ib-ne-ars-001", form:"ars"},
+    {id:"ib-ne-ekiar-001", form:"ekiar"},
+    {id:"ib-ne-egiar-001", form:"egiar"},
+    {id:"ib-ne-likine-001", form:"likine"},
+    {id:"ib-ne-tarsaban-001", form:"taŕśabań"},
+    {id:"ib-ne-baisetas-001", form:"baisetaś"},
+    {id:"ib-ne-seltar-001", form:"seltar"},
+    {id:"ib-ne-ebanen-001", form:"ebanen"}
+  ];
+
+  const runButton = document.getElementById("runButton");
+  const copyButton = document.getElementById("copyButton");
+  const globalStatus = document.getElementById("globalStatus");
+  const results = document.getElementById("results");
+  const report = document.getElementById("report");
+  const frame = document.getElementById("probeFrame");
+
+  function sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
+  function waitForLoad(timeoutMilliseconds = 15000) {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error("timeout-load"));
+      }, timeoutMilliseconds);
+      const onLoad = () => {
+        cleanup();
+        resolve();
+      };
+      const cleanup = () => {
+        clearTimeout(timer);
+        frame.removeEventListener("load", onLoad);
+      };
+      frame.addEventListener("load", onLoad, {once:true});
+    });
+  }
+
+  async function waitForRenderer(timeoutMilliseconds = 5000) {
+    const deadline = Date.now() + timeoutMilliseconds;
+    while (Date.now() < deadline) {
+      const root = frame.contentDocument?.documentElement;
+      if (root?.dataset.rendererReady === "true") return true;
+      await sleep(50);
+    }
+    return false;
+  }
+
+  async function evaluateTarget(target, ordinal) {
+    const nonce = `${Date.now()}-${ordinal}`;
+    const url = new URL(`./?iberolab_deep_link_test=${encodeURIComponent(nonce)}#${encodeURIComponent(target.id)}`, location.href);
+    const loadPromise = waitForLoad();
+    frame.src = url.href;
+    await loadPromise;
+
+    const ready = await waitForRenderer();
+    const documentInFrame = frame.contentDocument;
+    const windowInFrame = frame.contentWindow;
+    const selectedId = documentInFrame?.getElementById("formSelect")?.value ?? null;
+    const reading = documentInFrame?.getElementById("readingText")?.textContent?.trim() ?? null;
+    const output = documentInFrame?.getElementById("glyphOutput");
+    const renderedChildren = output?.children?.length ?? 0;
+    const actualHash = windowInFrame?.location?.hash ?? null;
+    const requestedHash = `#${target.id}`;
+    const passed = ready && actualHash === requestedHash && selectedId === target.id && reading === target.form && renderedChildren > 0;
+
+    return {
+      id: target.id,
+      form: target.form,
+      requested_hash: requestedHash,
+      actual_hash: actualHash,
+      renderer_ready: ready,
+      selected_id: selectedId,
+      reading,
+      rendered_children: renderedChildren,
+      passed,
+      error: passed ? null : "deep-link-state-mismatch"
+    };
+  }
+
+  function appendRow(item) {
+    const row = document.createElement("div");
+    row.className = "row";
+    const name = document.createElement("code");
+    name.textContent = `${item.form} · #${item.id}`;
+    const detail = document.createElement("div");
+    detail.className = "detail";
+    detail.textContent = item.passed
+      ? `${item.selected_id}; ${item.rendered_children} elementos gráficos`
+      : `hash=${item.actual_hash}; selección=${item.selected_id}; lectura=${item.reading}; salida=${item.rendered_children}`;
+    const pill = document.createElement("span");
+    pill.className = `pill ${item.passed ? "ok" : "error"}`;
+    pill.textContent = item.passed ? "correcto" : "fallo";
+    row.append(name, detail, pill);
+    results.append(row);
+  }
+
+  async function run() {
+    runButton.disabled = true;
+    copyButton.disabled = true;
+    results.replaceChildren();
+    globalStatus.className = "status";
+    globalStatus.textContent = "Comprobando enlaces profundos…";
+
+    const linkReport = [];
+    for (let index = 0; index < TARGETS.length; index += 1) {
+      const target = TARGETS[index];
+      let item;
+      try {
+        item = await evaluateTarget(target, index);
+      } catch (error) {
+        item = {
+          id: target.id,
+          form: target.form,
+          requested_hash: `#${target.id}`,
+          actual_hash: null,
+          renderer_ready: false,
+          selected_id: null,
+          reading: null,
+          rendered_children: 0,
+          passed: false,
+          error: error instanceof Error ? error.message : String(error)
+        };
+      }
+      linkReport.push(item);
+      appendRow(item);
+      document.getElementById("linksMetric").textContent = `${linkReport.length}/${TARGETS.length}`;
+    }
+
+    frame.removeAttribute("src");
+    const passedCount = linkReport.filter(item => item.passed).length;
+    const failedCount = TARGETS.length - passedCount;
+    const emptyOutputs = linkReport.filter(item => item.rendered_children === 0).length;
+    const passed = passedCount === TARGETS.length && emptyOutputs === 0;
+
+    document.getElementById("passedMetric").textContent = String(passedCount);
+    document.getElementById("failedMetric").textContent = String(failedCount);
+    document.getElementById("emptyMetric").textContent = String(emptyOutputs);
+    globalStatus.className = `status ${passed ? "ok" : "error"}`;
+    globalStatus.textContent = passed
+      ? "Prueba superada: los 11 identificadores seleccionan la forma correcta y ninguna salida queda vacía."
+      : "La prueba ha detectado uno o más enlaces profundos incorrectos. Copia el informe para documentarlos.";
+
+    const payload = {
+      application: "IberoLab deep-link self-test",
+      version: "1.0.0",
+      asset_mode: "local_repository",
+      executed_at: new Date().toISOString(),
+      page: location.href,
+      user_agent: navigator.userAgent,
+      language: navigator.language,
+      online: navigator.onLine,
+      result: passed ? "pass" : "fail",
+      metrics: {
+        links_evaluated: linkReport.length,
+        links_total: TARGETS.length,
+        links_passed: passedCount,
+        links_failed: failedCount,
+        empty_outputs: emptyOutputs
+      },
+      links: linkReport
+    };
+
+    report.value = JSON.stringify(payload, null, 2);
+    copyButton.disabled = false;
+    runButton.disabled = false;
+    document.documentElement.dataset.deepLinkTest = passed ? "pass" : "fail";
+  }
+
+  async function copyReport() {
+    try {
+      await navigator.clipboard.writeText(report.value);
+      copyButton.textContent = "Informe copiado";
+    } catch {
+      report.focus();
+      report.select();
+      document.execCommand("copy");
+      copyButton.textContent = "Informe seleccionado";
+    }
+    setTimeout(() => { copyButton.textContent = "Copiar informe"; }, 1800);
+  }
+
+  runButton.addEventListener("click", run);
+  copyButton.addEventListener("click", copyReport);
+})();
+</script>
+</body>
+</html>
