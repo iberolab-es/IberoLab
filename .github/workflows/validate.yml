@@ -55,3 +55,6 @@ jobs:
 
       - name: Validate public identity and academic presence
         run: python scripts/validate_public_presence.py
+
+      - name: Validate public landing, history and approximate audio
+        run: python scripts/validate_public_site.py
