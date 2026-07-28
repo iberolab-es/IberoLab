@@ -58,3 +58,10 @@ Una actualización solo debe aceptarse si:
 ## Límite científico
 
 La disponibilidad local y la integridad criptográfica de un SVG prueban la reproducibilidad técnica del recurso, no su adecuación paleográfica a una inscripción concreta. La selección de alógrafos documentados continúa siendo una fase posterior y requiere revisión especializada.
+
+
+## Variante nasal m1
+
+El token `ń` utiliza `docs/assets/signs/northeastern-dual/variant-m1-nasal.svg`, procedente de `NE Iberian m1.svg`, obra de Vriullop publicada en Wikimedia Commons bajo CC0 1.0. La publicación de 2025 sobre `taŕśabańar` identifica el signo como variante `m1`: conserva `m` como transcripción tradicional y adopta `ń` para el comportamiento ibérico de nasal marcada no labial. IberoLab registra estas tres capas por separado y usa el SVG únicamente como referencia normalizada, no como facsímil.
+
+Evidencia paleográfica: https://doi.org/10.36707/palaeohispanica.v25i1.703.

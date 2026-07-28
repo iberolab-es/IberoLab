@@ -10,9 +10,9 @@ IberoLab mantiene una matriz versionada de pruebas en `data/tests/browser-matrix
 La página `test.html` comprueba:
 
 - que están declaradas las once formas del corpus;
-- que los dieciocho SVG normalizados pueden cargarse en el navegador actual;
+- que los diecinueve SVG de referencia pueden cargarse en el navegador actual;
 - que ninguna forma queda sin salida visible;
-- que `ń` sigue siendo el único token deliberadamente pendiente;
+- que `ń` se renderiza mediante la variante paleográfica m1 documentada y no queda pendiente;
 - que puede generarse un informe reproducible con navegador, fecha y resultados;
 - que la ejecución corresponde al modo `local_repository`.
 
@@ -59,7 +59,7 @@ Esta cobertura detecta regresiones en Chromium, Firefox y WebKit, pero no equiva
 
 1. Abrir `test.html` en el dispositivo y navegador que se desea revisar.
 2. Pulsar **Comprobar las 11 formas**.
-3. Confirmar que el informe indica `version: 1.1.0`, `asset_mode: local_repository` y `result: pass`.
+3. Confirmar que el informe indica `version: 1.2.0`, `asset_mode: local_repository` y `result: pass`.
 4. Revisar visualmente las once filas y copiar el informe.
 5. Abrir `deep-link-test.html` en el mismo navegador.
 6. Pulsar **Comprobar los 11 enlaces**.

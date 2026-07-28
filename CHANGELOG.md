@@ -29,6 +29,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Página pública de autodiagnóstico para comprobar las once formas, la carga de los signos y la ausencia de salidas vacías.
 - Página pública independiente que abre secuencialmente los once enlaces profundos y verifica el hash, la selección, la lectura y la salida gráfica efectiva.
 - Regresión automática con Playwright sobre Chromium, Firefox y WebKit para las once formas y las dos páginas de diagnóstico.
+- Variante paleográfica m1 normalizada, trazable y licenciada para resolver la transcripción ń del corpus.
 - Matriz versionada de pruebas en Safari, Chrome, Brave, Firefox y Edge, separando los entornos móviles de los navegadores ejecutados realmente en ordenador.
 - Dieciocho SVG de referencia almacenados dentro del repositorio bajo rutas estables.
 - Manifiesto individual de los recursos gráficos con origen, URL resuelta, autoría, licencia, tamaño y hash SHA-256.
@@ -54,14 +55,13 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 
 - Publicación correcta desde `main` y `/docs` mediante GitHub Pages.
 - Funcionamiento técnico de las once formas en Safari, Chrome, Brave y Edge sobre iPhone en la implementación remota previa: 11/11 formas, 18/18 SVG y cero salidas vacías.
-- `ń` permanece visible como único token deliberadamente pendiente en `taŕśabań`.
+- `ń` queda resuelto mediante la variante paleográfica m1 documentada; se conserva `m` como transcripción histórica y el recurso no se presenta como facsímil.
 - Descarga reproducible de los dieciocho SVG CC0, generación del manifiesto y migración local superadas en GitHub Actions.
 - Validaciones del corpus, auditoría documental, integridad gráfica, renderizador y matriz de navegadores superadas en la rama de integración local.
 - Primera ejecución automática completa satisfactoria en Chromium, Firefox y WebKit: once enlaces, SVG locales y ambos diagnósticos sin fallos.
 
 ### Known limitations
 
-- El token `ń` de `taŕśabań` permanece sin signo gráfico asignado hasta verificar la convención de transcripción y la forma exacta en la publicación correspondiente.
 - Las figuras actuales son formas normalizadas de referencia y no facsímiles de los alógrafos originales de cada inscripción.
 - Deben repetirse las pruebas móviles después del despliegue de los SVG locales.
 - Continúan pendientes Google Chrome, Mozilla Firefox y Microsoft Edge ejecutados manualmente en ordenador y la ejecución registrada del diagnóstico de enlaces profundos en esos entornos.

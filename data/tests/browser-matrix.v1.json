@@ -1,16 +1,21 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "matrix_id": "iberolab-browser-matrix",
   "updated_on": "2026-07-28",
   "test_page": "https://iberolab-es.github.io/IberoLab/test.html",
   "expected": {
     "forms_total": 11,
-    "mapped_svg_tokens": 18,
+    "mapped_svg_tokens": 19,
     "empty_outputs": 0,
-    "explicit_pending_tokens": [
-      "ń"
-    ],
-    "asset_mode": "local_repository"
+    "explicit_pending_tokens": [],
+    "asset_mode": "local_repository",
+    "resolved_transcriptions": {
+      "ń": {
+        "paleographic_variant": "m1",
+        "traditional_transcription": "m",
+        "current_transcription": "ń"
+      }
+    }
   },
   "environments": [
     {

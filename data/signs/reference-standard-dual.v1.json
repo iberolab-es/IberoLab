@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0.0",
   "dataset_id": "iberolab-reference-standard-dual",
-  "status": "local_provisional_reference_renderer",
+  "status": "local_reference_renderer_complete_for_seed_corpus",
   "script": "Northeastern Iberian dual signary",
-  "purpose": "Provide a visible, reproducible reference rendering of the attested seed corpus before inscription-specific allographs are selected.",
+  "purpose": "Provide visible, reproducible reference rendering for all tokens in the attested seed corpus, using normalized signary shapes and the documented m1 variant for ń.",
   "scientific_scope": {
-    "represents": "Standard reference sign shapes associated with conventional transliteration values.",
+    "represents": "Normalized reference sign shapes associated with conventional transliteration values; for ń, the documented paleographic variant m1 with explicit transcription history.",
     "does_not_represent": [
       "A facsimile of the original inscription",
       "The exact allograph used in every attestation",
@@ -151,11 +151,27 @@
     },
     {
       "token": "ń",
-      "reference_id": null,
-      "file_name": null,
-      "graphic_status": "pending_nasal_sign_verification",
-      "note": "The recent transcription in taŕśabań is retained in the corpus, but no standard reference SVG is assigned until the exact sign and transcription convention are checked against the 2025 publication."
+      "reference_id": "variant-m1-nasal",
+      "file_name": "NE Iberian m1.svg",
+      "graphic_status": "local_attested_variant_svg_available",
+      "local_path": "docs/assets/signs/northeastern-dual/variant-m1-nasal.svg",
+      "paleographic_variant": "m1",
+      "traditional_transcription": "m",
+      "project_transcription": "ń",
+      "phonological_scope": "marked_nasal_not_labial",
+      "graphic_scope": "normalized_m1_variant_reference_not_facsimile",
+      "evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703",
+      "note": "The 2025 publication identifies the sign as m1. Its traditional transcription m is retained as history; IberoLab follows the publication's ń transcription. The SVG is a normalized m1 reference, not a facsimile of the vessel."
     }
   ],
-  "asset_manifest": "data/signs/reference-standard-dual.assets.v1.json"
+  "asset_manifest": "data/signs/reference-standard-dual.assets.v1.json",
+  "resolved_tokens": [
+    {
+      "token": "ń",
+      "paleographic_variant": "m1",
+      "traditional_transcription": "m",
+      "current_transcription": "ń",
+      "evidence": "https://doi.org/10.36707/palaeohispanica.v25i1.703"
+    }
+  ]
 }
