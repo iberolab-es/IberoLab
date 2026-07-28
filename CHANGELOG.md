@@ -25,7 +25,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Manifiesto `data/signs/mvp-standard-signary.assets.v1.json` con fuente, licencia, ruta, tamaño y SHA-256 de los 38 SVG.
 - Contrato `data/engine/mvp-short-converter.v1.json` para nombres, palabras y frases de hasta 48 caracteres y 6 palabras.
 - Adaptador determinista `docs/mvp-converter.js` con correspondencias directas, vocales de apoyo declaradas y aproximaciones visibles.
-- Página responsive `docs/convertir.html` con ejemplos `amor`, `familia`, `te quiero`, `Lara` y `Cris`.
+- Página responsive `docs/convertir.html` con ejemplos `amor`, `familia`, `te quiero`, `hogar` y `amistad`.
 - Audio opcional para escuchar exclusivamente la entrada española mediante el navegador.
 - Validador del demostrador que conserva separado el manifiesto científico de 19 recursos.
 - Pruebas de navegador para adaptaciones directas, aproximadas y bloqueadas.
