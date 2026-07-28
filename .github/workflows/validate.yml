@@ -16,10 +16,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -37,3 +37,6 @@ jobs:
 
       - name: Validate browser matrix and self-test
         run: python scripts/validate_browser_matrix.py
+
+      - name: Validate current project state and phase gates
+        run: python scripts/validate_project_state.py

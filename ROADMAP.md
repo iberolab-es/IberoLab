@@ -21,29 +21,46 @@
 
 ## Fase 1B — Inventario paleográfico y SVG verificados
 
-- [x] Crear un mapeo gráfico provisional con formas normalizadas de referencia para los 19 tokens del corpus.
-- [x] Resolver `ń` como transcripción de la variante paleográfica m1, conservando `m` como transcripción histórica y sin confundirla con `n` o `ḿ`.
-- [x] Integrar los dieciocho SVG de referencia dentro del repositorio y eliminar su dependencia remota durante la navegación.
-- [x] Registrar para cada SVG la fuente, la autoría, la licencia, la ruta local, el tamaño y el hash SHA-256.
+### Base gráfica del corpus inicial
+
+- [x] Crear un mapeo gráfico de referencia para los 19 tokens del corpus.
+- [x] Integrar los 19 SVG dentro del repositorio y eliminar su dependencia remota durante la navegación.
+- [x] Resolver `ń` como transcripción actual de la variante paleográfica `m1`, conservando `m` como transcripción histórica y sin confundirla con `n` o `ḿ`.
+- [x] Registrar para cada SVG la fuente, autoría, licencia, ruta local, tamaño y hash SHA-256.
 - [x] Añadir pruebas automáticas de existencia, integridad criptográfica, XML válido y ausencia de marcadores activos inseguros.
+- [x] Reconstruir las once formas sin salidas vacías ni tokens gráficos pendientes.
+- [x] Ejecutar regresión automática sobre Chromium, Firefox y WebKit.
+
+### Base paleográfica ampliada
+
 - [ ] Diseñar el esquema definitivo para signos, alógrafos y variantes.
 - [ ] Registrar forma, valor, variante, procedencia, cronología, dirección y referencia de cada alógrafo.
 - [ ] Sustituir progresivamente las formas normalizadas por SVG propios derivados de testimonios documentados o por recursos compatibles seleccionados específicamente.
-- [ ] Resolver paleográficamente `ń` o mantenerlo formalmente pendiente si la evidencia no permite una asignación segura.
-- [ ] Crear pruebas automatizadas de regresión visual de la base.
+- [ ] Obtener revisión externa especializada de la selección gráfica y de la separación entre lectura, variante y valor.
+- [ ] Crear pruebas automatizadas de regresión visual cuando exista una base visual estable.
 - [ ] Ampliar después, sin mezclar sistemas, a ibérico meridional, greco-ibérico y celtibérico.
 
 ## Fase 2 — Motor de similitud y adaptación fonética
 
-- [ ] Definir una representación fonética normalizada para entradas modernas.
+### Especificación permitida antes de implementar
+
+- [ ] Definir una representación fonética interna versionada para entradas españolas.
+- [ ] Documentar qué información será lingüística, qué será decisión de adaptación y qué será solo renderizado.
+- [ ] Definir el formato de reglas, alternativas, costes, confianza y explicaciones.
+- [ ] Construir un inventario explícito de sonidos modernos sin equivalente directo.
+- [ ] Preparar casos de prueba sin convertir similitud sonora en significado ibérico.
+
+### Implementación bloqueada
+
+- [ ] Normalizar ortografía y pronunciación de entradas modernas.
+- [ ] Segmentar en vocales, continuantes y grupos oclusiva-vocal compatibles con el sistema seleccionado.
 - [ ] Comparar secuencias modernas con patrones silábicos y grafemáticos documentados.
-- [ ] Segmentar en vocales, continuantes y grupos oclusiva-vocal.
-- [ ] Tratar explícitamente sonidos sin equivalente directo.
 - [ ] Generar alternativas cuando exista ambigüedad.
-- [ ] Etiquetar la confianza y explicar cada decisión.
+- [ ] Calcular costes y confianza de forma determinista y reproducible.
+- [ ] Explicar cada sustitución, pérdida o aproximación.
 - [ ] Evitar presentar la adaptación como traducción al idioma ibérico.
 
-Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima de la fase 1B.
+La especificación formal puede avanzar sin publicar un conversor. La implementación y su exposición pública continúan bloqueadas hasta completar las pruebas manuales actuales del renderizador, fijar el modelo mínimo de alógrafos y someter la base inicial a revisión externa.
 
 ## Fase 3 — Renderizador
 
@@ -52,13 +69,14 @@ Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima 
 - [x] Preparar `docs/index.html` para publicación desde `/docs` mediante GitHub Pages.
 - [x] Añadir navegación por las once formas, enlaces profundos y fuente documental visible.
 - [x] Revisar técnicamente las once formas en Safari, Chrome, Brave y Edge sobre iPhone en la implementación remota previa.
-- [x] Integrar SVG locales controlados y adaptar el autodiagnóstico para identificarlos como `local_repository`.
-- [ ] Repetir la prueba completa en Safari, Chrome, Brave y Edge sobre iPhone después del despliegue local.
-- [ ] Verificar compatibilidad real con Chrome, Firefox y Edge ejecutados en ordenador.
-- [ ] Verificar manualmente los enlaces profundos por identificador.
+- [x] Integrar 19 SVG locales controlados y adaptar el autodiagnóstico para identificarlos como `local_repository`.
+- [x] Añadir una prueba pública de los once enlaces profundos.
+- [x] Ejecutar regresión automática en Chromium, Firefox y WebKit.
+- [ ] Repetir ambos diagnósticos en Safari, Chrome, Brave y Edge sobre iPhone después del despliegue local de 19 SVG.
+- [ ] Verificar ambos diagnósticos en Google Chrome, Mozilla Firefox y Microsoft Edge ejecutados realmente en ordenador.
 - [ ] Escritura de izquierda a derecha y derecha a izquierda cuando corresponda.
 - [ ] Copia, descarga y exportación accesible.
-- [ ] Pruebas visuales automatizadas.
+- [ ] Regresión visual automatizada cuando se estabilice la selección de alógrafos.
 
 ## Fase 4 — Beta web
 
@@ -66,8 +84,8 @@ Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima 
 - [x] Disponer de una interfaz pública responsive con salida inicial visible.
 - [x] Explicar públicamente qué hace y qué no hace la herramienta.
 - [x] Enlazar el buzón estructurado de sugerencias de GitHub.
-- [ ] Confirmar mediante pruebas manuales que todo el corpus se reconstruye con los recursos locales en móvil y escritorio.
-- [ ] Incorporar la adaptación experimental de entradas modernas mediante el motor de similitud.
+- [ ] Confirmar mediante pruebas manuales que todo el corpus se reconstruye con los recursos locales actuales en móvil y escritorio.
+- [ ] Incorporar una adaptación experimental de entradas modernas solo después de aprobar la especificación y sus pruebas.
 - [ ] Superar la revisión paleográfica, las pruebas multidispositivo y la revisión externa necesarias para etiquetar una beta.
 
 ## Fase 5 — Ampliación
@@ -80,4 +98,4 @@ Esta fase continúa bloqueada hasta resolver la revisión paleográfica mínima 
 
 ## Criterio de publicación
 
-La pre-alpha puede mostrar formas contrastadas y limitaciones explícitas. No se etiquetará una versión como beta hasta que el renderizador reconstruya de forma visible y reproducible el corpus mediante recursos controlados en móvil y escritorio, y cada transformación moderna pueda explicarse paso a paso.
+La pre-alpha puede mostrar formas contrastadas y limitaciones explícitas. No se etiquetará una versión como beta hasta que el renderizador reconstruya de forma visible y reproducible el corpus mediante recursos controlados en móvil y escritorio, la base gráfica haya recibido revisión externa suficiente y cada transformación moderna pueda explicarse paso a paso.
