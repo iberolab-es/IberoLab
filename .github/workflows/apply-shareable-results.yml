@@ -1,5 +1,6 @@
 name: Apply shareable MVP results
 
+# Temporary one-shot workflow; removed before merge.
 on:
   push:
     branches: [feat/shareable-results]
