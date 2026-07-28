@@ -3,15 +3,24 @@ Copyright 2026 IberoLab contributors
 
 This product includes software and documentation developed by the IberoLab project.
 
-The provisional reference renderer includes 18 SVG files from the Wikimedia Commons series “Sign Iber Noro Dual 01–38”, created by BotaFlo and released under CC0 1.0 Universal. Their individual source pages, resolved download URLs, local paths, sizes and SHA-256 hashes are recorded in:
+## Attested seed corpus graphic layer
+
+The attested-corpus reference renderer includes 18 SVG files from the Wikimedia Commons series “Sign Iber Noro Dual 01–38”, created by BotaFlo and released under CC0 1.0 Universal. Their individual source pages, resolved download URLs, local paths, sizes and SHA-256 hashes are recorded in:
 
   data/signs/reference-standard-dual.assets.v1.json
+
+The normalized m1 variant used for the transcription ń is derived from “NE Iberian m1.svg” by Vriullop, Wikimedia Commons, dedicated under CC0 1.0. Its paleographic assignment and transcription history are documented from Ferrer i Jané et al. (2025), DOI 10.36707/palaeohispanica.v25i1.703.
+
+## Short-input MVP graphic layer
+
+The practical short-input demonstrator uses the complete 38-file normalized Wikimedia Commons series “Sign Iber Noro Dual 01–38”, created by BotaFlo and released under CC0 1.0 Universal. Twenty files extend the eighteen standard-series files already used by the seed renderer. The complete MVP manifest records each source page, resolved download URL, local path, size and SHA-256 hash in:
+
+  data/signs/mvp-standard-signary.assets.v1.json
+
+This 38-sign layer is maintained separately from the attested seed corpus. Its inclusion provides graphic coverage for experimental modern-input adaptations; it does not make every sign an attested requirement of the seed corpus and does not convert normalized shapes into inscription-specific facsimiles.
 
 Additional explanatory information is provided in:
 
   docs/ASSET_PROVENANCE.md
 
-These normalized reference shapes are not facsimiles of the allographs used in every attested inscription. Other historical forms, bibliographic data and third-party resources may have separate attribution and licensing requirements and must be documented individually before distribution.
-
-
-The normalized m1 variant used for the transcription ń is derived from ‘NE Iberian m1.svg’ by Vriullop, Wikimedia Commons, dedicated under CC0 1.0. Its paleographic assignment and transcription history are documented from Ferrer i Jané et al. (2025), DOI 10.36707/palaeohispanica.v25i1.703.
+All normalized reference shapes remain graphic references rather than facsimiles of the allographs used in every attested inscription. Other historical forms, bibliographic data and third-party resources may have separate attribution and licensing requirements and must be documented individually before distribution.
