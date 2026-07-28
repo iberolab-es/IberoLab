@@ -184,6 +184,6 @@ if __name__ == "__main__":
         raise SystemExit(1)
     print(
         "MVP CONVERTER VALIDATION OK: "
-        f"{assets} normalized SVGs; seed corpus remains {seed_assets}; "
-        f"{examples} contract examples; {page_markers} page markers; {script_markers} script safeguards."
+        f"{assets} MVP SVG assets; {seed_assets} attested assets preserved; "
+        f"{examples} acceptance examples; {page_markers} page markers; {script_markers} script safeguards."
     )
