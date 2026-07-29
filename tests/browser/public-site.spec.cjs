@@ -58,15 +58,15 @@ test('historia mantiene la distinción entre lectura y traducción y prepara You
   await expect(page.getByText('Una sección preparada para crecer con YouTube.')).toBeVisible();
 });
 
-test('metodología identifica el símbolo como contemporáneo y explica los audios', async ({ page }) => {
+test('metodología identifica el símbolo como contemporáneo y limita el audio al español moderno', async ({ page }) => {
   await page.goto('/metodologia.html', { waitUntil: 'load' });
   await expect(page.getByText('No es un signo ibérico arqueológico.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Una fusión gráfica, no un signo antiguo.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Dos audios con alcances distintos.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Lectura aproximada' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Audio limitado al español moderno.' })).toBeVisible();
+  await expect(page.getByText('No vocaliza una pronunciación ibérica ni una reconstrucción histórica.')).toBeVisible();
 });
 
-test('la lectura aproximada vocaliza la secuencia generada con una voz moderna', async ({ page }) => {
+test('el único audio reproduce la entrada española y no ofrece una falsa lectura ibérica', async ({ page }) => {
   await page.addInitScript(() => {
     window.__iberoSpoken = null;
     class StubUtterance { constructor(text) { this.text = text; this.lang = ''; this.rate = 1; } }
@@ -74,9 +74,10 @@ test('la lectura aproximada vocaliza la secuencia generada con una voz moderna',
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { cancel() {}, speak(utterance) { window.__iberoSpoken = { text: utterance.text, lang: utterance.lang, rate: utterance.rate }; } } });
   });
   await page.goto('/convertir.html', { waitUntil: 'load' });
-  await page.locator('#sourceInput').fill('familia');
+  await page.locator('#sourceInput').fill('mundo');
   await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
-  await page.getByRole('button', { name: 'Escuchar lectura aproximada' }).click();
-  expect(await page.evaluate(() => window.__iberoSpoken)).toEqual({ text: 'bamilia', lang: 'es-ES', rate: 0.78 });
-  await expect(page.getByText(/recurso didáctico y no una reconstrucción histórica/)).toBeVisible();
+  await page.getByRole('button', { name: 'Escuchar entrada en español' }).click();
+  expect(await page.evaluate(() => window.__iberoSpoken)).toEqual({ text: 'mundo', lang: 'es-ES', rate: 0.9 });
+  await expect(page.getByRole('button', { name: 'Escuchar lectura aproximada' })).toHaveCount(0);
+  await expect(page.getByText(/No representa ni reconstruye la pronunciación de la lengua ibérica/)).toBeVisible();
 });
