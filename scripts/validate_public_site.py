@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the public landing, history, methodology and approximate-reading safeguards."""
+"""Validate the public landing, history, methodology and audio safeguards."""
 from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1]
@@ -14,15 +14,17 @@ def main():
     index=INDEX.read_text(encoding="utf-8");history=HISTORY.read_text(encoding="utf-8");method=METHODOLOGY.read_text(encoding="utf-8");academia=ACADEMIA.read_text(encoding="utf-8");converter=CONVERTER.read_text(encoding="utf-8");converter_ui=CONVERTER_UI.read_text(encoding="utf-8");combined_converter=converter+"\n"+converter_ui;style=STYLE.read_text(encoding="utf-8");mark=MARK.read_text(encoding="utf-8")
     require(index,("Lengua ibérica · Patrimonio · Tecnología","Adaptación fonética · MVP","No ofrece una traducción a la lengua ibérica","Probar conversor",'id="corpus"','href="historia.html"','href="metodologia.html"','href="academia.html"',"Un monograma-glifo contemporáneo","No es un signo ibérico antiguo","Para la comunidad académica",'href="convertir.html?q=tierra"','dual-28-ti.svg','dual-02-e.svg','dual-34-r2.svg','dual-01-a.svg'),"home")
     require(history,("Comprender el mundo ibérico antes de intentar representarlo","Leer signos no significa traducir la lengua","Una sección preparada para crecer con YouTube","Monedas e inscripciones",'href="./#corpus"','href="academia.html"'),"history")
-    require(method,("No traduce el español a la lengua ibérica","Dos audios con alcances distintos","Lectura aproximada","No es un signo ibérico arqueológico","Trazabilidad técnica",'href="./#corpus"','href="privacidad.html"'),"methodology")
+    require(method,("No traduce el español a la lengua ibérica","Audio limitado al español moderno","No vocaliza una pronunciación ibérica ni una reconstrucción histórica","No es un signo ibérico arqueológico","Trazabilidad técnica",'href="./#corpus"','href="privacidad.html"'),"methodology")
     require(academia,("Información para universidades y especialistas",'href="./#corpus"','href="historia.html"','href="metodologia.html"','href="academia.html" aria-current="page"','href="convertir.html"'),"academic page")
     if 'href="corpus.html"' in history or 'href="corpus.html"' in method: raise ValueError("provisional corpus.html link remains in public pages")
-    require(combined_converter,("Escuchar lectura aproximada","experimentalReadingText","recurso didáctico y no una reconstrucción histórica",'href="historia.html"','href="metodologia.html"','href="academia.html"','src="converter-ui.js"','data-example="hogar"','data-example="tierra"','data-example="mundo"','data-example="olivo"','data-example="mar"',"cualquier nombre, sentimiento", "palabra o frase breve"),"converter")
+    require(combined_converter,("Escuchar entrada en español","No representa ni reconstruye la pronunciación de la lengua ibérica",'href="historia.html"','href="metodologia.html"','href="academia.html"','src="converter-ui.js"','data-example="hogar"','data-example="tierra"','data-example="mundo"','data-example="olivo"','data-example="mar"',"cualquier nombre, sentimiento", "palabra o frase breve"),"converter")
     require(style,(".public-nav",".home-hero",".logo-story",".video-grid"),"stylesheet")
     require(mark,("Marca contemporánea geométrica","fusiona trazos inspirados","no representa ni reproduce un signo antiguo auténtico","<circle"),"brand mark")
     if "dual-29-te.svg" in index: raise ValueError("mislabeled te/to graphic reference remains in home sample")
     if "Escuchar en ibero" in combined_converter: raise ValueError("authentic Iberian pronunciation claim detected")
-    print("PUBLIC SITE VALIDATION OK: landing, history, methodology, academic links, contemporary mark and approximate-reading safeguards present.");return 0
+    for forbidden in ("Escuchar lectura aproximada","approximateButton","experimentalReadingText"):
+        if forbidden in combined_converter: raise ValueError(f"obsolete approximate-audio marker remains: {forbidden}")
+    print("PUBLIC SITE VALIDATION OK: landing, history, methodology, academic links, contemporary mark and Spanish-only audio safeguards present.");return 0
 if __name__=="__main__":
     try: raise SystemExit(main())
     except (OSError,ValueError) as exc:

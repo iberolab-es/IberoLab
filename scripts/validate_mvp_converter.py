@@ -49,12 +49,14 @@ def validate_contract():
     return len(examples)
 def validate_web_files():
     page=PAGE.read_text(encoding="utf-8");script=SCRIPT.read_text(encoding="utf-8");ui=UI.read_text(encoding="utf-8");combined=page+"\n"+ui
-    page_markers=("Adaptación fonética experimental","No es una traducción a la lengua ibérica","Escuchar entrada en español","Escuchar lectura aproximada","Compartir resultado","Recientes en este dispositivo","IberoLab no recibe este historial",'id="historySection"','HISTORY_KEY="iberolab:mvp:recent:v1"',"HISTORY_LIMIT=5","localStorage",'id="actionStatus"','wordLabel.className="word-label"','searchParams.set("q",trimmed)',"navigator.share","experimentalReadingText","recurso didáctico y no una reconstrucción histórica","Los signos son formas normalizadas de referencia",'src="mvp-converter.js"','src="converter-ui.js"','data-example="hogar"','data-example="tierra"','data-example="mundo"','data-example="olivo"','data-example="mar"','dataset.mvpConverterReady="true"')
+    page_markers=("Adaptación fonética experimental","No es una traducción a la lengua ibérica","Escuchar entrada en español","Compartir resultado","Recientes en este dispositivo","IberoLab no recibe este historial",'id="historySection"','HISTORY_KEY="iberolab:mvp:recent:v1"',"HISTORY_LIMIT=5","localStorage",'id="actionStatus"','wordLabel.className="word-label"','searchParams.set("q",trimmed)',"navigator.share","No representa ni reconstruye la pronunciación de la lengua ibérica","Los signos son formas normalizadas de referencia",'src="mvp-converter.js"','src="converter-ui.js"','data-example="hogar"','data-example="tierra"','data-example="mundo"','data-example="olivo"','data-example="mar"','dataset.mvpConverterReady="true"')
     script_markers=("experimental_phonetic_adaptation","translationClaim: false","cluster_support_vowel","f_to_labial_stop","theta_to_sibilant","palatal_nasal_to_ni","empty_word_output","window.IberoMvp")
     for marker in page_markers:
         if marker not in combined: fail(f"converter page/UI lacks required marker {marker!r}")
     for marker in script_markers:
         if marker not in script: fail(f"converter engine lacks safeguard {marker!r}")
+    for forbidden in ("Escuchar lectura aproximada","approximateButton","experimentalReadingText"):
+        if forbidden in combined: fail(f"converter retains obsolete approximate-audio marker {forbidden!r}")
     for item in load_json(MVP_MANIFEST)["assets"]:
         browser_path=item["local_path"].removeprefix("docs/")
         if browser_path not in script: fail(f"converter engine does not map token {item['token']!r}")

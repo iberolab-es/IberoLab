@@ -4,7 +4,7 @@ Todos los cambios relevantes del proyecto se documentarán en este archivo.
 
 El formato se inspira en Keep a Changelog y el proyecto utilizará versionado semántico cuando exista una primera versión funcional.
 
-## Unreleased — portada pública, historia y audio aproximado
+## Unreleased — portada pública, historia y audio
 
 - Se adopta de forma sistemática «lengua ibérica» en la web, los contratos, la documentación, la tarjeta social y las pruebas; se mantiene «escritura/signario/signos ibéricos» para los sistemas gráficos.
 - El plan de difusión exige mensajes individuales, contactos verificados en fuentes oficiales, motivos personalizados, solicitud de correcciones concretas y ausencia de afiliación institucional implícita.
@@ -15,7 +15,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - El símbolo oficial evoluciona a un monograma-glifo contemporáneo que fusiona eje, travesaño, chevrón y ramificación; no reproduce un signo ibérico antiguo ni posee valor fonético histórico.
 - En la portada móvil, el monograma y la lectura documentada se muestran como elementos separados, sin solapamiento ni huecos verticales artificiales.
 - La página académica incorpora acceso directo a Corpus, Historia, Metodología, Universidades y Conversor.
-- El demostrador mantiene el audio de la entrada española y añade una lectura técnica aproximada mediante voz española moderna, siempre etiquetada como recurso didáctico y no como pronunciación histórica.
+- El demostrador conserva únicamente el audio de la entrada española. Se retira la lectura sonora de los signos porque, en correspondencias directas, duplicaba el español original y podía sugerir una reconstrucción histórica inexistente.
 - La interfaz separa su lógica en módulos propios y añade validación estática y regresión sobre Chromium, Firefox y WebKit.
 - El sitemap incluye Historia y Metodología, y se conservan la página académica, privacidad, citación, metadatos sociales y recursos de identidad existentes.
 
