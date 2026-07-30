@@ -6,8 +6,12 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function createIberoVoice(root) {
   "use strict";
 
-  const VERSION = "0.1.1";
-  const PROFILE_ID = "iberolab-sign-reading-voice-v1";
+  const VERSION = "0.2.0";
+  const PROFILE_ID = "iberolab-sign-reading-voice-v2";
+  const TECHNICAL_PROFILE_ID = "iberolab-sign-reading-voice-v1";
+  const FLUID_PROFILE_ID = "iberolab-fluid-device-voice-v1";
+  const MODE_FLUID = "fluid";
+  const MODE_TECHNICAL = "technical";
   const PLAYBACK_SESSION_TYPE = "playback";
   const SAMPLE_RATE = 24000;
   const EDGE_SILENCE_SECONDS = 0.06;
@@ -32,6 +36,51 @@
   });
 
   const CONTINUANT_TOKENS = new Set(["s", "ś", "r", "ŕ", "l", "m", "n", "ḿ"]);
+  const FLUID_LANGUAGE_PREFERENCES = Object.freeze(["eu-ES", "eu", "ca-ES", "ca", "es-ES", "es"]);
+  const FLUID_PALETTES = Object.freeze({
+    eu: Object.freeze({
+      id: "modern-basque-orthographic-bridge",
+      label: "paleta moderna en euskera",
+      tokenText: Object.freeze({
+        s: "z",
+        "ś": "s",
+        r: "r",
+        "ŕ": "rr",
+        l: "l",
+        m: "m",
+        n: "n",
+        "ḿ": "um"
+      })
+    }),
+    ca: Object.freeze({
+      id: "modern-mediterranean-orthographic-bridge",
+      label: "paleta mediterránea moderna",
+      tokenText: Object.freeze({
+        s: "s",
+        "ś": "x",
+        r: "r",
+        "ŕ": "rr",
+        l: "l",
+        m: "m",
+        n: "n",
+        "ḿ": "um"
+      })
+    }),
+    es: Object.freeze({
+      id: "modern-peninsular-orthographic-bridge",
+      label: "paleta peninsular moderna",
+      tokenText: Object.freeze({
+        s: "s",
+        "ś": "sh",
+        r: "r",
+        "ŕ": "rr",
+        l: "l",
+        m: "m",
+        n: "n",
+        "ḿ": "um"
+      })
+    })
+  });
   const VALID_TOKENS = new Set([
     ...Object.keys(VOWEL_FORMANTS),
     ...Object.keys(STOP_TOKENS),
@@ -112,12 +161,117 @@
       .join(" / ");
 
     return {
-      profileId: PROFILE_ID,
+      profileId: TECHNICAL_PROFILE_ID,
       version: VERSION,
       words: normalizedWords,
       reading,
       items,
       durationSeconds: cursor + EDGE_SILENCE_SECONDS
+    };
+  }
+
+  function languageFamily(language) {
+    const normalized = String(language || "").toLocaleLowerCase("en");
+    if (normalized.startsWith("eu")) return "eu";
+    if (normalized.startsWith("ca")) return "ca";
+    return "es";
+  }
+
+  function availableVoices() {
+    if (!root.speechSynthesis || typeof root.speechSynthesis.getVoices !== "function") return [];
+    try {
+      const voices = root.speechSynthesis.getVoices();
+      return Array.isArray(voices) ? voices : Array.from(voices || []);
+    } catch {
+      return [];
+    }
+  }
+
+  function selectFluidVoice() {
+    const voices = availableVoices();
+    for (const preferredLanguage of FLUID_LANGUAGE_PREFERENCES) {
+      const exact = voices.find(voice =>
+        String(voice.lang || "").toLocaleLowerCase("en") ===
+        preferredLanguage.toLocaleLowerCase("en")
+      );
+      if (exact) {
+        return {
+          voice: exact,
+          language: exact.lang || preferredLanguage,
+          palette: FLUID_PALETTES[languageFamily(exact.lang || preferredLanguage)],
+          requestedLanguage: preferredLanguage
+        };
+      }
+      if (!preferredLanguage.includes("-")) {
+        const family = voices.find(voice =>
+          languageFamily(voice.lang) === preferredLanguage.toLocaleLowerCase("en")
+        );
+        if (family) {
+          return {
+            voice: family,
+            language: family.lang || preferredLanguage,
+            palette: FLUID_PALETTES[languageFamily(family.lang || preferredLanguage)],
+            requestedLanguage: preferredLanguage
+          };
+        }
+      }
+    }
+
+    return {
+      voice: null,
+      language: "eu-ES",
+      palette: FLUID_PALETTES.eu,
+      requestedLanguage: "eu-ES"
+    };
+  }
+
+  function stopTokenText(token, paletteFamily) {
+    const [consonant, vowel] = STOP_TOKENS[token];
+    if (paletteFamily === "eu") return `${consonant}${vowel}`;
+    if (consonant === "g" && (vowel === "e" || vowel === "i")) return `gu${vowel}`;
+    return `${consonant}${vowel}`;
+  }
+
+  function fluidTokenText(token, palette) {
+    if (VOWEL_FORMANTS[token]) return token;
+    if (STOP_TOKENS[token]) {
+      const paletteFamily = palette === FLUID_PALETTES.eu
+        ? "eu"
+        : palette === FLUID_PALETTES.ca
+          ? "ca"
+          : "es";
+      return stopTokenText(token, paletteFamily);
+    }
+    return palette.tokenText[token];
+  }
+
+  function buildFluidPlan(words, voiceSelection = selectFluidVoice()) {
+    const normalizedWords = normalizeWords(words);
+    const palette = voiceSelection.palette || FLUID_PALETTES.eu;
+    const spokenWords = normalizedWords.map(word => {
+      const spoken = word.tokens.map(token => fluidTokenText(token, palette)).join("");
+      return /[aeiou]/i.test(spoken) ? spoken : `${spoken}e`;
+    });
+    const reading = normalizedWords
+      .map(word => word.tokens.join(" · "))
+      .join(" / ");
+
+    return {
+      profileId: FLUID_PROFILE_ID,
+      version: VERSION,
+      mode: MODE_FLUID,
+      reading,
+      words: normalizedWords,
+      spokenWords,
+      spokenText: spokenWords.join(", "),
+      language: voiceSelection.language || "eu-ES",
+      requestedLanguage: voiceSelection.requestedLanguage || "eu-ES",
+      paletteId: palette.id,
+      paletteLabel: palette.label,
+      voice: voiceSelection.voice || null,
+      voiceName: voiceSelection.voice?.name || "",
+      deterministic: false,
+      historicalRelationshipClaim: false
     };
   }
 
@@ -383,7 +537,7 @@
   function synthesize(words) {
     const plan = buildPlan(words);
     const samples = new Float32Array(Math.ceil(plan.durationSeconds * SAMPLE_RATE));
-    const random = makeRandom(hashString(`${PROFILE_ID}|${plan.reading}`));
+    const random = makeRandom(hashString(`${TECHNICAL_PROFILE_ID}|${plan.reading}`));
 
     for (const item of plan.items) {
       const phraseProgress = item.startSeconds / plan.durationSeconds;
@@ -406,8 +560,9 @@
 
     const peak = normalizeSamples(samples);
     return {
-      profileId: PROFILE_ID,
+      profileId: TECHNICAL_PROFILE_ID,
       version: VERSION,
+      mode: MODE_TECHNICAL,
       sampleRate: SAMPLE_RATE,
       samples,
       reading: plan.reading,
@@ -432,7 +587,22 @@
   }
 
   function isPlaybackSupported() {
-    return Boolean(root.AudioContext || root.webkitAudioContext);
+    return isModeSupported(MODE_FLUID) || isModeSupported(MODE_TECHNICAL);
+  }
+
+  function isModeSupported(mode) {
+    if (mode === MODE_FLUID) {
+      return Boolean(
+        root.speechSynthesis &&
+        typeof root.speechSynthesis.speak === "function" &&
+        typeof root.speechSynthesis.cancel === "function" &&
+        root.SpeechSynthesisUtterance
+      );
+    }
+    if (mode === MODE_TECHNICAL) {
+      return Boolean(root.AudioContext || root.webkitAudioContext);
+    }
+    return false;
   }
 
   function requestPlaybackAudioSession() {
@@ -465,16 +635,10 @@
     if (!activePlayback) return;
     const playback = activePlayback;
     activePlayback = null;
-    try {
-      playback.source.stop();
-    } catch {
-      // A source that has already ended cannot be stopped a second time.
-    } finally {
-      playback.finish();
-    }
+    playback.stopInternal();
   }
 
-  async function play(words) {
+  async function playTechnical(words) {
     const AudioContextConstructor = root.AudioContext || root.webkitAudioContext;
     if (!AudioContextConstructor) {
       throw new Error("Este navegador no ofrece Web Audio para reproducir la recreación.");
@@ -507,6 +671,7 @@
         resolveEnded = resolve;
       });
       playback = {
+        mode: MODE_TECHNICAL,
         source,
         rendered,
         ended,
@@ -519,6 +684,15 @@
         },
         stop() {
           if (activePlayback === playback) stop();
+        },
+        stopInternal() {
+          try {
+            source.stop();
+          } catch {
+            // A source that has already ended cannot be stopped a second time.
+          } finally {
+            playback.finish();
+          }
         }
       };
       source.addEventListener("ended", playback.finish, { once: true });
@@ -532,16 +706,93 @@
     }
   }
 
+  async function playFluid(words) {
+    if (!isModeSupported(MODE_FLUID)) {
+      throw new Error("Este navegador no ofrece una voz de sistema para la recreación fluida.");
+    }
+
+    stop();
+    root.speechSynthesis.cancel();
+    const releaseAudioSession = requestPlaybackAudioSession();
+    const rendered = buildFluidPlan(words);
+    const utterance = new root.SpeechSynthesisUtterance(rendered.spokenText);
+    utterance.lang = rendered.language;
+    utterance.rate = 0.78;
+    utterance.pitch = 0.94;
+    utterance.volume = 1;
+    if (rendered.voice) utterance.voice = rendered.voice;
+
+    let resolveEnded;
+    let finished = false;
+    const ended = new Promise(resolve => {
+      resolveEnded = resolve;
+    });
+    const playback = {
+      mode: MODE_FLUID,
+      utterance,
+      rendered,
+      ended,
+      finish() {
+        if (finished) return;
+        finished = true;
+        if (activePlayback === playback) activePlayback = null;
+        releaseAudioSession();
+        resolveEnded(rendered);
+      },
+      stop() {
+        if (activePlayback === playback) stop();
+      },
+      stopInternal() {
+        try {
+          root.speechSynthesis.cancel();
+        } finally {
+          playback.finish();
+        }
+      }
+    };
+
+    utterance.addEventListener("end", playback.finish, { once: true });
+    utterance.addEventListener("error", playback.finish, { once: true });
+    activePlayback = playback;
+    try {
+      root.speechSynthesis.speak(utterance);
+      return playback;
+    } catch (error) {
+      if (activePlayback === playback) activePlayback = null;
+      releaseAudioSession();
+      throw error;
+    }
+  }
+
+  async function play(words, options = {}) {
+    const requestedMode = options.mode || MODE_FLUID;
+    if (requestedMode === MODE_FLUID) {
+      if (isModeSupported(MODE_FLUID)) return playFluid(words);
+      if (isModeSupported(MODE_TECHNICAL)) return playTechnical(words);
+    }
+    if (requestedMode === MODE_TECHNICAL) return playTechnical(words);
+    throw new Error(`Modo sonoro no disponible: ${requestedMode}.`);
+  }
+
   return Object.freeze({
     VERSION,
     PROFILE_ID,
+    TECHNICAL_PROFILE_ID,
+    FLUID_PROFILE_ID,
+    MODE_FLUID,
+    MODE_TECHNICAL,
     SAMPLE_RATE,
     VALID_TOKENS: Object.freeze(Array.from(VALID_TOKENS)),
     buildPlan,
+    buildFluidPlan,
     synthesize,
     fingerprint,
     isPlaybackSupported,
+    isModeSupported,
+    selectFluidVoice,
     play,
+    playFluid,
+    playTechnical,
     stop
   });
 });
