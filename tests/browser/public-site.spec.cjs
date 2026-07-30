@@ -107,9 +107,53 @@ test('la voz experimental sintetiza los tokens de forma local y determinista', a
 test('la interfaz compara español moderno y recreación de signos sin confundirlos', async ({ page }) => {
   await page.addInitScript(() => {
     window.__iberoSpoken = null;
+    window.__iberoAudio = {
+      copiedSamples: 0,
+      sampleRate: null,
+      starts: 0,
+      stops: 0
+    };
     class StubUtterance { constructor(text) { this.text = text; this.lang = ''; this.rate = 1; } }
+    class StubAudioBuffer {
+      constructor(length, sampleRate) {
+        this.length = length;
+        this.sampleRate = sampleRate;
+      }
+
+      copyToChannel(samples) {
+        window.__iberoAudio.copiedSamples = samples.length;
+        window.__iberoAudio.sampleRate = this.sampleRate;
+      }
+    }
+    class StubAudioSource extends EventTarget {
+      connect() {}
+
+      start() {
+        window.__iberoAudio.starts += 1;
+      }
+
+      stop() {
+        window.__iberoAudio.stops += 1;
+        this.dispatchEvent(new Event('ended'));
+      }
+    }
+    class StubAudioContext {
+      constructor() {
+        this.state = 'running';
+        this.destination = {};
+      }
+
+      createBuffer(_channels, length, sampleRate) {
+        return new StubAudioBuffer(length, sampleRate);
+      }
+
+      createBufferSource() {
+        return new StubAudioSource();
+      }
+    }
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: StubUtterance });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { cancel() {}, speak(utterance) { window.__iberoSpoken = { text: utterance.text, lang: utterance.lang, rate: utterance.rate }; } } });
+    Object.defineProperty(window, 'AudioContext', { configurable: true, value: StubAudioContext });
   });
   await page.goto('/convertir.html', { waitUntil: 'load' });
   await page.locator('#sourceInput').fill('mundo mundo');
@@ -122,9 +166,16 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
   await recreation.click();
   await expect(page.getByRole('button', { name: 'Detener aproximación' })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#actionStatus')).toHaveText('Reproduciendo: m · u · n · do / m · u · n · do.');
+  expect(await page.evaluate(() => window.__iberoAudio)).toEqual({
+    copiedSamples: 45168,
+    sampleRate: 24000,
+    starts: 1,
+    stops: 0
+  });
   await page.getByRole('button', { name: 'Detener aproximación' }).click();
   await expect(recreation).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('#actionStatus')).toHaveText('Recreación detenida.');
+  expect(await page.evaluate(() => window.__iberoAudio.stops)).toBe(1);
 
   await expect(page.getByRole('button', { name: 'Escuchar lectura aproximada' })).toHaveCount(0);
   await expect(page.getByText(/No reconstruye cómo hablaban los íberos/)).toBeVisible();
