@@ -37,6 +37,12 @@
     .notice,.panel{border:1px solid var(--line);background:rgba(16,27,38,.94);border-radius:24px}
     .notice{padding:16px 18px;margin:22px 0;color:var(--muted);line-height:1.55}
     .notice strong{color:var(--text)}
+    .layer-map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 18px}
+    .layer-card{display:grid;gap:6px;border:1px solid var(--line);border-radius:17px;background:rgba(10,20,30,.72);padding:15px;color:var(--muted);text-decoration:none}
+    .layer-card strong{color:var(--text);font-size:1.04rem}
+    .layer-card span{color:var(--accent);font-size:.75rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+    .layer-card.current{border-color:rgba(244,200,106,.58);background:rgba(244,200,106,.06)}
+    .layer-card.current span{color:var(--warn)}
     .panel{padding:clamp(18px,4vw,34px);box-shadow:0 22px 70px rgba(0,0,0,.28)}
     form{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
     label{display:block;font-weight:850;margin-bottom:8px}
@@ -107,6 +113,7 @@
       form>button{width:100%}
       .technical-grid{grid-template-columns:1fr}
       .voice-lab{grid-template-columns:1fr}
+      .layer-map{grid-template-columns:1fr}
       #glyphOutput{padding:14px}
       .sign-card{width:70px;min-height:112px;grid-template-rows:68px auto}
       .actions button{flex:1 1 100%}
@@ -131,7 +138,7 @@
     </div>
     <header>
       <div class="topline">
-        <div class="eyebrow">IberoLab · demostrador MVP</div>
+        <div class="eyebrow">Recorrido 2 · demostrador MVP</div>
         <a class="back" href="./#corpus">Corpus documentado</a>
       </div>
       <h1>Escribe algo breve.<br>Visualízalo en signos ibéricos.</h1>
@@ -140,6 +147,18 @@
     <div class="notice">
       <strong>No es una traducción a la lengua ibérica.</strong>
       Es una adaptación fonética experimental del español moderno. Los signos son formas normalizadas de referencia y no facsímiles de una inscripción concreta.
+    </div>
+    <div class="layer-map" aria-label="Dos recorridos de IberoLab">
+      <a class="layer-card" href="./#corpus">
+        <span>Recorrido 1</span>
+        <strong>Forma ibérica atestiguada</strong>
+        <small>Parte de una lectura documentada, muestra sus signos y permite oír una recreación moderna claramente delimitada.</small>
+      </a>
+      <div class="layer-card current" aria-current="step">
+        <span>Recorrido 2 · estás aquí</span>
+        <strong>Entrada española moderna</strong>
+        <small>Adapta sonidos actuales al signario y vocaliza el resultado. Ni los signos ni el audio constituyen una traducción ibérica.</small>
+      </div>
     </div>
     <section class="panel">
       <form id="converterForm">
@@ -209,7 +228,7 @@
         </div>
         <div class="boundary">
           <strong>Dos funciones y dos modos de recreación:</strong>
-          la entrada en español reproduce el texto original. La aproximación sonora vocaliza la lectura de los signos mediante el perfil <code>iberolab-sign-reading-voice-v2</code>: ofrece una voz fluida moderna y conserva la síntesis técnica reproducible de la versión anterior.
+          la entrada en español reproduce el texto original. La aproximación sonora vocaliza la lectura de los signos mediante el perfil <code>iberolab-sign-reading-voice-v3</code>: ofrece una voz fluida moderna y conserva la síntesis técnica reproducible de la versión anterior. El mismo perfil puede leer formas atestiguadas en el corpus, pero la interfaz identifica siempre de cuál de los dos recorridos procede la secuencia.
           <strong>No reconstruye cómo hablaban los íberos.</strong>
           <details class="voice-details">
             <summary>Qué es seguro y qué es hipotético</summary>

@@ -22,3 +22,4 @@
   document.addEventListener("DOMContentLoaded",()=>{for(const form of FORMS){const option=document.createElement("option");option.value=form.id;option.textContent=form.form;select.append(option);}button.addEventListener("click",()=>renderForm(select.value));select.addEventListener("change",()=>renderForm(select.value));previousButton.addEventListener("click",()=>move(-1));nextButton.addEventListener("click",()=>move(1));const requested=decodeURIComponent(location.hash.slice(1));renderForm(FORMS.some(item=>item.id===requested)?requested:FORMS[0].id,!requested);document.documentElement.dataset.rendererReady="true";});
   window.addEventListener("hashchange",()=>{const requested=decodeURIComponent(location.hash.slice(1));if(FORMS.some(item=>item.id===requested))renderForm(requested,false);});
 })();
+(() => { const script = document.createElement("script"); script.src = "corpus-voice.js"; script.async = false; document.head.append(script); })();

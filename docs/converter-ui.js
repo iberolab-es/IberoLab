@@ -319,7 +319,10 @@
       : "Preparando la síntesis técnica local…";
 
     try {
-      const playback = await window.IberoVoice.play(resultAtStart.words, { mode: modeAtStart });
+      const playback = await window.IberoVoice.play(resultAtStart.words, {
+        mode: modeAtStart,
+        sourceClass: window.IberoVoice.SOURCE_MODERN
+      });
       if (currentResult !== resultAtStart || selectedVoiceMode() !== modeAtStart) {
         playback.stop();
         return;

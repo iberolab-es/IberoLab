@@ -33,7 +33,7 @@
       "resolve_silent_u_in_gu_before_e_or_i",
       "preserve_word_boundaries"
     ],
-    "audio_policy": "Browser speech synthesis may read the original Spanish input. A separate experimental recreation may vocalize only the adapted sign tokens through a modern fluid device voice or a technical local synthesizer; neither output may be labelled as reconstructed Iberian pronunciation or evidence of linguistic relationship."
+    "audio_policy": "Browser speech synthesis may read the original Spanish input. A separate experimental recreation may vocalize only the adapted sign tokens through a modern fluid device voice or a technical local synthesizer. The shared v3 voice engine may also read attested corpus sequences under a distinct source label; neither source class may be labelled as reconstructed Iberian pronunciation, translation, or evidence of linguistic relationship."
   },
   "graphic_layer": {
     "manifest": "data/signs/mvp-standard-signary.assets.v1.json",

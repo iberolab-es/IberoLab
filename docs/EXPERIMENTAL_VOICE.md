@@ -2,15 +2,20 @@
 
 ## Alcance
 
-La voz de IberoLab **no reconstruye cómo hablaban los íberos**. Vocaliza la secuencia de valores convencionales que ya aparece en la lectura técnica del conversor.
+La voz de IberoLab **no reconstruye cómo hablaban los íberos**. Vocaliza secuencias de valores convencionales procedentes de dos fuentes que la interfaz mantiene separadas:
+
+1. **formas ibéricas atestiguadas**, cuya escritura y segmentación están documentadas en el corpus;
+2. **adaptaciones modernas**, generadas a partir de una entrada española por el demostrador.
 
 Por ejemplo, si la adaptación gráfica produce `ka · s · a`, el sistema recibe esos tres tokens. No traduce la palabra a la lengua ibérica ni le atribuye una pronunciación histórica.
+
+Cuando el corpus reproduce `i · l · di · ŕ · da`, la secuencia escrita sí es una lectura ibérica documentada; el audio continúa siendo una recreación moderna. Que una forma sea antigua y esté atestiguada no convierte su sonorización en pronunciación recuperada.
 
 La clasificación correcta es **aproximación sonora experimental**, **recreación sonora experimental**, **voz fluida moderna** o **lectura sintética de los signos**. No debe denominarse «audio en ibérico», «pronunciación auténtica», «acento ibérico» ni «reconstrucción histórica».
 
 ## Dos modos complementarios
 
-El perfil público `iberolab-sign-reading-voice-v2` conserva dos renderizadores:
+El perfil público `iberolab-sign-reading-voice-v3` conserva dos renderizadores:
 
 ### Voz fluida moderna
 
@@ -52,6 +57,7 @@ Las incertidumbres permanecen visibles:
 - `s` y `ś` se diferencian mediante una hipótesis laminal frente a apical;
 - `r` y `ŕ` se realizan como vibrante simple y múltiple siguiendo una convención propia de IberoLab;
 - `ḿ` recibe una vocalización auxiliar únicamente para poder oír el signo;
+- `ń`, transcripción de proyecto para la variante `m1` documentada en `taŕśabań`, se aproxima como `n` en la voz fluida y como nasal alveolar prolongada en la síntesis técnica; esta diferencia audible es una convención de baja confianza, no el descubrimiento de su valor fonético;
 - la oposición de las oclusivas dentales y velares se realiza como sonora frente a sorda, aunque se ha planteado también una diferencia fortis/lenis;
 - no se infiere un sistema ibérico de acento, ritmo o entonación.
 
@@ -70,8 +76,11 @@ En WebKit compatible, ambos modos solicitan una sesión `playback` antes de repr
 - Oliver Simkin, «The Iberian sibilants revisited», *Palaeohispanica* 17 (2017), pp. 207–233. [Texto completo](https://ifc.dpz.es/recursos/publicaciones/36/49/13simkin.pdf).
 - Ander Egurtzegi, «Phonetics and Phonology» (2013), en *Towards a History of the Basque Language*. [Texto completo](https://www.phonetik.uni-muenchen.de/personen/assoziierte_wissenschaftler/egurtzegi_ander/2013_protobasque_phonology.pdf).
 - Iván Igartua, «Bringing phonological oddities to the fore: The Basque sibilants», *ASJU* 57 (2023), pp. 495–513. DOI: [10.1387/asju.25965](https://doi.org/10.1387/asju.25965).
+- Joan Ferrer i Jané et al., «Towards a systematisation of Palaeohispanic scripts in Unicode», *Palaeohispanica* 15 (2015). [Texto completo](https://ifc.dpz.es/recursos/publicaciones/35/02/01ferreretal.pdf).
+- Joan Ferrer i Jané et al., «La casa de Taŕśabań», *Palaeohispanica* 25 (2025), pp. 175–202. DOI: [10.36707/palaeohispanica.v25i1.703](https://doi.org/10.36707/palaeohispanica.v25i1.703).
 
 Las configuraciones legibles por máquina se conservan en:
 
-- [`data/engine/experimental-voice-profile.v2.json`](../data/engine/experimental-voice-profile.v2.json), perfil híbrido vigente;
+- [`data/engine/experimental-voice-profile.v3.json`](../data/engine/experimental-voice-profile.v3.json), perfil vigente con separación entre formas atestiguadas y adaptaciones modernas;
+- [`data/engine/experimental-voice-profile.v2.json`](../data/engine/experimental-voice-profile.v2.json), perfil fluido anterior preservado;
 - [`data/engine/experimental-voice-profile.v1.json`](../data/engine/experimental-voice-profile.v1.json), síntesis técnica preservada.

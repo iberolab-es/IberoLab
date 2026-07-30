@@ -39,6 +39,8 @@ El flujo `Browser smoke tests` ejecuta Playwright sobre un servidor HTTP local y
 
 Para cada motor comprueba las once formas mediante sus identificadores, la selección y lectura visible, el número esperado de tarjetas, la ausencia de tarjetas fallidas y la carga real de cada imagen local. Después ejecuta íntegramente `test.html` y `deep-link-test.html` y exige que ambos informes terminen en `pass`.
 
+La misma matriz distingue además los dos orígenes sonoros, prueba la reproducción y detención de una forma atestiguada, exige cobertura conjunta de los 38 tokens del demostrador y `ń`, y verifica que la nasal marcada conserve una salida distinta sin presentarla como valor histórico.
+
 La suite utiliza Playwright `1.62.0` fijado, un único trabajador en CI, permisos de solo lectura y conserva trazas y capturas únicamente cuando existe un fallo. Su configuración se encuentra en:
 
 - `.github/workflows/browser-smoke.yml`;
@@ -52,7 +54,7 @@ Esta cobertura detecta regresiones en Chromium, Firefox y WebKit, pero no equiva
 - la exactitud paleográfica del alógrafo seleccionado;
 - la fidelidad del recurso gráfico a una inscripción concreta;
 - la validez semántica de una interpretación;
-- la futura adaptación de palabras modernas;
+- que una adaptación moderna equivalga a vocabulario o traducción de la lengua ibérica;
 - la apariencia exacta píxel a píxel, que requerirá regresión visual separada.
 
 ## Procedimiento manual completo

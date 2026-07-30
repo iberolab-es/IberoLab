@@ -22,6 +22,9 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - La reproducción experimental solicita una sesión de audio `playback` en WebKit compatible y abre el canal desde el propio gesto, evitando que el modo silencio de iPhone deje Web Audio mudo.
 - El perfil `iberolab-sign-reading-voice-v2` añade como opción predeterminada una voz fluida del dispositivo y conserva la síntesis técnica reproducible como modo comparativo.
 - La voz fluida prefiere una ortografía puente y una voz moderna en euskera por su ajuste práctico a cinco vocales, róticas y sibilantes; la interfaz y la metodología excluyen expresamente cualquier afirmación de parentesco o pronunciación histórica.
+- El perfil `iberolab-sign-reading-voice-v3` separa dos orígenes de secuencia: formas ibéricas atestiguadas y adaptaciones españolas modernas.
+- Las once formas del corpus incorporan reproducción opcional fluida y técnica sin convertir la lectura documentada en una afirmación sobre pronunciación histórica.
+- El token corpus `ń` queda cubierto como aproximación sonora de baja confianza: `n` en la voz fluida y nasal prolongada en el modo técnico, sin equiparación fonética histórica.
 - El sitemap incluye Historia y Metodología, y se conservan la página académica, privacidad, citación, metadatos sociales y recursos de identidad existentes.
 
 ## Unreleased — historial local privado

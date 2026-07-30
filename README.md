@@ -32,6 +32,7 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 - resolución explícita de `ń` mediante la variante paleográfica `m1`, conservando `m` como transcripción histórica;
 - cero tokens gráficos pendientes en el corpus inicial;
 - renderizador, navegación, lectura técnica, fuentes y enlaces profundos;
+- recreación sonora opcional de las lecturas atestiguadas, separada de la evidencia escrita y rotulada como experimento moderno;
 - regresión automática sobre Chromium, Firefox y WebKit.
 
 ### Demostrador MVP
@@ -47,7 +48,8 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 - audio opcional para comparar la entrada española mediante la voz del navegador;
 - voz fluida moderna mediante una ortografía puente y la voz disponible en el dispositivo, con preferencia por el euskera explicada como ajuste articulatorio y no como parentesco;
 - síntesis técnica local y determinista preservada mediante `iberolab-sign-reading-voice-v1`;
-- perfil híbrido vigente `iberolab-sign-reading-voice-v2`;
+- perfil vigente `iberolab-sign-reading-voice-v3`, que distingue formas atestiguadas de adaptaciones españolas modernas y amplía la cobertura sonora al token corpus `ń`;
+- perfil fluido anterior `iberolab-sign-reading-voice-v2` preservado;
 - separación explícita entre valores convencionales, hipótesis acústicas y decisiones de síntesis sin valor histórico.
 
 ### Motor formal

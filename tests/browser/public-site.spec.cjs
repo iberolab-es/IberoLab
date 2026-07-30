@@ -62,10 +62,83 @@ test('metodología identifica el símbolo y separa los modos sonoros', async ({ 
   await page.goto('/metodologia.html', { waitUntil: 'load' });
   await expect(page.getByText('No es un signo ibérico arqueológico.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Una fusión gráfica, no un signo antiguo.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Dos funciones sonoras, dos modos de recreación.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dos orígenes, dos modos de recreación.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Forma atestiguada' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Entrada moderna' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Voz fluida moderna' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Síntesis técnica' })).toBeVisible();
   await expect(page.getByText('No es una reconstrucción de cómo hablaban los íberos.')).toBeVisible();
+});
+
+test('el corpus vocaliza una forma atestiguada y mantiene visible la incertidumbre de ń', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__iberoAttested = { spoken: null, cancels: 0 };
+    class StubUtterance extends EventTarget {
+      constructor(text) {
+        super();
+        this.text = text;
+        this.lang = '';
+        this.rate = 1;
+        this.pitch = 1;
+        this.volume = 1;
+        this.voice = null;
+      }
+    }
+    const basqueVoice = {
+      name: 'Ainhoa Corpus Test',
+      lang: 'eu-ES',
+      localService: true,
+      default: true
+    };
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      configurable: true,
+      value: StubUtterance
+    });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        getVoices() {
+          return [basqueVoice];
+        },
+        cancel() {
+          window.__iberoAttested.cancels += 1;
+        },
+        speak(utterance) {
+          window.__iberoAttested.spoken = {
+            text: utterance.text,
+            lang: utterance.lang,
+            rate: utterance.rate,
+            pitch: utterance.pitch,
+            voice: utterance.voice?.name || ''
+          };
+        }
+      }
+    });
+  });
+
+  await page.goto('/#ib-ne-tarsaban-001', { waitUntil: 'load' });
+  const button = page.getByRole('button', { name: 'Escuchar forma atestiguada' });
+  await expect(page.locator('html')).toHaveAttribute(
+    'data-attested-voice-profile',
+    'iberolab-sign-reading-voice-v3'
+  );
+  await expect(button).toBeEnabled();
+  await expect(page.getByText('La secuencia escrita está documentada; su sonido no.')).toBeVisible();
+  await expect(page.getByText(/Para ń, la voz fluida usa n y la técnica una nasal prolongada/)).toBeVisible();
+  await button.click();
+  await expect(page.getByRole('button', { name: 'Detener recreación' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#attestedVoiceStatus')).toHaveText(
+    'Forma atestiguada · voz fluida (paleta moderna en euskera): tarrsaban.'
+  );
+  expect(await page.evaluate(() => window.__iberoAttested.spoken)).toEqual({
+    text: 'tarrsaban',
+    lang: 'eu-ES',
+    rate: 0.78,
+    pitch: 0.94,
+    voice: 'Ainhoa Corpus Test'
+  });
+  await page.getByRole('button', { name: 'Detener recreación' }).click();
+  await expect(page.locator('#attestedVoiceStatus')).toHaveText('Recreación detenida.');
 });
 
 test('la voz experimental sintetiza los tokens de forma local y determinista', async ({ page }) => {
@@ -81,6 +154,7 @@ test('la voz experimental sintetiza los tokens de forma local y determinista', a
     );
     return {
       profileId: first.profileId,
+      sourceClass: first.sourceClass,
       sampleRate: first.sampleRate,
       reading: first.reading,
       durationSeconds: first.durationSeconds,
@@ -94,6 +168,7 @@ test('la voz experimental sintetiza los tokens de forma local y determinista', a
     };
   });
   expect(summary.profileId).toBe('iberolab-sign-reading-voice-v1');
+  expect(summary.sourceClass).toBe('modern_spanish_adaptation');
   expect(summary.sampleRate).toBe(24000);
   expect(summary.reading).toBe('m · u · n · do');
   expect(summary.durationSeconds).toBeGreaterThan(0.7);
@@ -103,6 +178,46 @@ test('la voz experimental sintetiza los tokens de forma local y determinista', a
   expect(summary.deterministic).toBe(true);
   expect(summary.distinctSibilants).toBe(true);
   expect(summary.itemCount).toBe(4);
+});
+
+test('el perfil sonoro cubre los 38 signos del MVP y el token corpus ń', async ({ page }) => {
+  await page.goto('/convertir.html', { waitUntil: 'load' });
+  const summary = await page.evaluate(() => {
+    const plainN = window.IberoVoice.synthesize([{ tokens: ['n'] }]);
+    const markedN = window.IberoVoice.synthesize([{ tokens: ['ń'] }]);
+    const fluid = window.IberoVoice.buildFluidPlan(
+      [{ tokens: ['ta', 'ŕ', 'ś', 'a', 'ba', 'ń'] }],
+      {
+        language: 'eu-ES',
+        requestedLanguage: 'eu-ES',
+        palette: null,
+        voice: null
+      },
+      {
+        sourceClass: window.IberoVoice.SOURCE_ATTESTED
+      }
+    );
+    return {
+      profile: window.IberoVoice.PROFILE_ID,
+      tokenCount: window.IberoVoice.VALID_TOKENS.length,
+      markedReading: markedN.reading,
+      longerThanN: markedN.durationSeconds > plainN.durationSeconds,
+      distinctFromN:
+        window.IberoVoice.fingerprint(markedN) !==
+        window.IberoVoice.fingerprint(plainN),
+      fluidText: fluid.spokenText,
+      fluidSource: fluid.sourceClass
+    };
+  });
+  expect(summary).toEqual({
+    profile: 'iberolab-sign-reading-voice-v3',
+    tokenCount: 39,
+    markedReading: 'ń',
+    longerThanN: true,
+    distinctFromN: true,
+    fluidText: 'tarrsaban',
+    fluidSource: 'attested_iberian_form'
+  });
 });
 
 test('la voz fluida usa una paleta moderna declarada y una voz humana del dispositivo', async ({ page }) => {

@@ -3,7 +3,7 @@
 from __future__ import annotations
 import json,sys
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1];CORPUS=ROOT/"data"/"corpus"/"attested-forms.v1.json";MAPPING=ROOT/"data"/"signs"/"reference-standard-dual.v1.json";HTML=ROOT/"docs"/"index.html";SCRIPT=ROOT/"docs"/"corpus-renderer.js";LOCAL_STATUSES={"local_reference_svg_available","local_attested_variant_svg_available"}
+ROOT=Path(__file__).resolve().parents[1];CORPUS=ROOT/"data"/"corpus"/"attested-forms.v1.json";MAPPING=ROOT/"data"/"signs"/"reference-standard-dual.v1.json";HTML=ROOT/"docs"/"index.html";SCRIPT=ROOT/"docs"/"corpus-renderer.js";VOICE_UI=ROOT/"docs"/"corpus-voice.js";LOCAL_STATUSES={"local_reference_svg_available","local_attested_variant_svg_available"}
 def main():
     corpus=json.loads(CORPUS.read_text(encoding="utf-8"));mapping=json.loads(MAPPING.read_text(encoding="utf-8"));signs={i["token"]:i for i in mapping["signs"]};used={t for f in corpus["forms"] for t in f["grapheme_sequence"]}
     missing=sorted(used-signs.keys());extras=sorted(signs.keys()-used)
@@ -22,8 +22,8 @@ def main():
     expected={"graphic_status":"local_attested_variant_svg_available","paleographic_variant":"m1","traditional_transcription":"m","project_transcription":"ń","phonological_scope":"marked_nasal_not_labial","graphic_scope":"normalized_m1_variant_reference_not_facsimile","evidence":"https://doi.org/10.36707/palaeohispanica.v25i1.703"}
     for key,value in expected.items():
         if nasal.get(key)!=value: raise ValueError(f"ń mapping lacks documented {key}={value!r}")
-    html=HTML.read_text(encoding="utf-8");script=SCRIPT.read_text(encoding="utf-8");combined=html+"\n"+script
-    required=("renderForm","glyph-fallback","DOMContentLoaded","sourceLink","evidenceText","transcriptionNote","previousButton","nextButton","hashchange","rendererReady","No es una traducción a la lengua ibérica","Referencia normalizada","variant-m1-nasal.svg","variante m1","transcripción tradicional era m","no un facsímil",'src="corpus-renderer.js"')
+    html=HTML.read_text(encoding="utf-8");script=SCRIPT.read_text(encoding="utf-8");voice_ui=VOICE_UI.read_text(encoding="utf-8");combined=html+"\n"+script+"\n"+voice_ui
+    required=("renderForm","glyph-fallback","DOMContentLoaded","sourceLink","evidenceText","transcriptionNote","previousButton","nextButton","hashchange","rendererReady","No es una traducción a la lengua ibérica","Referencia normalizada","variant-m1-nasal.svg","variante m1","transcripción tradicional era m","no un facsímil",'src="corpus-renderer.js"',"Escuchar forma atestiguada","iberolab-sign-reading-voice-v3","La secuencia escrita está documentada; su sonido no","nasal prolongada","sourceClass: engine.SOURCE_ATTESTED")
     absent=[m for m in required if m not in combined]
     if absent: raise ValueError(f"renderer lacks safeguards: {absent}")
     if "Special:Redirect/file" in combined or "COMMONS_REDIRECT" in combined or "upload.wikimedia.org" in combined: raise ValueError("remote SVG dependency detected")

@@ -15,6 +15,11 @@ Cuando la lectura técnica se convierta en audio, se añadirá una quinta capa i
 
 5. **Recreación acústica:** síntesis moderna y versionada de los valores convencionales de los tokens, sin atribuir al resultado prosodia ni pronunciación histórica.
 
+La recreación acústica admite dos orígenes, que deben conservar etiquetas distintas:
+
+- **forma ibérica atestiguada:** la secuencia escrita procede del corpus documentado, pero su sonorización es experimental;
+- **entrada española moderna:** la secuencia procede de la adaptación del demostrador y no constituye vocabulario ibérico ni traducción.
+
 ## 2. Clasificación de resultados
 
 Cada resultado deberá identificarse como una de estas categorías:
@@ -106,7 +111,7 @@ Una elección del usuario no convierte una hipótesis en lectura documentada.
 
 ## 7.1. Recreación sonora
 
-La recreación sonora recibe como entrada la secuencia de tokens ya adaptada, no la palabra española original. Debe funcionar sin transmitir la entrada a IberoLab y declarar por separado:
+La recreación sonora recibe como entrada una secuencia inspeccionable de tokens: una lectura atestiguada del corpus o la secuencia ya adaptada por el demostrador, nunca una traducción inferida. Debe funcionar sin transmitir la entrada a IberoLab y declarar por separado:
 
 - valores convencionales con consenso relativo;
 - hipótesis fonéticas discutibles;
@@ -115,7 +120,9 @@ La recreación sonora recibe como entrada la secuencia de tokens ya adaptada, no
 
 El perfil vigente ofrece una voz fluida moderna, dependiente de la voz instalada en el dispositivo, y conserva un modo técnico determinista. Si se utiliza la fonética o la ortografía de una lengua moderna como paleta articulatoria, debe explicarse que no supone parentesco, descendencia ni continuidad histórica.
 
-La interfaz utilizará «recreación sonora experimental», «voz fluida moderna» o «lectura sintética de los signos». No utilizará «pronunciación auténtica», «audio en ibérico», «acento ibérico histórico» ni formulaciones equivalentes. La configuración se documenta en [`EXPERIMENTAL_VOICE.md`](EXPERIMENTAL_VOICE.md), `data/engine/experimental-voice-profile.v2.json` y el perfil técnico preservado `data/engine/experimental-voice-profile.v1.json`.
+La variante `m1`, transcrita por el proyecto como `ń`, se conserva como token propio. La voz fluida la aproxima mediante `n` y la síntesis técnica mediante una nasal prolongada; son decisiones audibles de baja confianza y no valores históricos establecidos.
+
+La interfaz utilizará «recreación sonora experimental», «voz fluida moderna» o «lectura sintética de los signos». No utilizará «pronunciación auténtica», «audio en ibérico», «acento ibérico histórico» ni formulaciones equivalentes. La configuración se documenta en [`EXPERIMENTAL_VOICE.md`](EXPERIMENTAL_VOICE.md), `data/engine/experimental-voice-profile.v3.json` y los perfiles preservados `data/engine/experimental-voice-profile.v2.json` y `data/engine/experimental-voice-profile.v1.json`.
 
 ## 8. Validación mínima
 
