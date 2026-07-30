@@ -110,8 +110,22 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
     window.__iberoAudio = {
       copiedSamples: 0,
       sampleRate: null,
+      resumes: 0,
       starts: 0,
-      stops: 0
+      stops: 0,
+      sessionTypes: [],
+      events: []
+    };
+    const audioSession = {
+      _type: 'auto',
+      get type() {
+        return this._type;
+      },
+      set type(value) {
+        this._type = value;
+        window.__iberoAudio.sessionTypes.push(value);
+        window.__iberoAudio.events.push(`session:${value}`);
+      }
     };
     class StubUtterance { constructor(text) { this.text = text; this.lang = ''; this.rate = 1; } }
     class StubAudioBuffer {
@@ -123,6 +137,7 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
       copyToChannel(samples) {
         window.__iberoAudio.copiedSamples = samples.length;
         window.__iberoAudio.sampleRate = this.sampleRate;
+        window.__iberoAudio.events.push('samples');
       }
     }
     class StubAudioSource extends EventTarget {
@@ -130,17 +145,27 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
 
       start() {
         window.__iberoAudio.starts += 1;
+        window.__iberoAudio.events.push('start');
       }
 
       stop() {
         window.__iberoAudio.stops += 1;
+        window.__iberoAudio.events.push('stop');
         this.dispatchEvent(new Event('ended'));
       }
     }
     class StubAudioContext {
       constructor() {
-        this.state = 'running';
+        this.state = 'suspended';
         this.destination = {};
+        window.__iberoAudio.events.push('context');
+      }
+
+      resume() {
+        this.state = 'running';
+        window.__iberoAudio.resumes += 1;
+        window.__iberoAudio.events.push('resume');
+        return Promise.resolve();
       }
 
       createBuffer(_channels, length, sampleRate) {
@@ -151,6 +176,7 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
         return new StubAudioSource();
       }
     }
+    Object.defineProperty(window.navigator, 'audioSession', { configurable: true, value: audioSession });
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { configurable: true, value: StubUtterance });
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { cancel() {}, speak(utterance) { window.__iberoSpoken = { text: utterance.text, lang: utterance.lang, rate: utterance.rate }; } } });
     Object.defineProperty(window, 'AudioContext', { configurable: true, value: StubAudioContext });
@@ -169,13 +195,26 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
   expect(await page.evaluate(() => window.__iberoAudio)).toEqual({
     copiedSamples: 45168,
     sampleRate: 24000,
+    resumes: 1,
     starts: 1,
-    stops: 0
+    stops: 0,
+    sessionTypes: ['playback'],
+    events: ['session:playback', 'context', 'resume', 'samples', 'start']
   });
   await page.getByRole('button', { name: 'Detener aproximación' }).click();
   await expect(recreation).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('#actionStatus')).toHaveText('Recreación detenida.');
   expect(await page.evaluate(() => window.__iberoAudio.stops)).toBe(1);
+  expect(await page.evaluate(() => window.__iberoAudio.sessionTypes)).toEqual(['playback', 'auto']);
+  expect(await page.evaluate(() => window.__iberoAudio.events)).toEqual([
+    'session:playback',
+    'context',
+    'resume',
+    'samples',
+    'start',
+    'stop',
+    'session:auto'
+  ]);
 
   await expect(page.getByRole('button', { name: 'Escuchar lectura aproximada' })).toHaveCount(0);
   await expect(page.getByText(/No reconstruye cómo hablaban los íberos/)).toBeVisible();

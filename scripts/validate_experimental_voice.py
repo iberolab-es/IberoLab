@@ -122,6 +122,8 @@ def validate() -> tuple[int, int]:
             "fingerprint",
             "AudioContext",
             "webkitAudioContext",
+            'PLAYBACK_SESSION_TYPE = "playback"',
+            "root.navigator.audioSession",
             "renderSibilant",
             "renderRhotic",
             "root.AudioContext",

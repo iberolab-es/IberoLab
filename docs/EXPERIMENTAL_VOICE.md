@@ -41,6 +41,12 @@ El tono, el ritmo, las duraciones, las frecuencias formánticas y la ligera caí
 
 La síntesis no requiere red, cuenta, clave de API ni archivos de voz externos. Para la misma secuencia de tokens y la misma versión utiliza siempre el mismo plan y la misma semilla. Dentro de un mismo motor JavaScript genera las mismas muestras; no se promete identidad binaria absoluta entre navegadores distintos, cuyas funciones matemáticas pueden introducir diferencias numéricas mínimas.
 
+## Reproducción en iPhone y iPad
+
+En WebKit, Web Audio utiliza de forma predeterminada una sesión ambiental que puede quedar silenciada por el modo silencio del dispositivo aunque el contexto indique que está reproduciendo ([WebKit, incidencia 237322](https://bugs.webkit.org/show_bug.cgi?id=237322)). IberoLab solicita, cuando el navegador ofrece la API correspondiente, una sesión de tipo `playback` antes de abrir o reanudar el contexto de audio. La sesión anterior se restaura al terminar o detener la recreación.
+
+La generación de muestras continúa siendo local y no cambia: esta medida solo selecciona el canal de reproducción apropiado. En navegadores sin Audio Session API se conserva el comportamiento normal de Web Audio.
+
 ## Fuentes de referencia
 
 - Noemí Moncunill Martí y Javier Velaza Frías, «Iberian», *Palaeohispanica* 20 (2020), pp. 591–629. DOI: [10.36707/palaeohispanica.v0i20.370](https://doi.org/10.36707/palaeohispanica.v0i20.370).
