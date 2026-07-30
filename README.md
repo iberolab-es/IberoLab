@@ -45,7 +45,9 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 - bloqueo explícito ante símbolos no admitidos;
 - prohibición de salidas vacías y sustituciones silenciosas;
 - audio opcional para comparar la entrada española mediante la voz del navegador;
-- recreación sonora local y determinista de la lectura técnica mediante el perfil versionado `iberolab-sign-reading-voice-v1`;
+- voz fluida moderna mediante una ortografía puente y la voz disponible en el dispositivo, con preferencia por el euskera explicada como ajuste articulatorio y no como parentesco;
+- síntesis técnica local y determinista preservada mediante `iberolab-sign-reading-voice-v1`;
+- perfil híbrido vigente `iberolab-sign-reading-voice-v2`;
 - separación explícita entre valores convencionales, hipótesis acústicas y decisiones de síntesis sin valor histórico.
 
 ### Motor formal

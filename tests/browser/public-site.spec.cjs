@@ -58,12 +58,13 @@ test('historia mantiene la distinción entre lectura y traducción y prepara You
   await expect(page.getByText('Una sección preparada para crecer con YouTube.')).toBeVisible();
 });
 
-test('metodología identifica el símbolo y separa los dos alcances sonoros', async ({ page }) => {
+test('metodología identifica el símbolo y separa los modos sonoros', async ({ page }) => {
   await page.goto('/metodologia.html', { waitUntil: 'load' });
   await expect(page.getByText('No es un signo ibérico arqueológico.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Una fusión gráfica, no un signo antiguo.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Dos funciones sonoras, dos alcances.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Recreación experimental' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dos funciones sonoras, dos modos de recreación.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Voz fluida moderna' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Síntesis técnica' })).toBeVisible();
   await expect(page.getByText('No es una reconstrucción de cómo hablaban los íberos.')).toBeVisible();
 });
 
@@ -102,6 +103,80 @@ test('la voz experimental sintetiza los tokens de forma local y determinista', a
   expect(summary.deterministic).toBe(true);
   expect(summary.distinctSibilants).toBe(true);
   expect(summary.itemCount).toBe(4);
+});
+
+test('la voz fluida usa una paleta moderna declarada y una voz humana del dispositivo', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__iberoFluid = {
+      cancels: 0,
+      spoken: null
+    };
+    let activeUtterance = null;
+    class StubUtterance extends EventTarget {
+      constructor(text) {
+        super();
+        this.text = text;
+        this.lang = '';
+        this.rate = 1;
+        this.pitch = 1;
+        this.volume = 1;
+        this.voice = null;
+      }
+    }
+    const basqueVoice = {
+      name: 'Ainhoa Test',
+      lang: 'eu-ES',
+      localService: true,
+      default: true
+    };
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      configurable: true,
+      value: StubUtterance
+    });
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        getVoices() {
+          return [basqueVoice];
+        },
+        cancel() {
+          window.__iberoFluid.cancels += 1;
+          if (!activeUtterance) return;
+          const utterance = activeUtterance;
+          activeUtterance = null;
+          utterance.dispatchEvent(new Event('end'));
+        },
+        speak(utterance) {
+          activeUtterance = utterance;
+          window.__iberoFluid.spoken = {
+            text: utterance.text,
+            lang: utterance.lang,
+            rate: utterance.rate,
+            pitch: utterance.pitch,
+            voice: utterance.voice?.name || ''
+          };
+        }
+      }
+    });
+  });
+  await page.goto('/convertir.html', { waitUntil: 'load' });
+  await expect(page.locator('#recreationMode')).toHaveValue('fluid');
+  await expect(page.locator('#voiceModeDescription')).toContainText('Prefiere una voz moderna en euskera');
+  await page.locator('#sourceInput').fill('casa');
+  await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
+  await page.getByRole('button', { name: 'Escuchar aproximación sonora' }).click();
+  await expect(page.getByRole('button', { name: 'Detener aproximación' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#actionStatus')).toHaveText('Voz fluida (paleta moderna en euskera): kaza.');
+  expect(await page.evaluate(() => window.__iberoFluid.spoken)).toEqual({
+    text: 'kaza',
+    lang: 'eu-ES',
+    rate: 0.78,
+    pitch: 0.94,
+    voice: 'Ainhoa Test'
+  });
+  await page.getByRole('button', { name: 'Detener aproximación' }).click();
+  await expect(page.locator('#actionStatus')).toHaveText('Recreación detenida.');
+  expect(await page.evaluate(() => window.__iberoFluid.cancels)).toBe(2);
 });
 
 test('la interfaz compara español moderno y recreación de signos sin confundirlos', async ({ page }) => {
@@ -187,11 +262,13 @@ test('la interfaz compara español moderno y recreación de signos sin confundir
   await page.getByRole('button', { name: 'Escuchar entrada en español' }).click();
   expect(await page.evaluate(() => window.__iberoSpoken)).toEqual({ text: 'mundo mundo', lang: 'es-ES', rate: 0.9 });
 
+  await page.locator('#recreationMode').selectOption('technical');
+  await expect(page.locator('#voiceModeDescription')).toContainText('Técnica reproducible');
   const recreation = page.getByRole('button', { name: 'Escuchar aproximación sonora' });
   await expect(recreation).toBeEnabled();
   await recreation.click();
   await expect(page.getByRole('button', { name: 'Detener aproximación' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#actionStatus')).toHaveText('Reproduciendo: m · u · n · do / m · u · n · do.');
+  await expect(page.locator('#actionStatus')).toHaveText('Síntesis técnica: m · u · n · do / m · u · n · do.');
   expect(await page.evaluate(() => window.__iberoAudio)).toEqual({
     copiedSamples: 45168,
     sampleRate: 24000,

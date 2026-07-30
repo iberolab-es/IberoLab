@@ -106,14 +106,16 @@ Una elección del usuario no convierte una hipótesis en lectura documentada.
 
 ## 7.1. Recreación sonora
 
-La recreación sonora recibe como entrada la secuencia de tokens ya adaptada, no la palabra española original. Debe ser determinista, funcionar localmente y declarar por separado:
+La recreación sonora recibe como entrada la secuencia de tokens ya adaptada, no la palabra española original. Debe funcionar sin transmitir la entrada a IberoLab y declarar por separado:
 
 - valores convencionales con consenso relativo;
 - hipótesis fonéticas discutibles;
 - convenciones propias del proyecto;
 - decisiones puramente acústicas, como timbre, tono, duración, pausas y contorno melódico.
 
-La interfaz utilizará «recreación sonora experimental» o «lectura sintética de los signos». No utilizará «pronunciación auténtica», «audio en ibérico» ni formulaciones equivalentes. La configuración inicial se documenta en [`EXPERIMENTAL_VOICE.md`](EXPERIMENTAL_VOICE.md) y `data/engine/experimental-voice-profile.v1.json`.
+El perfil vigente ofrece una voz fluida moderna, dependiente de la voz instalada en el dispositivo, y conserva un modo técnico determinista. Si se utiliza la fonética o la ortografía de una lengua moderna como paleta articulatoria, debe explicarse que no supone parentesco, descendencia ni continuidad histórica.
+
+La interfaz utilizará «recreación sonora experimental», «voz fluida moderna» o «lectura sintética de los signos». No utilizará «pronunciación auténtica», «audio en ibérico», «acento ibérico histórico» ni formulaciones equivalentes. La configuración se documenta en [`EXPERIMENTAL_VOICE.md`](EXPERIMENTAL_VOICE.md), `data/engine/experimental-voice-profile.v2.json` y el perfil técnico preservado `data/engine/experimental-voice-profile.v1.json`.
 
 ## 8. Validación mínima
 

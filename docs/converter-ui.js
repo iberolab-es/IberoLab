@@ -10,6 +10,8 @@
   const statusBadge = document.getElementById("statusBadge");
   const noticeList = document.getElementById("noticeList");
   const speakButton = document.getElementById("speakButton");
+  const recreationMode = document.getElementById("recreationMode");
+  const voiceModeDescription = document.getElementById("voiceModeDescription");
   const recreationButton = document.getElementById("recreationButton");
   const copyButton = document.getElementById("copyButton");
   const shareButton = document.getElementById("shareButton");
@@ -21,6 +23,10 @@
   const HISTORY_KEY = "iberolab:mvp:recent:v1";
   const HISTORY_LIMIT = 5;
   const RECREATION_LABEL = "Escuchar aproximación sonora";
+  const VOICE_MODE_COPY = Object.freeze({
+    fluid: "<strong>Fluida moderna:</strong> articula la lectura como palabras completas con una voz actual del dispositivo. Prefiere una voz moderna en euskera por su ajuste fonético, sin afirmar parentesco con la lengua ibérica.",
+    technical: "<strong>Técnica reproducible:</strong> genera la señal de 24 kHz signo a signo mediante el sintetizador de formantes de IberoLab. Es más mecánica, pero permite comparar exactamente el mismo experimento."
+  });
   let currentResult = null;
   let activeRecreation = null;
 
@@ -127,6 +133,25 @@
     recreationButton.setAttribute("aria-pressed", "false");
   }
 
+  function selectedVoiceMode() {
+    return recreationMode?.value === "technical" ? "technical" : "fluid";
+  }
+
+  function refreshVoiceMode() {
+    let mode = selectedVoiceMode();
+    if (
+      window.IberoVoice &&
+      !window.IberoVoice.isModeSupported(mode) &&
+      window.IberoVoice.isModeSupported("technical")
+    ) {
+      recreationMode.value = "technical";
+      mode = "technical";
+    }
+    if (voiceModeDescription) voiceModeDescription.innerHTML = VOICE_MODE_COPY[mode];
+    if (!recreationButton || !currentResult || currentResult.executionStatus !== "success") return;
+    recreationButton.disabled = !window.IberoVoice?.isModeSupported(mode);
+  }
+
   function stopRecreation({ announce = false } = {}) {
     if (activeRecreation) {
       activeRecreation.stop();
@@ -191,7 +216,7 @@
       ? "Adaptación directa"
       : "Adaptación con aproximaciones";
     speakButton.disabled = !("speechSynthesis" in window);
-    recreationButton.disabled = !window.IberoVoice?.isPlaybackSupported();
+    recreationButton.disabled = !window.IberoVoice?.isModeSupported(selectedVoiceMode());
     copyButton.disabled = false;
     shareButton.disabled = false;
     actionStatus.textContent = "";
@@ -249,6 +274,12 @@
     }
   });
 
+  recreationMode.addEventListener("change", () => {
+    stopRecreation();
+    refreshVoiceMode();
+    actionStatus.textContent = "";
+  });
+
   speakButton.addEventListener("click", () => {
     if (
       !currentResult ||
@@ -271,20 +302,25 @@
     if (
       !currentResult ||
       currentResult.executionStatus !== "success" ||
-      !window.IberoVoice?.isPlaybackSupported()
+      !window.IberoVoice?.isModeSupported(selectedVoiceMode())
     ) {
       actionStatus.textContent = "Este navegador no permite iniciar la recreación sonora.";
       return;
     }
 
-    if ("speechSynthesis" in window) speechSynthesis.cancel();
     const resultAtStart = currentResult;
+    const modeAtStart = selectedVoiceMode();
+    if (modeAtStart === "technical" && "speechSynthesis" in window) {
+      speechSynthesis.cancel();
+    }
     recreationButton.disabled = true;
-    actionStatus.textContent = "Preparando la recreación sonora local…";
+    actionStatus.textContent = modeAtStart === "fluid"
+      ? "Preparando la voz fluida del dispositivo…"
+      : "Preparando la síntesis técnica local…";
 
     try {
-      const playback = await window.IberoVoice.play(resultAtStart.words);
-      if (currentResult !== resultAtStart) {
+      const playback = await window.IberoVoice.play(resultAtStart.words, { mode: modeAtStart });
+      if (currentResult !== resultAtStart || selectedVoiceMode() !== modeAtStart) {
         playback.stop();
         return;
       }
@@ -292,7 +328,9 @@
       recreationButton.disabled = false;
       recreationButton.textContent = "Detener aproximación";
       recreationButton.setAttribute("aria-pressed", "true");
-      actionStatus.textContent = `Reproduciendo: ${playback.rendered.reading}.`;
+      actionStatus.textContent = playback.mode === "fluid"
+        ? `Voz fluida (${playback.rendered.paletteLabel}): ${playback.rendered.spokenText}.`
+        : `Síntesis técnica: ${playback.rendered.reading}.`;
       playback.ended.then(() => {
         if (activeRecreation !== playback) return;
         activeRecreation = null;
@@ -353,6 +391,7 @@
   addEventListener("popstate", loadFromUrl);
   addEventListener("pagehide", () => stopRecreation());
   renderHistory();
+  refreshVoiceMode();
   loadFromUrl();
   document.documentElement.dataset.mvpConverterReady = "true";
   document.documentElement.dataset.experimentalVoiceProfile = window.IberoVoice?.PROFILE_ID || "unavailable";

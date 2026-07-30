@@ -40,8 +40,9 @@
     .panel{padding:clamp(18px,4vw,34px);box-shadow:0 22px 70px rgba(0,0,0,.28)}
     form{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
     label{display:block;font-weight:850;margin-bottom:8px}
-    input,button{min-height:54px;border-radius:14px;border:1px solid var(--line);font:inherit}
+    input,button,select{min-height:54px;border-radius:14px;border:1px solid var(--line);font:inherit}
     input{width:100%;background:var(--panel2);color:var(--text);padding:0 15px;font-size:1.05rem}
+    select{width:100%;background:var(--panel2);color:var(--text);padding:0 42px 0 14px}
     button{padding:0 20px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer}
     button.secondary{min-height:42px;background:var(--panel2);color:var(--text);padding:0 14px}
     button.recreation{border-color:rgba(244,200,106,.62);background:rgba(244,200,106,.08);color:var(--warn)}
@@ -84,6 +85,10 @@
     .technical-card h3{margin:0 0 7px;color:var(--accent);font-size:.78rem;text-transform:uppercase}
     .technical-card p{margin:0;color:var(--muted)}
     .technical-card code{color:var(--text)}
+    .voice-lab{margin-top:14px;border:1px solid rgba(244,200,106,.38);border-radius:16px;background:rgba(244,200,106,.05);padding:14px;display:grid;grid-template-columns:minmax(210px,.78fr) minmax(280px,1.22fr);gap:14px;align-items:end}
+    .voice-lab label{margin:0 0 7px;color:var(--warn);font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+    .voice-lab p{margin:0;color:var(--muted);line-height:1.55;font-size:.9rem}
+    .voice-lab strong{color:var(--text)}
     .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
     .action-status{min-height:1.35em;margin-top:8px;color:var(--muted);font-size:.85rem}
     .explanation{margin-top:20px;display:grid;gap:10px}
@@ -101,6 +106,7 @@
       form{grid-template-columns:1fr}
       form>button{width:100%}
       .technical-grid{grid-template-columns:1fr}
+      .voice-lab{grid-template-columns:1fr}
       #glyphOutput{padding:14px}
       .sign-card{width:70px;min-height:112px;grid-template-rows:68px auto}
       .actions button{flex:1 1 100%}
@@ -180,6 +186,16 @@
             <p><code id="technicalReading">—</code></p>
           </article>
         </div>
+        <div class="voice-lab">
+          <div>
+            <label for="recreationMode">Sonoridad experimental</label>
+            <select id="recreationMode" aria-describedby="voiceModeDescription">
+              <option value="fluid" selected>Fluida moderna · voz natural</option>
+              <option value="technical">Técnica · síntesis reproducible</option>
+            </select>
+          </div>
+          <p id="voiceModeDescription"><strong>Fluida moderna:</strong> articula la lectura como palabras completas con una voz actual del dispositivo. Prefiere una voz moderna en euskera por su ajuste fonético, sin afirmar parentesco con la lengua ibérica.</p>
+        </div>
         <div class="actions">
           <button id="speakButton" class="secondary" type="button">Escuchar entrada en español</button>
           <button id="recreationButton" class="secondary recreation" type="button" aria-pressed="false">Escuchar aproximación sonora</button>
@@ -192,12 +208,12 @@
           <div id="noticeList"></div>
         </div>
         <div class="boundary">
-          <strong>Dos audios diferentes:</strong>
-          la entrada en español utiliza la voz moderna del dispositivo. La aproximación sonora experimental sintetiza localmente la lectura exacta de los signos mediante el perfil reproducible <code>iberolab-sign-reading-voice-v1</code>.
+          <strong>Dos funciones y dos modos de recreación:</strong>
+          la entrada en español reproduce el texto original. La aproximación sonora vocaliza la lectura de los signos mediante el perfil <code>iberolab-sign-reading-voice-v2</code>: ofrece una voz fluida moderna y conserva la síntesis técnica reproducible de la versión anterior.
           <strong>No reconstruye cómo hablaban los íberos.</strong>
           <details class="voice-details">
             <summary>Qué es seguro y qué es hipotético</summary>
-            <p>Las cinco vocales y las series de oclusivas parten de valores convencionales aceptados con distinto grado de seguridad. La diferencia sonora entre <code>s/ś</code> adopta una hipótesis laminal–apical y <code>r/ŕ</code> sigue una convención simple–múltiple propia del proyecto. El timbre, el tono, el ritmo y las pausas son decisiones modernas del sintetizador.</p>
+            <p>Las cinco vocales y las series de oclusivas parten de valores convencionales aceptados con distinto grado de seguridad. La diferencia sonora entre <code>s/ś</code> adopta una hipótesis laminal–apical y <code>r/ŕ</code> sigue una convención simple–múltiple propia del proyecto. El euskera se usa únicamente como paleta articulatoria moderna por poder representar esos contrastes; no se presenta como descendiente ni como prueba de parentesco. El timbre, el acento, el ritmo y las pausas son decisiones actuales.</p>
             <p><a href="https://github.com/iberolab-es/IberoLab/blob/main/docs/EXPERIMENTAL_VOICE.md">Metodología sonora y fuentes</a>.</p>
           </details>
         </div>
