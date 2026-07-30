@@ -11,6 +11,10 @@ IberoLab debe mantener separadas cuatro capas para evitar confundir operaciones 
 
 La salida final deberá permitir inspeccionar las capas intermedias.
 
+Cuando la lectura técnica se convierta en audio, se añadirá una quinta capa independiente:
+
+5. **Recreación acústica:** síntesis moderna y versionada de los valores convencionales de los tokens, sin atribuir al resultado prosodia ni pronunciación histórica.
+
 ## 2. Clasificación de resultados
 
 Cada resultado deberá identificarse como una de estas categorías:
@@ -99,6 +103,17 @@ Cuando una secuencia moderna admita varias adaptaciones plausibles, el motor no 
 - permitir al usuario escoger una variante.
 
 Una elección del usuario no convierte una hipótesis en lectura documentada.
+
+## 7.1. Recreación sonora
+
+La recreación sonora recibe como entrada la secuencia de tokens ya adaptada, no la palabra española original. Debe ser determinista, funcionar localmente y declarar por separado:
+
+- valores convencionales con consenso relativo;
+- hipótesis fonéticas discutibles;
+- convenciones propias del proyecto;
+- decisiones puramente acústicas, como timbre, tono, duración, pausas y contorno melódico.
+
+La interfaz utilizará «recreación sonora experimental» o «lectura sintética de los signos». No utilizará «pronunciación auténtica», «audio en ibérico» ni formulaciones equivalentes. La configuración inicial se documenta en [`EXPERIMENTAL_VOICE.md`](EXPERIMENTAL_VOICE.md) y `data/engine/experimental-voice-profile.v1.json`.
 
 ## 8. Validación mínima
 

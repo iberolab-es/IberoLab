@@ -53,6 +53,9 @@ jobs:
       - name: Validate practical short-input MVP converter
         run: python scripts/validate_mvp_converter.py
 
+      - name: Validate experimental sign-reading voice
+        run: python scripts/validate_experimental_voice.py
+
       - name: Validate public identity and academic presence
         run: python scripts/validate_public_presence.py
 

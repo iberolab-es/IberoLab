@@ -58,15 +58,53 @@ test('historia mantiene la distinción entre lectura y traducción y prepara You
   await expect(page.getByText('Una sección preparada para crecer con YouTube.')).toBeVisible();
 });
 
-test('metodología identifica el símbolo como contemporáneo y limita el audio al español moderno', async ({ page }) => {
+test('metodología identifica el símbolo y separa los dos alcances sonoros', async ({ page }) => {
   await page.goto('/metodologia.html', { waitUntil: 'load' });
   await expect(page.getByText('No es un signo ibérico arqueológico.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Una fusión gráfica, no un signo antiguo.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Audio limitado al español moderno.' })).toBeVisible();
-  await expect(page.getByText('No vocaliza una pronunciación ibérica ni una reconstrucción histórica.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dos funciones sonoras, dos alcances.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Recreación experimental' })).toBeVisible();
+  await expect(page.getByText('No es una reconstrucción de cómo hablaban los íberos.')).toBeVisible();
 });
 
-test('el único audio reproduce la entrada española y no ofrece una falsa lectura ibérica', async ({ page }) => {
+test('la voz experimental sintetiza los tokens de forma local y determinista', async ({ page }) => {
+  await page.goto('/convertir.html', { waitUntil: 'load' });
+  const summary = await page.evaluate(() => {
+    const result = window.IberoMvp.convert('mundo');
+    const first = window.IberoVoice.synthesize(result.words);
+    const second = window.IberoVoice.synthesize(result.words);
+    const plainS = window.IberoVoice.synthesize([{ tokens: ['s'] }]);
+    const markedS = window.IberoVoice.synthesize([{ tokens: ['ś'] }]);
+    const rms = Math.sqrt(
+      first.samples.reduce((sum, value) => sum + value * value, 0) / first.samples.length
+    );
+    return {
+      profileId: first.profileId,
+      sampleRate: first.sampleRate,
+      reading: first.reading,
+      durationSeconds: first.durationSeconds,
+      peak: first.peak,
+      rms,
+      deterministic:
+        window.IberoVoice.fingerprint(first) === window.IberoVoice.fingerprint(second),
+      distinctSibilants:
+        window.IberoVoice.fingerprint(plainS) !== window.IberoVoice.fingerprint(markedS),
+      itemCount: first.items.length
+    };
+  });
+  expect(summary.profileId).toBe('iberolab-sign-reading-voice-v1');
+  expect(summary.sampleRate).toBe(24000);
+  expect(summary.reading).toBe('m · u · n · do');
+  expect(summary.durationSeconds).toBeGreaterThan(0.7);
+  expect(summary.durationSeconds).toBeLessThan(1.2);
+  expect(summary.peak).toBeGreaterThan(0.7);
+  expect(summary.rms).toBeGreaterThan(0.03);
+  expect(summary.deterministic).toBe(true);
+  expect(summary.distinctSibilants).toBe(true);
+  expect(summary.itemCount).toBe(4);
+});
+
+test('la interfaz compara español moderno y recreación de signos sin confundirlos', async ({ page }) => {
   await page.addInitScript(() => {
     window.__iberoSpoken = null;
     class StubUtterance { constructor(text) { this.text = text; this.lang = ''; this.rate = 1; } }
@@ -74,10 +112,20 @@ test('el único audio reproduce la entrada española y no ofrece una falsa lectu
     Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { cancel() {}, speak(utterance) { window.__iberoSpoken = { text: utterance.text, lang: utterance.lang, rate: utterance.rate }; } } });
   });
   await page.goto('/convertir.html', { waitUntil: 'load' });
-  await page.locator('#sourceInput').fill('mundo');
+  await page.locator('#sourceInput').fill('mundo mundo');
   await page.getByRole('button', { name: 'Adaptar a signos ibéricos' }).click();
   await page.getByRole('button', { name: 'Escuchar entrada en español' }).click();
-  expect(await page.evaluate(() => window.__iberoSpoken)).toEqual({ text: 'mundo', lang: 'es-ES', rate: 0.9 });
+  expect(await page.evaluate(() => window.__iberoSpoken)).toEqual({ text: 'mundo mundo', lang: 'es-ES', rate: 0.9 });
+
+  const recreation = page.getByRole('button', { name: 'Escuchar aproximación sonora' });
+  await expect(recreation).toBeEnabled();
+  await recreation.click();
+  await expect(page.getByRole('button', { name: 'Detener aproximación' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#actionStatus')).toHaveText('Reproduciendo: m · u · n · do / m · u · n · do.');
+  await page.getByRole('button', { name: 'Detener aproximación' }).click();
+  await expect(recreation).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#actionStatus')).toHaveText('Recreación detenida.');
+
   await expect(page.getByRole('button', { name: 'Escuchar lectura aproximada' })).toHaveCount(0);
-  await expect(page.getByText(/No representa ni reconstruye la pronunciación de la lengua ibérica/)).toBeVisible();
+  await expect(page.getByText(/No reconstruye cómo hablaban los íberos/)).toBeVisible();
 });
