@@ -57,6 +57,7 @@ Objetivo limitado: nombres, palabras y frases breves con representación gráfic
 - [x] Añadir ejemplos contractuales para `amor`, `familia` y `te quiero`.
 - [x] Crear una interfaz responsive separada del corpus atestiguado.
 - [x] Añadir audio opcional exclusivamente para la entrada española.
+- [x] Añadir una recreación sonora local de los tokens con perfil versionado, hipótesis visibles y prohibición expresa de presentarla como pronunciación histórica.
 - [x] Añadir regresión automática para resultados directos, aproximados y bloqueados.
 - [ ] Repetir manualmente las pruebas del demostrador en Safari/iOS, Chrome, Firefox y Edge.
 - [ ] Revisar con usuarios reales si las explicaciones son comprensibles y suficientemente breves.

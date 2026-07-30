@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "profile_id": "iberolab-sign-reading-voice-v1",
+  "status": "public_experimental_recreation",
+  "classification": "synthetic_reading_of_conventional_sign_values",
+  "historical_pronunciation_reconstruction": false,
+  "translation_claim": false,
+  "engine": {
+    "type": "deterministic_client_side_formant_synthesizer",
+    "sample_rate_hz": 24000,
+    "network_required": false,
+    "external_voice_required": false,
+    "input": "adapted_sign_tokens",
+    "output": "mono_float32_audio",
+    "same_input_same_plan": true,
+    "same_input_same_samples_within_runtime_version": true,
+    "cross_engine_bit_identity_guaranteed": false
+  },
+  "scope": {
+    "purpose": "Make the conventional reading values of the signs audible as an explicitly modern, synthetic and inspectable experiment.",
+    "may_be_labelled": [
+      "aproximación sonora experimental",
+      "recreación sonora experimental",
+      "lectura sintética de los signos"
+    ],
+    "must_not_be_labelled": [
+      "pronunciación auténtica ibérica",
+      "reconstrucción de cómo hablaban los íberos",
+      "audio en lengua ibérica"
+    ]
+  },
+  "evidence_based_conventions": [
+    {
+      "id": "five_vowels",
+      "tokens": ["a", "e", "i", "o", "u"],
+      "synthetic_values": ["a", "e", "i", "o", "u"],
+      "confidence": "comparatively_high",
+      "note": "The five-vowel interpretation is broadly accepted; the exact ancient timbre remains unrecoverable."
+    },
+    {
+      "id": "stop_series",
+      "tokens": [
+        "ba", "be", "bi", "bo", "bu",
+        "da", "de", "di", "do", "du",
+        "ta", "te", "ti", "to", "tu",
+        "ga", "ge", "gi", "go", "gu",
+        "ka", "ke", "ki", "ko", "ku"
+      ],
+      "synthetic_values": ["bV", "dV", "tV", "gV", "kV"],
+      "confidence": "medium",
+      "note": "Dental and velar dualities are voiced/voiceless in the profile. The historical contrast may instead have involved fortis/lenis features. The single labial series is rendered with a voiced onset."
+    },
+    {
+      "id": "continuous_consonants",
+      "tokens": ["l", "m", "n"],
+      "synthetic_values": ["l", "m", "n"],
+      "confidence": "medium",
+      "note": "These are conventional readable values, not measurements of ancient articulation."
+    }
+  ],
+  "explicit_hypotheses": [
+    {
+      "id": "two_sibilants",
+      "tokens": ["s", "ś"],
+      "synthetic_values_ipa": ["s̻", "s̺"],
+      "confidence": "low_hypothesis",
+      "note": "The profile adopts a laminal versus apical/retracted contrast to make the two signs audibly distinct. Their historical phonetic values remain controversial."
+    },
+    {
+      "id": "two_rhotics",
+      "tokens": ["r", "ŕ"],
+      "synthetic_values_ipa": ["ɾ", "r"],
+      "confidence": "project_convention",
+      "note": "Tap versus trill is retained only as IberoLab's audible project convention. The historical opposition between the two Iberian signs is unknown."
+    },
+    {
+      "id": "marked_nasal",
+      "tokens": ["ḿ"],
+      "synthetic_values_ipa": ["m̩"],
+      "confidence": "low_hypothesis",
+      "note": "A syllabic nasal colour is used only so the token can be heard; scholarship also considers analyses involving a nasal plus a vocalic element."
+    }
+  ],
+  "non_historical_engineering_choices": {
+    "voice": "neutral synthetic formant voice",
+    "base_pitch_hz": 122,
+    "timing": "approximately equal duration per sign token",
+    "token_gap_ms": 32,
+    "word_gap_ms": 180,
+    "intonation": "slight synthetic phrase declination",
+    "stress": "none inferred",
+    "speaker_identity": "none",
+    "note": "Pitch, formants, duration, rhythm, pauses and timbre are interface design parameters and carry no historical claim."
+  },
+  "sources": [
+    {
+      "citation": "Moncunill Martí, Noemí; Velaza Frías, Javier (2020), Iberian, Palaeohispanica 20, 591-629.",
+      "doi": "10.36707/palaeohispanica.v0i20.370",
+      "url": "https://ifc.dpz.es/recursos/publicaciones/38/77/17moncunillvelaza.pdf",
+      "supports": [
+        "five_vowels",
+        "stop_series",
+        "continuous_consonants",
+        "uncertainty_of_two_sibilants",
+        "uncertainty_of_two_rhotics",
+        "uncertainty_of_nasals"
+      ]
+    },
+    {
+      "citation": "Simkin, Oliver (2017), The Iberian sibilants revisited, Palaeohispanica 17, 207-233.",
+      "url": "https://ifc.dpz.es/recursos/publicaciones/36/49/13simkin.pdf",
+      "supports": [
+        "possible_laminal_apical_sibilant_hypothesis",
+        "absence_of_consensus"
+      ]
+    }
+  ]
+}

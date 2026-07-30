@@ -33,7 +33,7 @@
       "resolve_silent_u_in_gu_before_e_or_i",
       "preserve_word_boundaries"
     ],
-    "audio_policy": "Browser speech synthesis may read the original Spanish input; it must never be labelled as reconstructed Iberian pronunciation."
+    "audio_policy": "Browser speech synthesis may read the original Spanish input. A separate versioned local synthesizer may vocalize only the adapted sign tokens as an experimental acoustic recreation; neither output may be labelled as reconstructed Iberian pronunciation."
   },
   "graphic_layer": {
     "manifest": "data/signs/mvp-standard-signary.assets.v1.json",
@@ -102,6 +102,7 @@
     "primary": "Adaptación fonética experimental",
     "not_translation": "No es una traducción a la lengua ibérica",
     "pronunciation": "Pronunciación española de referencia",
+    "experimental_voice": "Recreación sonora experimental de la lectura técnica",
     "graphic_note": "Signos normalizados de referencia, no facsímiles arqueológicos"
   }
 }

@@ -15,7 +15,9 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - El símbolo oficial evoluciona a un monograma-glifo contemporáneo que fusiona eje, travesaño, chevrón y ramificación; no reproduce un signo ibérico antiguo ni posee valor fonético histórico.
 - En la portada móvil, el monograma y la lectura documentada se muestran como elementos separados, sin solapamiento ni huecos verticales artificiales.
 - La página académica incorpora acceso directo a Corpus, Historia, Metodología, Universidades y Conversor.
-- El demostrador conserva únicamente el audio de la entrada española. Se retira la lectura sonora de los signos porque, en correspondencias directas, duplicaba el español original y podía sugerir una reconstrucción histórica inexistente.
+- Se retira la antigua lectura sonora de los signos, que reenviaba la secuencia a la misma voz española y duplicaba la entrada en correspondencias directas.
+- Se incorpora un sintetizador de formantes propio que vocaliza los tokens adaptados, no la palabra original: es local, determinista, versionado y se presenta únicamente como recreación sonora experimental.
+- El perfil `iberolab-sign-reading-voice-v1` separa valores convencionales, hipótesis para `s/ś` y `r/ŕ`, y parámetros acústicos modernos sin valor histórico.
 - La interfaz separa su lógica en módulos propios y añade validación estática y regresión sobre Chromium, Firefox y WebKit.
 - El sitemap incluye Historia y Metodología, y se conservan la página académica, privacidad, citación, metadatos sociales y recursos de identidad existentes.
 
@@ -63,6 +65,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Adaptador determinista `docs/mvp-converter.js` con correspondencias directas, vocales de apoyo declaradas y aproximaciones visibles.
 - Página responsive `docs/convertir.html` con ejemplos `amor`, `familia`, `te quiero`, `hogar` y `amistad`.
 - Audio opcional para escuchar exclusivamente la entrada española mediante el navegador.
+- Recreación sonora experimental de los tokens mediante síntesis local de formantes, con perfil machine-readable y metodología pública.
 - Validador del demostrador que conserva separado el manifiesto científico de 19 recursos.
 - Pruebas de navegador para adaptaciones directas, aproximadas y bloqueadas.
 - Acceso al demostrador desde la portada del corpus y buzón estructurado de sugerencias.
@@ -96,7 +99,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 
 - Los signos son formas normalizadas de referencia y no facsímiles de alógrafos arqueológicos concretos.
 - El demostrador aplica convenciones de proyecto y no reconstruye vocabulario ni significado ibéricos.
-- El audio reproduce español moderno y no pronunciación ibérica antigua.
+- Ninguno de los dos audios reconstruye la pronunciación ibérica antigua: la voz española reproduce la entrada y el sintetizador recrea valores convencionales de los signos.
 - Las aproximaciones para `f`, `ñ`, `ch`, `y/ll`, `j`, `z/c` y otros sonidos modernos requieren revisión y pueden mejorarse.
 - Deben repetirse manualmente las pruebas actuales en Safari/iOS y en Chrome, Firefox y Edge de ordenador.
 - La cobertura automática no sustituye revisión visual ni evaluación con usuarios.

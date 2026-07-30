@@ -44,7 +44,9 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 - advertencias obligatorias para vocales de apoyo y sonidos modernos sin equivalente directo;
 - bloqueo explícito ante símbolos no admitidos;
 - prohibición de salidas vacías y sustituciones silenciosas;
-- audio opcional únicamente para escuchar la entrada española mediante el navegador.
+- audio opcional para comparar la entrada española mediante la voz del navegador;
+- recreación sonora local y determinista de la lectura técnica mediante el perfil versionado `iberolab-sign-reading-voice-v1`;
+- separación explícita entre valores convencionales, hipótesis acústicas y decisiones de síntesis sin valor histórico.
 
 ### Motor formal
 
@@ -78,6 +80,7 @@ Entre otras:
 - Separación entre corpus atestiguado, demostración práctica y motor formal.
 - Trazabilidad de cada signo, variante, transcripción y recurso gráfico.
 - Ausencia de traducciones, significados o pronunciaciones antiguas inventadas.
+- Toda recreación sonora se identifica como experimento moderno y nunca como pronunciación auténtica o reconstrucción histórica.
 - Ausencia de sustituciones silenciosas.
 - Funcionamiento local en el navegador sin depender de SVG remotos.
 - Pruebas reproducibles antes de etiquetar una versión estable.
@@ -111,6 +114,7 @@ python scripts/validate_engine_spec.py
 python scripts/validate_engine_schema_registry.py
 python scripts/validate_pronunciation_profiles.py
 python scripts/validate_mvp_converter.py
+python scripts/validate_experimental_voice.py
 python scripts/validate_public_presence.py
 ```
 
