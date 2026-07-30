@@ -6,8 +6,9 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function createIberoVoice(root) {
   "use strict";
 
-  const VERSION = "0.1.0";
+  const VERSION = "0.1.1";
   const PROFILE_ID = "iberolab-sign-reading-voice-v1";
+  const PLAYBACK_SESSION_TYPE = "playback";
   const SAMPLE_RATE = 24000;
   const EDGE_SILENCE_SECONDS = 0.06;
   const TOKEN_GAP_SECONDS = 0.032;
@@ -434,6 +435,32 @@
     return Boolean(root.AudioContext || root.webkitAudioContext);
   }
 
+  function requestPlaybackAudioSession() {
+    const session = root.navigator && root.navigator.audioSession;
+    if (!session) return () => {};
+
+    let previousType;
+    try {
+      previousType = session.type;
+      session.type = PLAYBACK_SESSION_TYPE;
+    } catch {
+      return () => {};
+    }
+
+    let released = false;
+    return function releasePlaybackAudioSession() {
+      if (released) return;
+      released = true;
+      try {
+        if (session.type === PLAYBACK_SESSION_TYPE) {
+          session.type = previousType || "auto";
+        }
+      } catch {
+        // The browser owns the audio session and may revoke access at any time.
+      }
+    };
+  }
+
   function stop() {
     if (!activePlayback) return;
     const playback = activePlayback;
@@ -441,6 +468,8 @@
     try {
       playback.source.stop();
     } catch {
+      // A source that has already ended cannot be stopped a second time.
+    } finally {
       playback.finish();
     }
   }
@@ -452,41 +481,55 @@
     }
 
     stop();
-    const rendered = synthesize(words);
-    if (!audioContext || audioContext.state === "closed") {
-      audioContext = new AudioContextConstructor();
-    }
-    if (audioContext.state === "suspended") await audioContext.resume();
+    const releaseAudioSession = requestPlaybackAudioSession();
+    let playback = null;
 
-    const buffer = audioContext.createBuffer(1, rendered.samples.length, rendered.sampleRate);
-    buffer.copyToChannel(rendered.samples, 0);
-    const source = audioContext.createBufferSource();
-    source.buffer = buffer;
-    source.connect(audioContext.destination);
-
-    let resolveEnded;
-    let finished = false;
-    const ended = new Promise(resolve => {
-      resolveEnded = resolve;
-    });
-    const playback = {
-      source,
-      rendered,
-      ended,
-      finish() {
-        if (finished) return;
-        finished = true;
-        if (activePlayback === playback) activePlayback = null;
-        resolveEnded(rendered);
-      },
-      stop() {
-        if (activePlayback === playback) stop();
+    try {
+      if (!audioContext || audioContext.state === "closed") {
+        audioContext = new AudioContextConstructor();
       }
-    };
-    source.addEventListener("ended", playback.finish, { once: true });
-    activePlayback = playback;
-    source.start();
-    return playback;
+      const resumePromise = audioContext.state !== "running" &&
+        typeof audioContext.resume === "function"
+        ? audioContext.resume()
+        : null;
+      const rendered = synthesize(words);
+      if (resumePromise) await resumePromise;
+
+      const buffer = audioContext.createBuffer(1, rendered.samples.length, rendered.sampleRate);
+      buffer.copyToChannel(rendered.samples, 0);
+      const source = audioContext.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioContext.destination);
+
+      let resolveEnded;
+      let finished = false;
+      const ended = new Promise(resolve => {
+        resolveEnded = resolve;
+      });
+      playback = {
+        source,
+        rendered,
+        ended,
+        finish() {
+          if (finished) return;
+          finished = true;
+          if (activePlayback === playback) activePlayback = null;
+          releaseAudioSession();
+          resolveEnded(rendered);
+        },
+        stop() {
+          if (activePlayback === playback) stop();
+        }
+      };
+      source.addEventListener("ended", playback.finish, { once: true });
+      activePlayback = playback;
+      source.start();
+      return playback;
+    } catch (error) {
+      if (activePlayback === playback) activePlayback = null;
+      releaseAudioSession();
+      throw error;
+    }
   }
 
   return Object.freeze({

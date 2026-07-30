@@ -19,6 +19,7 @@ El formato se inspira en Keep a Changelog y el proyecto utilizará versionado se
 - Se incorpora un sintetizador de formantes propio que vocaliza los tokens adaptados, no la palabra original: es local, determinista, versionado y se presenta únicamente como recreación sonora experimental.
 - El perfil `iberolab-sign-reading-voice-v1` separa valores convencionales, hipótesis para `s/ś` y `r/ŕ`, y parámetros acústicos modernos sin valor histórico.
 - La interfaz separa su lógica en módulos propios y añade validación estática y regresión sobre Chromium, Firefox y WebKit.
+- La reproducción experimental solicita una sesión de audio `playback` en WebKit compatible y abre el canal desde el propio gesto, evitando que el modo silencio de iPhone deje Web Audio mudo.
 - El sitemap incluye Historia y Metodología, y se conservan la página académica, privacidad, citación, metadatos sociales y recursos de identidad existentes.
 
 ## Unreleased — historial local privado
