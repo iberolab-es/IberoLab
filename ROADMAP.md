@@ -40,6 +40,13 @@
 - [ ] Crear pruebas automatizadas de regresión visual cuando exista una base visual estable.
 - [ ] Ampliar después, sin mezclar sistemas, a ibérico meridional, greco-ibérico y celtibérico.
 
+### Capa sonora del corpus
+
+- [x] Permitir escuchar las once formas atestiguadas mediante una recreación moderna separada de la evidencia escrita.
+- [x] Mantener dos modos: voz fluida del dispositivo y síntesis técnica reproducible.
+- [x] Incorporar `ń` sin identificarla silenciosamente con `n`: aproximación fluida como `n` y nasal prolongada técnica, ambas rotuladas como convención de baja confianza.
+- [x] Compartir un perfil sonoro con el demostrador, pero conservar visible el origen de cada secuencia.
+
 ## Fase 2 — Adaptación de entradas modernas
 
 ### Fase 2A — Demostrador MVP práctico
@@ -56,7 +63,7 @@ Objetivo limitado: nombres, palabras y frases breves con representación gráfic
 - [x] Bloquear símbolos no admitidos y prohibir salidas vacías.
 - [x] Añadir ejemplos contractuales para `amor`, `familia` y `te quiero`.
 - [x] Crear una interfaz responsive separada del corpus atestiguado.
-- [x] Añadir audio opcional exclusivamente para la entrada española.
+- [x] Añadir audio opcional para comparar la entrada española original.
 - [x] Añadir una voz fluida moderna y una síntesis técnica reproducible, con perfiles versionados, hipótesis visibles y prohibición expresa de presentarlas como pronunciación histórica o prueba de parentesco.
 - [x] Añadir regresión automática para resultados directos, aproximados y bloqueados.
 - [ ] Repetir manualmente las pruebas del demostrador en Safari/iOS, Chrome, Firefox y Edge.

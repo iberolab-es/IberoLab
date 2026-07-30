@@ -6,12 +6,15 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function createIberoVoice(root) {
   "use strict";
 
-  const VERSION = "0.2.0";
-  const PROFILE_ID = "iberolab-sign-reading-voice-v2";
+  const VERSION = "0.3.0";
+  const PROFILE_ID = "iberolab-sign-reading-voice-v3";
   const TECHNICAL_PROFILE_ID = "iberolab-sign-reading-voice-v1";
   const FLUID_PROFILE_ID = "iberolab-fluid-device-voice-v1";
   const MODE_FLUID = "fluid";
   const MODE_TECHNICAL = "technical";
+  const SOURCE_ATTESTED = "attested_iberian_form";
+  const SOURCE_MODERN = "modern_spanish_adaptation";
+  const VALID_SOURCE_CLASSES = new Set([SOURCE_ATTESTED, SOURCE_MODERN]);
   const PLAYBACK_SESSION_TYPE = "playback";
   const SAMPLE_RATE = 24000;
   const EDGE_SILENCE_SECONDS = 0.06;
@@ -35,7 +38,7 @@
     ka: ["k", "a"], ke: ["k", "e"], ki: ["k", "i"], ko: ["k", "o"], ku: ["k", "u"]
   });
 
-  const CONTINUANT_TOKENS = new Set(["s", "ś", "r", "ŕ", "l", "m", "n", "ḿ"]);
+  const CONTINUANT_TOKENS = new Set(["s", "ś", "r", "ŕ", "l", "m", "n", "ń", "ḿ"]);
   const FLUID_LANGUAGE_PREFERENCES = Object.freeze(["eu-ES", "eu", "ca-ES", "ca", "es-ES", "es"]);
   const FLUID_PALETTES = Object.freeze({
     eu: Object.freeze({
@@ -49,6 +52,7 @@
         l: "l",
         m: "m",
         n: "n",
+        "ń": "n",
         "ḿ": "um"
       })
     }),
@@ -63,6 +67,7 @@
         l: "l",
         m: "m",
         n: "n",
+        "ń": "n",
         "ḿ": "um"
       })
     }),
@@ -77,6 +82,7 @@
         l: "l",
         m: "m",
         n: "n",
+        "ń": "n",
         "ḿ": "um"
       })
     })
@@ -115,12 +121,19 @@
     });
   }
 
+  function normalizeSourceClass(sourceClass = SOURCE_MODERN) {
+    if (!VALID_SOURCE_CLASSES.has(sourceClass)) {
+      fail(`Origen de secuencia no admitido: «${sourceClass}».`);
+    }
+    return sourceClass;
+  }
+
   function tokenKind(token) {
     if (VOWEL_FORMANTS[token]) return "vowel";
     if (STOP_TOKENS[token]) return "stop_syllabogram";
     if (token === "s" || token === "ś") return "sibilant";
     if (token === "r" || token === "ŕ") return "rhotic";
-    if (token === "m" || token === "n" || token === "ḿ") return "nasal";
+    if (token === "m" || token === "n" || token === "ń" || token === "ḿ") return "nasal";
     return "lateral";
   }
 
@@ -131,11 +144,13 @@
     if (token === "r") return 0.082;
     if (token === "ŕ") return 0.155;
     if (token === "ḿ") return 0.165;
+    if (token === "ń") return 0.18;
     return 0.13;
   }
 
-  function buildPlan(words) {
+  function buildPlan(words, options = {}) {
     const normalizedWords = normalizeWords(words);
+    const sourceClass = normalizeSourceClass(options.sourceClass);
     const items = [];
     let cursor = EDGE_SILENCE_SECONDS;
 
@@ -163,6 +178,7 @@
     return {
       profileId: TECHNICAL_PROFILE_ID,
       version: VERSION,
+      sourceClass,
       words: normalizedWords,
       reading,
       items,
@@ -245,8 +261,9 @@
     return palette.tokenText[token];
   }
 
-  function buildFluidPlan(words, voiceSelection = selectFluidVoice()) {
+  function buildFluidPlan(words, voiceSelection = selectFluidVoice(), options = {}) {
     const normalizedWords = normalizeWords(words);
+    const sourceClass = normalizeSourceClass(options.sourceClass);
     const palette = voiceSelection.palette || FLUID_PALETTES.eu;
     const spokenWords = normalizedWords.map(word => {
       const spoken = word.tokens.map(token => fluidTokenText(token, palette)).join("");
@@ -260,6 +277,7 @@
       profileId: FLUID_PROFILE_ID,
       version: VERSION,
       mode: MODE_FLUID,
+      sourceClass,
       reading,
       words: normalizedWords,
       spokenWords,
@@ -491,7 +509,7 @@
   }
 
   function renderNasal(samples, item, token, pitch, random) {
-    const formants = token === "n"
+    const formants = token === "n" || token === "ń"
       ? [[280, 170, 1], [1650, 340, 0.32], [2600, 430, 0.2]]
       : token === "ḿ"
         ? [[270, 180, 1], [1050, 360, 0.38], [2050, 450, 0.22]]
@@ -501,7 +519,9 @@
       release: 0.02,
       modulation: token === "ḿ"
         ? time => 0.82 + 0.1 * Math.sin(2 * Math.PI * 5 * time)
-        : undefined
+        : token === "ń"
+          ? time => 0.87 + 0.06 * Math.sin(2 * Math.PI * 4 * time)
+          : undefined
     });
   }
 
@@ -534,8 +554,8 @@
     return peak * scale;
   }
 
-  function synthesize(words) {
-    const plan = buildPlan(words);
+  function synthesize(words, options = {}) {
+    const plan = buildPlan(words, options);
     const samples = new Float32Array(Math.ceil(plan.durationSeconds * SAMPLE_RATE));
     const random = makeRandom(hashString(`${TECHNICAL_PROFILE_ID}|${plan.reading}`));
 
@@ -563,6 +583,7 @@
       profileId: TECHNICAL_PROFILE_ID,
       version: VERSION,
       mode: MODE_TECHNICAL,
+      sourceClass: plan.sourceClass,
       sampleRate: SAMPLE_RATE,
       samples,
       reading: plan.reading,
@@ -638,7 +659,7 @@
     playback.stopInternal();
   }
 
-  async function playTechnical(words) {
+  async function playTechnical(words, options = {}) {
     const AudioContextConstructor = root.AudioContext || root.webkitAudioContext;
     if (!AudioContextConstructor) {
       throw new Error("Este navegador no ofrece Web Audio para reproducir la recreación.");
@@ -656,7 +677,7 @@
         typeof audioContext.resume === "function"
         ? audioContext.resume()
         : null;
-      const rendered = synthesize(words);
+      const rendered = synthesize(words, options);
       if (resumePromise) await resumePromise;
 
       const buffer = audioContext.createBuffer(1, rendered.samples.length, rendered.sampleRate);
@@ -706,7 +727,7 @@
     }
   }
 
-  async function playFluid(words) {
+  async function playFluid(words, options = {}) {
     if (!isModeSupported(MODE_FLUID)) {
       throw new Error("Este navegador no ofrece una voz de sistema para la recreación fluida.");
     }
@@ -714,7 +735,7 @@
     stop();
     root.speechSynthesis.cancel();
     const releaseAudioSession = requestPlaybackAudioSession();
-    const rendered = buildFluidPlan(words);
+    const rendered = buildFluidPlan(words, selectFluidVoice(), options);
     const utterance = new root.SpeechSynthesisUtterance(rendered.spokenText);
     utterance.lang = rendered.language;
     utterance.rate = 0.78;
@@ -767,10 +788,10 @@
   async function play(words, options = {}) {
     const requestedMode = options.mode || MODE_FLUID;
     if (requestedMode === MODE_FLUID) {
-      if (isModeSupported(MODE_FLUID)) return playFluid(words);
-      if (isModeSupported(MODE_TECHNICAL)) return playTechnical(words);
+      if (isModeSupported(MODE_FLUID)) return playFluid(words, options);
+      if (isModeSupported(MODE_TECHNICAL)) return playTechnical(words, options);
     }
-    if (requestedMode === MODE_TECHNICAL) return playTechnical(words);
+    if (requestedMode === MODE_TECHNICAL) return playTechnical(words, options);
     throw new Error(`Modo sonoro no disponible: ${requestedMode}.`);
   }
 
@@ -781,6 +802,8 @@
     FLUID_PROFILE_ID,
     MODE_FLUID,
     MODE_TECHNICAL,
+    SOURCE_ATTESTED,
+    SOURCE_MODERN,
     SAMPLE_RATE,
     VALID_TOKENS: Object.freeze(Array.from(VALID_TOKENS)),
     buildPlan,

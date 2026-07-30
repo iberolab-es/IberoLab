@@ -70,6 +70,8 @@ Que una forma tenga una lectura estable no implica que su significado esté comp
 
 Del mismo modo, que exista un SVG controlado no implica que se haya seleccionado el alógrafo exacto de cada inscripción.
 
+La recreación sonora aplica la misma separación: la secuencia de una forma del corpus está atestiguada, pero su audio no. El perfil `iberolab-sign-reading-voice-v3` vocaliza valores convencionales y mantiene como hipótesis o decisiones de proyecto las oposiciones inciertas, incluida la aproximación de `ń`.
+
 ## Fuentes de referencia
 
 La bibliografía completa y las URL persistentes se almacenan dentro de `data/corpus/attested-forms.v1.json`. El corpus se apoya inicialmente en:
@@ -88,6 +90,6 @@ La cobertura técnica del corpus inicial está completa. Las siguientes tareas s
 1. registrar alógrafos específicos y su procedencia cuando la evidencia lo permita;
 2. repetir los diagnósticos actuales en móvil y navegadores de ordenador reales;
 3. obtener revisión externa especializada;
-4. definir formalmente el modelo fonético futuro sin publicar todavía un conversor.
+4. mejorar el demostrador y la recreación sonora solo mediante reglas explícitas, casos reproducibles y revisión externa.
 
 No se incorporan como evidencia los 37 trazados del prototipo HTML anterior, porque no estaban vinculados a variantes paleográficas documentadas.

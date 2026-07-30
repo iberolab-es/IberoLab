@@ -1,0 +1,227 @@
+{
+  "schema_version": "3.0.0",
+  "profile_id": "iberolab-sign-reading-voice-v3",
+  "status": "public_experimental_recreation",
+  "classification": "source_aware_modern_reading_of_conventional_sign_values",
+  "historical_pronunciation_reconstruction": false,
+  "translation_claim": false,
+  "default_mode": "fluid",
+  "source_classes": {
+    "attested_iberian_form": {
+      "input": "documented_transcription_and_grapheme_sequence",
+      "required_public_label": "forma ibérica atestiguada",
+      "claim": "The written sequence is attested; the generated sound is modern and experimental."
+    },
+    "modern_spanish_adaptation": {
+      "input": "spanish_input_adapted_to_sign_tokens",
+      "required_public_label": "adaptación fonética experimental",
+      "claim": "Neither the token sequence nor the generated sound is an Iberian translation."
+    }
+  },
+  "modes": {
+    "fluid": {
+      "renderer_id": "iberolab-fluid-device-voice-v1",
+      "type": "system_speech_synthesis_with_orthographic_bridge",
+      "input": "conventional_sign_tokens",
+      "output": "platform_speech_audio",
+      "preferred_language_tag": "eu-ES",
+      "fallback_language_tags": ["ca-ES", "es-ES"],
+      "deterministic": false,
+      "iberolab_network_required": false,
+      "platform_voice_asset_may_be_required": true,
+      "same_voice_across_devices_guaranteed": false,
+      "purpose": "Offer a smoother contemporary reading while preserving the distinction between attested sequences and modern adaptations.",
+      "modern_palette": {
+        "primary_reference": "modern Basque orthography and system voice",
+        "historical_relationship_claim": false,
+        "descent_claim": false,
+        "rationale": "The modern palette has five stable vowel letters and practical written distinctions for tap/trill and laminal/apical sibilants. It is selected for articulatory fit, not as evidence that Iberian sounded like Basque.",
+        "token_mappings": {
+          "s": "z",
+          "ś": "s",
+          "r": "r",
+          "ŕ": "rr",
+          "ń": "n",
+          "ḿ": "um"
+        },
+        "non_historical_parameters": {
+          "rate": 0.78,
+          "pitch": 0.94,
+          "word_separator": "short_platform_pause"
+        }
+      }
+    },
+    "technical": {
+      "renderer_id": "iberolab-sign-reading-voice-v1",
+      "type": "deterministic_client_side_formant_synthesizer",
+      "sample_rate_hz": 24000,
+      "input": "conventional_sign_tokens",
+      "output": "mono_float32_audio",
+      "network_required": false,
+      "external_voice_required": false,
+      "same_input_same_plan": true,
+      "same_input_same_samples_within_runtime_version": true,
+      "cross_engine_bit_identity_guaranteed": false,
+      "purpose": "Preserve a reproducible laboratory baseline for comparison, inspection and regression testing."
+    }
+  },
+  "scope": {
+    "may_be_labelled": [
+      "aproximación sonora experimental",
+      "recreación sonora experimental",
+      "voz fluida moderna",
+      "lectura sintética de los signos",
+      "recreación sonora de una forma atestiguada"
+    ],
+    "must_not_be_labelled": [
+      "pronunciación auténtica ibérica",
+      "reconstrucción de cómo hablaban los íberos",
+      "audio en lengua ibérica",
+      "acento ibérico histórico",
+      "prueba de parentesco entre ibérico y euskera",
+      "traducción neoibérica"
+    ]
+  },
+  "evidence_based_conventions": [
+    {
+      "id": "five_vowels",
+      "tokens": ["a", "e", "i", "o", "u"],
+      "synthetic_values": ["a", "e", "i", "o", "u"],
+      "confidence": "comparatively_high",
+      "note": "The five-vowel interpretation is broadly accepted; the exact ancient timbre remains unrecoverable."
+    },
+    {
+      "id": "stop_series",
+      "tokens": [
+        "ba",
+        "be",
+        "bi",
+        "bo",
+        "bu",
+        "da",
+        "de",
+        "di",
+        "do",
+        "du",
+        "ta",
+        "te",
+        "ti",
+        "to",
+        "tu",
+        "ga",
+        "ge",
+        "gi",
+        "go",
+        "gu",
+        "ka",
+        "ke",
+        "ki",
+        "ko",
+        "ku"
+      ],
+      "synthetic_values": ["bV", "dV", "tV", "gV", "kV"],
+      "confidence": "medium",
+      "note": "Dental and velar dualities are rendered as voiced/voiceless. Their historical contrast may instead have involved fortis/lenis features."
+    },
+    {
+      "id": "continuous_consonants",
+      "tokens": ["l", "m", "n"],
+      "synthetic_values": ["l", "m", "n"],
+      "confidence": "medium",
+      "note": "These are conventional readable values, not measurements of ancient articulation."
+    }
+  ],
+  "explicit_hypotheses": [
+    {
+      "id": "two_sibilants",
+      "tokens": ["s", "ś"],
+      "synthetic_values_ipa": ["s̻", "s̺"],
+      "confidence": "low_hypothesis",
+      "note": "The fluid Basque bridge uses z/s and the technical mode uses a laminal/apical contrast. Iberian historical values remain controversial."
+    },
+    {
+      "id": "two_rhotics",
+      "tokens": ["r", "ŕ"],
+      "synthetic_values_ipa": ["ɾ", "r"],
+      "confidence": "project_convention",
+      "note": "Tap versus trill remains an audible project convention; the historical Iberian opposition is unknown."
+    },
+    {
+      "id": "marked_nasal",
+      "tokens": ["ḿ"],
+      "synthetic_values_ipa": ["m̩"],
+      "confidence": "low_hypothesis",
+      "note": "The technical mode uses a syllabic nasal colour and the fluid bridge uses um only to keep the sign audible."
+    },
+    {
+      "id": "m1_nasal",
+      "tokens": ["ń"],
+      "synthetic_values_ipa": ["n", "nː"],
+      "confidence": "low_project_convention",
+      "note": "The attested m1 sign is kept distinct as ń. The fluid bridge uses n and the technical renderer lengthens an alveolar nasal only to make the marked token audible; neither value is claimed as its historical pronunciation."
+    }
+  ],
+  "historical_boundaries": {
+    "basque": "A hypothetical relationship between Iberian and ancient or modern languages remains uncertain. The modern Basque palette is not used as a genealogical model.",
+    "celtic": "Celtiberian was a different Indo-European language and is not used as a pronunciation model for Iberian.",
+    "arabic": "Arabic belongs to a later historical horizon in the peninsula and is not used as a pronunciation model for Iberian.",
+    "prosody": "No Iberian stress or intonation system can currently be recovered well enough to drive speech synthesis.",
+    "m1_nasal": "The m1 sign and project transcription ń are documented; its audible realization as n or a prolonged n is an engineering convention, not a deciphered phonetic value."
+  },
+  "sources": [
+    {
+      "citation": "Moncunill Martí, Noemí; Velaza Frías, Javier (2020), Iberian, Palaeohispanica 20, 591-629.",
+      "doi": "10.36707/palaeohispanica.v0i20.370",
+      "url": "https://ifc.dpz.es/recursos/publicaciones/38/77/17moncunillvelaza.pdf",
+      "supports": [
+        "five_vowels",
+        "stop_series",
+        "continuous_consonants",
+        "uncertainty_of_two_sibilants",
+        "uncertainty_of_two_rhotics",
+        "uncertainty_of_nasals",
+        "uncertain_relationship_with_other_languages"
+      ]
+    },
+    {
+      "citation": "Simkin, Oliver (2017), The Iberian sibilants revisited, Palaeohispanica 17, 207-233.",
+      "url": "https://ifc.dpz.es/recursos/publicaciones/36/49/13simkin.pdf",
+      "supports": [
+        "possible_laminal_apical_sibilant_hypothesis",
+        "absence_of_consensus"
+      ]
+    },
+    {
+      "citation": "Egurtzegi, Ander (2013), Phonetics and Phonology, in Towards a History of the Basque Language.",
+      "url": "https://www.phonetik.uni-muenchen.de/personen/assoziierte_wissenschaftler/egurtzegi_ander/2013_protobasque_phonology.pdf",
+      "supports": [
+        "modern_basque_five_vowel_palette",
+        "modern_basque_rhotic_and_sibilant_inventory"
+      ]
+    },
+    {
+      "citation": "Igartua, Iván (2023), Bringing phonological oddities to the fore: The Basque sibilants, ASJU 57, 495-513.",
+      "doi": "10.1387/asju.25965",
+      "url": "https://doi.org/10.1387/asju.25965",
+      "supports": ["modern_basque_apical_laminal_sibilant_contrast"]
+    },
+    {
+      "citation": "Ferrer i Jané, Joan et al. (2015), Towards a systematisation of Palaeohispanic scripts in Unicode, Palaeohispanica 15.",
+      "url": "https://ifc.dpz.es/recursos/publicaciones/35/02/01ferreretal.pdf",
+      "supports": [
+        "possible_double_nasal_n_marked_n",
+        "m1_transcription_inventory"
+      ]
+    },
+    {
+      "citation": "Ferrer i Jané, Joan et al. (2025), La casa de Taŕśabań, Palaeohispanica 25, 175-202.",
+      "doi": "10.36707/palaeohispanica.v25i1.703",
+      "url": "https://ifc.dpz.es/recursos/publicaciones/41/87/08ferrer.pdf",
+      "supports": [
+        "attested_tarsaban_reading",
+        "m1_sign_identification",
+        "traditional_m_and_project_n_marked_transcription_context"
+      ]
+    }
+  ]
+}
