@@ -1,7 +1,7 @@
 {
   "name": "IberoLab",
   "short_name": "IberoLab",
-  "description": "Adaptación fonética experimental y corpus documentado de formas ibéricas.",
+  "description": "Descubre la escritura ibérica nororiental. Conversor experimental de escritura y corpus documentado; no es traducción.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Si utilizas o revisas IberoLab, cita el proyecto y la versión o commit consultados."
-title: "IberoLab: corpus documentado y adaptación fonética experimental con signos ibéricos normalizados"
+title: "IberoLab: divulgación de la escritura ibérica nororiental y adaptación gráfico-fonética experimental"
 type: software
 authors:
   - name: "IberoLab contributors"
@@ -9,7 +9,8 @@ date-released: "2026-07-28"
 repository-code: "https://github.com/iberolab-es/IberoLab"
 url: "https://iberolab-es.github.io/IberoLab/"
 abstract: >-
-  Proyecto abierto e independiente que combina un corpus inicial de formas ibéricas
+  Recurso divulgativo abierto e independiente sobre escritura ibérica nororiental.
+  Combina un corpus inicial de formas ibéricas
   documentadas con un demostrador de adaptación fonética experimental para entradas
   españolas modernas. No constituye una traducción a la lengua ibérica ni una
   reconstrucción de su pronunciación antigua.

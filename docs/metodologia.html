@@ -25,7 +25,7 @@
     code{color:#eef5ff}
   </style>
 </head>
-<body>
+<body><a class="skip-link" href="#contenido">Saltar al contenido</a>
   <nav class="public-nav">
     <div class="public-nav-inner">
       <a class="public-brand" href="./">
@@ -36,12 +36,12 @@
         <a href="./#corpus">Corpus</a>
         <a href="historia.html">Historia</a>
         <a href="metodologia.html" aria-current="page">Metodología</a>
-        <a href="academia.html">Universidades</a>
+        <a href="academia.html">Documentación académica</a>
         <a class="public-cta" href="convertir.html">Probar conversor</a>
       </div>
     </div>
   </nav>
-  <main class="page-shell">
+  <main id="contenido" tabindex="-1" class="page-shell">
     <header class="page-hero">
       <div class="section-kicker">Rigor · transparencia · límites</div>
       <h1>Una herramienta útil solo si explica qué está haciendo.</h1>
@@ -120,6 +120,13 @@
           <p class="logo-disclaimer"><strong>No es un signo ibérico arqueológico.</strong> Es una marca contemporánea que no reproduce un grafema concreto ni posee valor fonético histórico.</p>
         </div>
       </div>
+    </section>
+<section class="section-block" id="procedimiento"><div id="convenciones" class="section-kicker">Del español a los signos</div>
+      <h2 class="section-title">Por qué lo llamamos conversor experimental de escritura.</h2>
+      <p class="section-lead">Es una adaptación gráfico-fonética: aplica convenciones de lectura española y restricciones de un signario. «Conversor» describe la interacción; «experimental» delimita su alcance. No es una transliteración reversible, una traducción ni una transcripción epigráfica de un original antiguo.</p>
+      <ol class="reading-steps"><li>Entrada: hasta 48 caracteres y 6 palabras en español moderno.</li><li>Normalización y lectura: reglas deterministas del demostrador, no un modelo de todas las variedades del español.</li><li>Adaptación: signos vocálicos y consonánticos, y silabogramas para oclusivas; las sustituciones y vocales de apoyo se advierten.</li><li>Salida: SVG normalizados, lectura técnica y avisos. El audio añade una recreación moderna independiente.</li></ol>
+      <p class="section-lead">El repertorio operativo contiene 38 signos de referencia dual. No reúne todos los alógrafos ni todos los signos tratados por la bibliografía. En el corpus se conserva además <code>ń</code> con su documentación propia. La etiqueta «directa» describe el resultado de las reglas, no su autenticidad histórica.</p>
+      <p class="section-lead"><a href="historia.html#dual">Contexto de las variantes duales</a> · <a href="https://github.com/iberolab-es/IberoLab/blob/main/docs/ASSET_PROVENANCE.md">Procedencia de los SVG</a> · <a href="https://github.com/iberolab-es/IberoLab/blob/main/data/engine/mvp-short-converter.v1.json">Contrato y ejemplos verificables</a>.</p>
     </section>
     <footer class="public-footer">
       <span>© 2026 IberoLab · Metodología abierta y revisable</span>

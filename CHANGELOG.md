@@ -1,5 +1,13 @@
 # Historial de cambios
 
+## Propuesta divulgativa v1.1 — 2026-10-21 — pendiente de integración
+
+- Identidad centrada en escritura ibérica nororiental; conversor y límites destacados.
+- Contexto documentado, variantes duales y lectura gradual con fuentes por apartado.
+- Procedimiento y ejemplos, documentación para examen especializado y trazabilidad.
+- Navegación móvil, foco, salto al contenido y capturas comparativas en CI.
+- Propuesta modular de otros sistemas, sin activar repertorios ni cambiar reglas, corpus o voz.
+
 Todos los cambios relevantes del proyecto se documentarán en este archivo.
 
 El formato se inspira en Keep a Changelog y el proyecto utilizará versionado semántico cuando exista una primera versión funcional.

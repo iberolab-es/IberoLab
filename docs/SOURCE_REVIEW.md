@@ -1,5 +1,7 @@
 # Revisión documental del corpus inicial
 
+> Nota de lectura, 21/10/2026: los apartados siguientes conservan la auditoría inicial y sus pendientes históricos. El estado vigente está en `README.md`, `ASSET_PROVENANCE.md` y el manifiesto versionado: `ń` ya tiene SVG local m1 y no está pendiente. Se preserva aquí el diagnóstico anterior para trazabilidad; no debe interpretarse como un fallo actual. No se ha realizado en esta revisión editorial una nueva validación integral del corpus.
+
 Fecha de revisión: **28 de julio de 2026**.
 
 ## Alcance

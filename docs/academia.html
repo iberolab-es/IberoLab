@@ -16,6 +16,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.png">
   <title>IberoLab · Información para universidades y especialistas</title>
+  <link rel="stylesheet" href="public-site.css">
   <style>
     :root{color-scheme:dark;--bg:#071019;--panel:#10253a;--panel2:#0a1621;--text:#eef5ff;--muted:#afbdd0;--line:#31465b;--accent:#47a9ff;--gold:#d6a34d;--ok:#5adca5;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
     *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#17334e 0,var(--bg) 46rem);color:var(--text)}
@@ -26,22 +27,23 @@
     @media(max-width:760px){.grid,.metrics{grid-template-columns:1fr}.topbar{align-items:flex-start}header{padding-top:36px}}
   </style>
 </head>
-<body>
-<main>
+<body><a class="skip-link" href="#contenido">Saltar al contenido</a>
+<main id="contenido" tabindex="-1">
   <div class="topbar">
     <a class="brand" href="./"><img src="assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab"><span class="brand-name">Ibero<span>Lab</span></span></a>
-    <nav class="nav" aria-label="Navegación principal"><a href="./#corpus">Corpus</a><a href="historia.html">Historia</a><a href="metodologia.html">Metodología</a><a href="academia.html" aria-current="page">Universidades</a><a href="convertir.html">Conversor</a><a href="https://github.com/iberolab-es/IberoLab">GitHub</a></nav>
+    <nav class="nav" aria-label="Navegación principal"><a href="./#corpus">Corpus</a><a href="historia.html">Historia</a><a href="metodologia.html">Metodología</a><a href="academia.html" aria-current="page">Documentación académica</a><a href="convertir.html">Conversor</a><a href="https://github.com/iberolab-es/IberoLab">GitHub</a></nav>
   </div>
 
   <header>
     <div class="eyebrow">Información para universidades y especialistas</div>
-    <h1>Un proyecto pequeño,<br>abierto y revisable.</h1>
-    <p class="lead">IberoLab combina un corpus inicial documentado con un demostrador de adaptación fonética para palabras modernas. Su objetivo no es descifrar el ibérico ni sustituir la investigación académica, sino ofrecer una interfaz accesible, datos versionados y reglas visibles que puedan ser examinados, criticados y mejorados.</p>
+    <h1>Documentación para examinar y contrastar.</h1>
+    <p class="lead">IberoLab es un recurso divulgativo sobre escritura ibérica nororiental dirigido principalmente al público general. Combina un corpus inicial documentado con un demostrador de adaptación gráfico-fonética para palabras españolas modernas. Su objetivo no es descifrar el ibérico ni sustituir la investigación académica, sino ofrecer una interfaz accesible, datos versionados y reglas visibles que puedan ser examinados, criticados y mejorados.</p>
     <div class="actions"><a class="button" href="convertir.html">Probar el demostrador</a><a class="button secondary" href="https://github.com/iberolab-es/IberoLab">Examinar el repositorio</a></div>
   </header>
 
   <div class="notice"><strong>Límite fundamental:</strong> IberoLab no traduce a la lengua ibérica. El demostrador produce una adaptación fonética experimental del español moderno mediante signos normalizados; el corpus documentado conserva por separado lecturas atestiguadas, fuentes e incertidumbres.</div>
 
+  <section class="notice"><strong>Alcance de la revisión:</strong> el corpus, las fuentes y las convenciones se ofrecen para examen especializado. El conversor no se presenta como instrumento de análisis epigráfico validado. Las comprobaciones de software verifican comportamiento e integridad; no acreditan lecturas, interpretaciones ni correspondencias históricas.</section>
   <section class="metrics" aria-label="Estado cuantitativo del proyecto">
     <div class="metric"><strong>11</strong><span>formas atestiguadas documentadas</span></div>
     <div class="metric"><strong>19</strong><span>recursos gráficos del corpus</span></div>
@@ -55,12 +57,12 @@
 
     <article class="card full"><h3>Revisión solicitada</h3><h2>Áreas donde una aportación experta sería especialmente valiosa</h2><div class="grid"><div><ul><li>Lecturas, segmentaciones y convenciones de transcripción del corpus.</li><li>Selección y etiquetado de signos o alógrafos.</li><li>Advertencias necesarias para evitar interpretaciones engañosas.</li></ul></div><div><ul><li>Reglas de adaptación fonética del demostrador.</li><li>Bibliografía primaria o institucional que deba incorporarse.</li><li>Claridad de la comunicación pública y educativa.</li></ul></div></div></article>
 
-    <article class="card"><h3>Reproducibilidad</h3><h2>Material auditable</h2><div class="links"><a href="https://github.com/iberolab-es/IberoLab/tree/main/data/corpus">Corpus versionado</a><a href="https://github.com/iberolab-es/IberoLab/tree/main/data/signs">Inventarios y manifiestos gráficos</a><a href="https://github.com/iberolab-es/IberoLab/tree/main/scripts">Validadores</a><a href="https://github.com/iberolab-es/IberoLab/tree/main/tests/browser">Pruebas de navegador</a><a href="https://github.com/iberolab-es/IberoLab/blob/main/docs/METHODOLOGY.md">Metodología</a></div></article>
+    <article class="card"><h3>Reproducibilidad</h3><h2>Material auditable</h2><div class="links"><a href="https://github.com/iberolab-es/IberoLab/tree/main/data/corpus">Corpus versionado</a><a href="https://github.com/iberolab-es/IberoLab/tree/main/data/signs">Inventarios y manifiestos gráficos</a><a href="https://github.com/iberolab-es/IberoLab/tree/main/scripts">Validadores</a><a href="https://github.com/iberolab-es/IberoLab/tree/main/tests/browser">Pruebas de navegador</a><a href="metodologia.html">Metodología y convenciones</a><a href="https://github.com/iberolab-es/IberoLab/blob/main/docs/ASSET_PROVENANCE.md">Procedencia y licencias</a><a href="historia.html#fuentes">Bibliografía del recorrido divulgativo</a><a href="https://github.com/iberolab-es/IberoLab/blob/main/CHANGELOG.md">Historial de modificaciones</a><a href="https://github.com/iberolab-es/IberoLab/blob/main/docs/SOURCE_REVIEW.md">Auditoría de fuentes del corpus</a></div></article>
     <article class="card"><h3>Participación</h3><h2>Cómo revisar o contribuir</h2><p>Las observaciones pueden enviarse como issue estructurada o mediante correo del proyecto. Se agradecen especialmente correcciones acompañadas de una publicación, registro institucional o explicación reproducible.</p><div class="links"><a href="https://github.com/iberolab-es/IberoLab/issues/new/choose">Enviar una aportación</a><a href="mailto:iberolab.es@gmail.com">iberolab.es@gmail.com</a><a href="https://github.com/iberolab-es/IberoLab/blob/main/CITATION.cff">Cómo citar IberoLab</a></div></article>
 
     <article class="card full"><h3>Recursos institucionales relevantes</h3><h2>Contexto académico</h2><p>IberoLab es un proyecto independiente y no está afiliado a las instituciones siguientes. Se señalan porque constituyen referencias fundamentales para la paleohispanística y para la revisión futura del proyecto.</p><div class="links"><a href="https://hesperia.ucm.es/">Hesperia · Banco de Datos de Lenguas Paleohispánicas</a><a href="https://www.ub.edu/portal/web/philology-communication/projects">Universitat de Barcelona · proyectos de epigrafía ibérica</a><a href="https://ifc.dpz.es/publicaciones/ver/id/4187">Palaeohispanica · Revista sobre lenguas y culturas de la Hispania Antigua</a></div></article>
 
-    <article class="card full" lang="en"><h3>English summary</h3><h2>IberoLab for academic review</h2><p>IberoLab is an independent open project combining a small, source-traceable corpus of attested Iberian forms with a practical demonstrator for short modern Spanish inputs. The demonstrator is explicitly classified as an experimental phonetic adaptation: it is not a translation into the Iberian language, does not reconstruct ancient pronunciation, and does not infer semantics from phonetic resemblance.</p><p class="english">The repository contains versioned data, local graphic assets, provenance records, static validators and browser regression tests. Specialist review is invited on readings, segmentation, palaeographic choices, transcription conventions, adaptation rules and public wording.</p></article>
+    <article class="card full" lang="en"><h3>English summary</h3><h2>IberoLab for academic review</h2><p>IberoLab is an independent open project combining a small, source-traceable corpus of attested Iberian forms with a practical demonstrator for short modern Spanish inputs. Its main audience is the general public; the documentation supports specialist scrutiny, not a claim of scientific validation. The demonstrator is explicitly classified as an experimental phonetic adaptation: it is not a translation into the Iberian language, does not reconstruct ancient pronunciation, and does not infer semantics from phonetic resemblance.</p><p class="english">The repository contains versioned data, local graphic assets, provenance records, static validators and browser regression tests. Specialist review is invited on readings, segmentation, palaeographic choices, transcription conventions, adaptation rules and public wording.</p></article>
   </section>
 
   <footer>Identidad visual: el monograma-glifo de IberoLab fusiona trazos inspirados en geometrías paleohispánicas; es una marca contemporánea sin valor fonético histórico. Proyecto abierto y sin afiliación institucional. <a href="privacidad.html">Privacidad</a>.</footer>

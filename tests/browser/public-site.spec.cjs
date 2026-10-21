@@ -2,13 +2,13 @@ const { test, expect } = require('@playwright/test');
 
 test('la portada presenta la identidad pública sin ocultar el corpus', async ({ page }) => {
   await page.goto('/', { waitUntil: 'load' });
-  await expect(page.getByRole('heading', { name: 'IberoLab' })).toBeVisible();
-  await expect(page.getByText('Lengua ibérica · Patrimonio · Tecnología')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Descubre la escritura ibérica' })).toBeVisible();
+  await expect(page.getByText('Escritura ibérica nororiental · Divulgación abierta')).toBeVisible();
   await expect(page.getByText('No es un signo ibérico antiguo.')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Un monograma-glifo contemporáneo.' })).toBeVisible();
   await expect(page.locator('#corpus')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-renderer-ready', 'true');
-  await expect(page.getByRole('link', { name: 'Aprender historia' })).toHaveAttribute('href', 'historia.html');
+  await expect(page.getByRole('link', { name: 'Comprender la escritura' })).toHaveAttribute('href', 'historia.html');
   await expect(page.getByRole('link', { name: 'Información para universidades' })).toHaveAttribute('href', 'academia.html');
   await expect(page.getByRole('link', { name: 'Abrir «tierra»' })).toHaveAttribute('href', 'convertir.html?q=tierra');
 });
@@ -48,14 +48,14 @@ test('la página académica ofrece acceso directo a Historia', async ({ page }) 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/academia.html', { waitUntil: 'load' });
   await expect(page.getByRole('link', { name: 'Historia', exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Universidades', exact: true })).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('link', { name: 'Documentación académica', exact: true })).toHaveAttribute('aria-current', 'page');
 });
 
-test('historia mantiene la distinción entre lectura y traducción y prepara YouTube', async ({ page }) => {
+test('historia distingue lectura y traducción y documenta las variantes', async ({ page }) => {
   await page.goto('/historia.html', { waitUntil: 'load' });
-  await expect(page.getByRole('heading', { name: 'Comprender el mundo ibérico antes de intentar representarlo.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'La escritura se entiende mejor cuando conocemos su mundo.' })).toBeVisible();
   await expect(page.getByText('Leer signos no significa traducir la lengua.')).toBeVisible();
-  await expect(page.getByText('Una sección preparada para crecer con YouTube.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dual y no dual' })).toBeVisible();
 });
 
 test('metodología identifica el símbolo y separa los modos sonoros', async ({ page }) => {
