@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Adaptación fonética experimental de nombres, palabras y frases breves mediante signos ibéricos normalizados.">
+  <meta name="description" content="Conversor experimental de escritura: adaptación gráfico-fonética del español moderno a signos ibéricos nororientales de referencia dual. No traduce.">
   <link rel="canonical" href="https://iberolab-es.github.io/IberoLab/convertir.html">
   <link rel="icon" href="assets/brand/iberolab-mark.svg" type="image/svg+xml">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#10253a">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="IberoLab · Adaptación fonética experimental">
+  <meta property="og:title" content="IberoLab · Conversor experimental de escritura">
   <meta property="og:description" content="Escribe un nombre, una palabra o una frase breve y visualízala mediante signos ibéricos normalizados.">
   <meta property="og:url" content="https://iberolab-es.github.io/IberoLab/convertir.html">
   <meta property="og:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://iberolab-es.github.io/IberoLab/assets/brand/iberolab-social-card.png">
-  <title>IberoLab — Conversor breve experimental</title>
+  <title>IberoLab — Conversor experimental de escritura</title>
   <link rel="stylesheet" href="public-site.css">
   <style>
     :root{color-scheme:dark;--bg:#071019;--panel:#101b26;--panel2:#0a141e;--line:#2b3c4f;--text:#eef5ff;--muted:#a9b8ca;--accent:#35a7ff;--accent2:#1962c4;--ok:#59d39b;--warn:#f4c86a;--danger:#ff8f8f;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -120,33 +120,33 @@
     }
   </style>
 </head>
-<body>
-  <main>
+<body><a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <main id="contenido" tabindex="-1">
     <div class="site-topbar">
       <a class="site-brand" href="./">
         <img src="assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab">
         <span>IberoLab</span>
       </a>
-      <nav class="site-nav">
+      <nav class="site-nav" aria-label="Navegación principal">
         <a href="convertir.html">Conversor</a>
         <a href="./#corpus">Corpus</a>
         <a href="historia.html">Historia</a>
         <a href="metodologia.html">Metodología</a>
-        <a href="academia.html">Universidades</a>
+        <a href="academia.html">Documentación académica</a>
         <a href="https://github.com/iberolab-es/IberoLab">GitHub</a>
       </nav>
     </div>
     <header>
       <div class="topline">
-        <div class="eyebrow">Recorrido 2 · demostrador MVP</div>
+        <div class="eyebrow">Recorrido 2 · conversor experimental de escritura</div>
         <a class="back" href="./#corpus">Corpus documentado</a>
       </div>
       <h1>Escribe algo breve.<br>Visualízalo en signos ibéricos.</h1>
-      <p class="lead">Introduce un nombre, una palabra o una frase corta. El demostrador adapta su sonido mediante convenciones explícitas y muestra cualquier aproximación necesaria.</p>
+      <p class="lead">Introduce un nombre, una palabra o una frase corta en español moderno. Esta adaptación gráfico-fonética usa signos de la escritura ibérica nororiental, con un repertorio normalizado de referencia dual. Muestra las aproximaciones necesarias.</p>
     </header>
     <div class="notice">
       <strong>No es una traducción a la lengua ibérica.</strong>
-      Es una adaptación fonética experimental del español moderno. Los signos son formas normalizadas de referencia y no facsímiles de una inscripción concreta.
+      Es una adaptación fonética experimental del español moderno. No reconstruye su pronunciación antigua ni produce inscripciones históricamente auténticas. Los signos son formas normalizadas de referencia y no facsímiles de una inscripción concreta.
     </div>
     <div class="layer-map" aria-label="Dos recorridos de IberoLab">
       <a class="layer-card" href="./#corpus">
@@ -160,11 +160,23 @@
         <small>Adapta sonidos actuales al signario y vocaliza el resultado. Ni los signos ni el audio constituyen una traducción ibérica.</small>
       </div>
     </div>
+<details class="voice-details" id="como-funciona">
+      <summary>Cómo funciona · un ejemplo paso a paso</summary>
+      <ol><li>Normaliza la entrada española y aplica convenciones de lectura explícitas.</li>
+      <li>Agrupa los sonidos representables y selecciona signos; no sustituye cada letra por un símbolo.</li>
+      <li>Muestra la secuencia técnica, los signos normalizados y los avisos de aproximación.</li></ol>
+      <p><code>tierra → ti · e · ŕ · a</code>: <code>ti</code> ocupa un signo silábico; <code>ŕ</code> representa la vibrante múltiple solo por convención del proyecto.</p>
+      <p><code>mundo → m · u · n · do</code>: representa sonidos modernos, no la palabra ibérica para «mundo».
+      <code>familia → ba · m · i · l · i · a</code>: avisa de que <code>f</code> se aproxima con la serie labial.</p>
+      <p>«Directa» significa sin sustitución adicional según estas reglas; no acredita una forma histórica.
+      Los 38 signos operativos no son un inventario exhaustivo de variantes nororientales.</p>
+      <p><a href="metodologia.html#procedimiento">Procedimiento y límites</a> · <a href="historia.html#sistema">Qué es un semisilabario</a> · <a href="historia.html#dual">Dual y no dual</a>.</p>
+    </details>
     <section class="panel">
       <form id="converterForm">
         <div>
           <label id="converterTitle" for="sourceInput">Nombre, palabra o frase breve</label>
-          <input id="sourceInput" type="text" maxlength="48" autocomplete="off" value="hogar" placeholder="Ej.: hogar, tierra, mundo">
+          <input id="sourceInput" aria-describedby="characterCounter" type="text" maxlength="48" autocomplete="off" value="hogar" placeholder="Ej.: hogar, tierra, mundo">
           <div id="characterCounter" class="counter">5/48 caracteres · máximo 6 palabras</div>
         </div>
         <button type="submit">Adaptar a signos ibéricos</button>
@@ -194,7 +206,7 @@
             <span id="statusBadge" class="badge direct">Adaptación directa</span>
           </div>
         </div>
-        <div id="glyphOutput"></div>
+        <div id="glyphOutput" role="region" aria-label="Resultado en signos" aria-live="polite"></div>
         <div class="technical-grid">
           <article class="technical-card">
             <h3>Entrada normalizada</h3>

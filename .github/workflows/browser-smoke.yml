@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -43,6 +45,16 @@ jobs:
         run: npx playwright test
         env:
           CI: "true"
+          REVIEW_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+
+      - name: Upload review screenshots
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: editorial-review-${{ github.run_id }}
+          path: test-results/**/*.png
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload failure evidence
         if: ${{ failure() }}

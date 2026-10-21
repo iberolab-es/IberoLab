@@ -2,11 +2,13 @@
 
 <p align="center"><img src="docs/assets/brand/iberolab-mark.svg" alt="Símbolo de IberoLab" width="112"></p>
 
-**Proyecto abierto y experimental para representar fonéticamente nombres, palabras y frases breves mediante escrituras paleohispánicas.**
+**Recurso divulgativo abierto para descubrir la escritura ibérica nororiental y experimentar con una adaptación gráfico-fonética del español moderno a sus signos.**
 
 > Estado: **pre-alpha con demostrador MVP**. La web pública reconstruye un corpus inicial contrastado y ofrece una adaptación gráfica experimental para entradas modernas breves, pero todavía no ofrece un conversor formal validado ni traducciones a la lengua ibérica.
 
 ## Qué es
+
+El público principal son personas curiosas, estudiantes y docentes. La documentación permite el examen especializado del proyecto; no presenta el demostrador como una herramienta científica validada. «Conversor experimental de escritura» es la denominación divulgativa de su adaptación gráfico-fonética, no una traducción ni una transliteración reversible.
 
 IberoLab separa tres capas que no deben confundirse:
 
@@ -62,6 +64,7 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 ## Acceso público
 
 - Demostrador de entradas breves: <https://iberolab-es.github.io/IberoLab/convertir.html>
+- Recorrido histórico y epigráfico: <https://iberolab-es.github.io/IberoLab/historia.html>
 - Corpus y renderizador documentado: <https://iberolab-es.github.io/IberoLab/>
 - Información para universidades y especialistas: <https://iberolab-es.github.io/IberoLab/academia.html>
 - Diagnóstico de corpus y SVG: <https://iberolab-es.github.io/IberoLab/test.html>

@@ -1,5 +1,11 @@
 # Metodología
 
+## Alcance vigente
+
+El conversor experimental de escritura es una adaptación gráfico-fonética divulgativa del español moderno al repertorio operativo nororiental de referencia dual. No es una transliteración reversible ni una transcripción arqueológica. Las puertas de aprobación, costes y perfiles futuros de este documento corresponden al motor formal, no al MVP limitado descrito en `README.md`.
+
+El público principal es general. La documentación permite examinar decisiones sin atribuir validación científica integral al programa. Los 38 signos no constituyen un repertorio exhaustivo. Véanse el [recorrido documentado](historia.html) y las [convenciones](metodologia.html#convenciones).
+
 ## 1. Separación de capas
 
 IberoLab debe mantener separadas cuatro capas para evitar confundir operaciones distintas:

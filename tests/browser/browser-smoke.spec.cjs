@@ -94,7 +94,7 @@ test('el diagnóstico de enlaces profundos supera los once identificadores', asy
 test.describe('presencia pública y académica', () => {
   test('la página académica publica límites y vías de revisión', async ({ page }) => {
     await page.goto('/academia.html', { waitUntil: 'load' });
-    await expect(page.getByRole('heading', { name: /Un proyecto pequeño/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Documentación para examinar y contrastar/ })).toBeVisible();
     await expect(page.getByText('IberoLab no traduce a la lengua ibérica')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Enviar una aportación' })).toBeVisible();
     await expect(page.getByText('English summary')).toBeVisible();
@@ -104,7 +104,7 @@ test.describe('presencia pública y académica', () => {
     for (const path of ['/', '/convertir.html']) {
       await page.goto(path, { waitUntil: 'load' });
       await expect(page.locator('.site-brand img')).toHaveCount(1);
-      await expect(page.locator('.site-nav').getByRole('link', { name: 'Universidades', exact: true })).toBeVisible();
+      await expect(page.locator('.site-nav').getByRole('link', { name: 'Documentación académica', exact: true })).toBeVisible();
       await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
       await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
     }
