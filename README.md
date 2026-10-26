@@ -12,7 +12,7 @@ El público principal son personas curiosas, estudiantes y docentes. La document
 
 IberoLab separa tres capas que no deben confundirse:
 
-1. **Corpus documental:** lecturas, segmentaciones y contextos de formas ibéricas ya atestiguadas.
+1. **Corpus documental:** once formas atestiguadas con lecturas, contextos y descomposición grafemática técnica. No contiene todavía ediciones de inscripciones completas ni segmentaciones léxicas o morfológicas revisadas.
 2. **Demostrador práctico:** adaptación fonética experimental de nombres, palabras y frases españolas breves mediante reglas deterministas y advertencias visibles.
 3. **Motor formal futuro:** arquitectura versionada para perfiles, reglas, costes, alternativas y confianza, todavía desactivada.
 
@@ -65,7 +65,8 @@ El demostrador MVP produce una **adaptación fonética experimental**. No atribu
 
 - Demostrador de entradas breves: <https://iberolab-es.github.io/IberoLab/convertir.html>
 - Recorrido histórico y epigráfico: <https://iberolab-es.github.io/IberoLab/historia.html>
-- Corpus y renderizador documentado: <https://iberolab-es.github.io/IberoLab/>
+- Fichas académicas en el navegador (sin instalaciones): <https://iberolab-es.github.io/IberoLab/corpus.html>
+- Visor de signos normalizados: <https://iberolab-es.github.io/IberoLab/>
 - Información para universidades y especialistas: <https://iberolab-es.github.io/IberoLab/academia.html>
 - Diagnóstico de corpus y SVG: <https://iberolab-es.github.io/IberoLab/test.html>
 - Diagnóstico de enlaces profundos: <https://iberolab-es.github.io/IberoLab/deep-link-test.html>
@@ -148,3 +149,9 @@ Código y documentación publicados bajo [Apache License 2.0](LICENSE), salvo qu
 ### English summary
 
 IberoLab is an open experimental project for representing short modern Spanish names, words and phrases with normalized ancient Iberian signs. A public MVP demonstrator uses deterministic, explained conventions and a separate 38-sign graphic layer. It is not a translation into the undeciphered Iberian language. The attested research corpus remains separate, and the formal phonetic engine, pronunciation profiles, calibrated confidence and reviewed rule system remain disabled.
+
+## Consulta académica y segmentación
+
+El catálogo estático `docs/corpus.html` ofrece las once formas con referencias y certeza diferenciada de la interpretación. Las fichas se leen incluso sin JavaScript; la búsqueda es una mejora opcional. No presenta el conversor divulgativo como recurso científico central. `grapheme_sequence` describe la descomposición para el visor, no una división en palabras o morfemas. La ampliación requerirá ediciones, localizadores y revisión especializada por ficha; no se generarán segmentaciones por IA.
+
+Generar la página: `python3 scripts/render_academic_catalog.py`. Verificar datos y sincronización: `python3 scripts/validate_academic_catalog.py`. Las anotaciones públicas están en `data/corpus/academic-catalog.v1.json`.

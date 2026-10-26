@@ -30,7 +30,7 @@ class PageReferences(HTMLParser):
 def validate_editorial_references():
     docs = ROOT / "docs"
     count = 0
-    pages = ("index.html", "historia.html", "metodologia.html", "academia.html", "convertir.html", "privacidad.html")
+    pages = ("index.html", "historia.html", "metodologia.html", "academia.html", "convertir.html", "privacidad.html", "corpus.html")
     for name in pages:
         text = (docs / name).read_text(encoding="utf-8")
         if "Proyecto abierto sobre lengua ibérica" in text or "Lengua ibérica · Patrimonio · Tecnología" in text:
@@ -64,7 +64,7 @@ def main():
     require(history,("La escritura se entiende mejor cuando conocemos su mundo","Leer signos no significa traducir la lengua","Dual y no dual","Monedas e inscripciones",'href="./#corpus"','href="academia.html"'),"history")
     require(method,("No traduce el español a la lengua ibérica","Dos orígenes, dos modos de recreación","Forma atestiguada","Entrada moderna","Voz fluida moderna","Síntesis técnica","No es una reconstrucción de cómo hablaban los íberos","iberolab-sign-reading-voice-v3","iberolab-sign-reading-voice-v1","No es un signo ibérico arqueológico","Trazabilidad técnica",'href="./#corpus"','href="privacidad.html"'),"methodology")
     require(academia,("Información para universidades y especialistas",'href="./#corpus"','href="historia.html"','href="metodologia.html"','href="academia.html" aria-current="page"','href="convertir.html"'),"academic page")
-    if 'href="corpus.html"' in history or 'href="corpus.html"' in method: raise ValueError("provisional corpus.html link remains in public pages")
+    require((ROOT / "docs/corpus.html").read_text(encoding="utf-8"), ("Corpus documentado en el navegador", "0 segmentaciones lingüísticas incorporadas"), "academic corpus")
     require(combined_converter,("Escuchar entrada en español","Escuchar aproximación sonora","Fluida moderna · voz natural","Técnica · síntesis reproducible","No reconstruye cómo hablaban los íberos","iberolab-sign-reading-voice-v3","iberolab-sign-reading-voice-v1","Forma ibérica atestiguada","Entrada española moderna","sin afirmar parentesco",'href="historia.html"','href="metodologia.html"','href="academia.html"','src="iberian-voice.js"','src="converter-ui.js"','data-example="hogar"','data-example="tierra"','data-example="mundo"','data-example="olivo"','data-example="mar"',"cualquier nombre, sentimiento", "palabra o frase breve"),"converter")
     require(combined_corpus,("Escuchar forma atestiguada","Forma atestiguada · voz fluida","Forma atestiguada · síntesis técnica","La secuencia escrita está documentada; su sonido no","iberolab-sign-reading-voice-v3","VOICE_SCRIPT_PATH","nasal prolongada"),"attested corpus audio")
     require(style,(".public-nav",".home-hero",".logo-story",".video-grid"),"stylesheet")

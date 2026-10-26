@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.0.0",
+  "catalog_id": "iberolab-academic-seed",
+  "audited_on": "2026-10-26",
+  "base_corpus": "data/corpus/attested-forms.v1.json",
+  "entry_unit": "attested_form",
+  "complete_inscription_editions": 0,
+  "linguistic_segmentations": 0,
+  "segmentation_policy": {
+    "not_catalogued": "No incorporada: no se registra aquí una segmentación léxica o morfológica revisada; no implica que la bibliografía no discuta análisis.",
+    "documented": "Solo se admitirá una segmentación atribuida a una publicación, con localizador y revisión especializada registrada.",
+    "hypothesis": "Propuesta atribuida a sus autores, separada de las divisiones documentadas.",
+    "disputed": "Análisis alternativos atribuidos, sin resolverlos automáticamente.",
+    "unsegmented": "Texto completo incorporado sin segmentación lingüística; exige edición y fuente propias."
+  },
+  "entries": [
+    {
+      "form_id": "ib-ne-ildirda-001",
+      "context": "Leyenda monetal toponímica estudiada junto con erder.",
+      "interpretation": "Referente toponímico identificado; no se afirma una traducción léxica.",
+      "transcription_note": "El estudio emplea ildiŕda como lectura dual y también imprime para un ejemplar la secuencia i·l·ti·ŕ·ta. Esta pantalla usa di/da como normalización dual, no como facsímil.",
+      "provenance": {
+        "context": "Contexto numismático de ildiŕda",
+        "support": "Moneda",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-erder-001",
+      "context": "Leyenda secundaria de un semis de ildiŕda y expresión comparada con otras marcas monetales.",
+      "interpretation": "Hipótesis apoyada como marca de valor equivalente a un medio; no es una traducción universalmente segura.",
+      "transcription_note": "La web separa la lectura erder de la hipótesis semántica «mitad».",
+      "provenance": {
+        "context": "Contexto numismático de ildiŕda",
+        "support": "Moneda",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-undikesken-001",
+      "context": "Leyenda monetal o étnica utilizada en la comparación de marcas de valor.",
+      "interpretation": "Referente documentado; no se propone traducción palabra por palabra.",
+      "transcription_note": "IberoLab registra variantes de lectura como datos distintos y no las fusiona silenciosamente.",
+      "provenance": {
+        "context": "Comparación numismática; ejemplar no individualizado",
+        "support": "Moneda",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-ars-001",
+      "context": "Nombre de ceca o comparador monetal utilizado en el análisis de una hemidracma.",
+      "interpretation": "Referente identificado; significado léxico no afirmado.",
+      "transcription_note": "Se representa la forma citada por el estudio, no una reconstrucción integral de la moneda.",
+      "provenance": {
+        "context": "Comparación numismática; ejemplar no individualizado",
+        "support": "Moneda",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-ekiar-001",
+      "context": "Término presente en fórmulas ibéricas de autoría o producción.",
+      "interpretation": "Interpretación contextual; el valor gramatical exacto continúa abierto.",
+      "transcription_note": "La forma gráfica es normalizada y no reproduce el ductus de un recipiente concreto.",
+      "provenance": {
+        "context": "Fórmula estudiada en Ca n’Oliver y Caminreal; entrada no vinculada a un único objeto",
+        "support": "Fórmula en varios soportes",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-egiar-001",
+      "context": "Variante documentada de ekiar en una fórmula de autoría o producción.",
+      "interpretation": "Variante ortográfica o fonética documentada; análisis gramatical todavía abierto.",
+      "transcription_note": "No se presupone que ambas variantes sean intercambiables en cualquier inscripción.",
+      "provenance": {
+        "context": "Fórmula estudiada en Ca n’Oliver; entrada no vinculada a un único objeto",
+        "support": "Cerámica",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-likine-001",
+      "context": "Elemento onomástico de la inscripción musiva de Caminreal.",
+      "interpretation": "Antropónimo identificado dentro de la literatura sobre el mosaico.",
+      "transcription_note": "La pantalla muestra la forma aislada; no reconstruye la inscripción musiva completa.",
+      "provenance": {
+        "context": "Caminreal",
+        "support": "Mosaico",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-tarsaban-001",
+      "context": "Antropónimo documentado en dos escifos áticos de Mas Castellar, Pontós.",
+      "interpretation": "Nombre del propietario de los dos recipientes y probablemente de la casa, según el estudio.",
+      "transcription_note": "La publicación identifica el signo como variante m1. Su transcripción tradicional era m; IberoLab adopta ń siguiendo el estudio. El SVG es una referencia normalizada m1, no un facsímil.",
+      "provenance": {
+        "context": "Mas Castellar, Pontós (Girona)",
+        "support": "Escifos áticos",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-baisetas-001",
+      "context": "Antropónimo de la inscripción funeraria de la estela de Sinarcas.",
+      "interpretation": "Nombre identificado; su papel sintáctico concreto dentro del epitafio continúa discutido.",
+      "transcription_note": "Se conserva la lectura sin convertir una alternativa sintáctica en certeza.",
+      "provenance": {
+        "context": "Sinarcas (València)",
+        "support": "Estela",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-seltar-001",
+      "context": "Secuencia documentada en la estela de Sinarcas y en un contexto funerario.",
+      "interpretation": "Interpretación contextual como tumba o monumento funerario; no es una equivalencia libre de contexto.",
+      "transcription_note": "El motor futuro no podrá usar seltar como traducción automática de cualquier palabra moderna relacionada con «tumba».",
+      "provenance": {
+        "context": "Sinarcas (València)",
+        "support": "Estela",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    },
+    {
+      "form_id": "ib-ne-ebanen-001",
+      "context": "Término formular discutido en la inscripción funeraria de Sinarcas.",
+      "interpretation": "Lectura atestiguada; compiten análisis como posible marca de filiación y como posible forma verbal.",
+      "transcription_note": "IberoLab no asigna traducción a ebanen mientras la interpretación permanezca disputada.",
+      "provenance": {
+        "context": "Sinarcas (València)",
+        "support": "Estela",
+        "object_identifier": null,
+        "note": "El corpus inicial no registra un identificador de objeto o de inscripción individual. El identificador de esta ficha es interno de IberoLab."
+      },
+      "linguistic_segmentation": {
+        "status": "not_catalogued",
+        "segments": [],
+        "source_locator": null,
+        "specialist_review": null
+      }
+    }
+  ]
+}

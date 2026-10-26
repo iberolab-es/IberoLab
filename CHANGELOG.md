@@ -1,5 +1,12 @@
 # Historial de cambios
 
+## Propuesta de acceso académico al corpus — 2026-10-26 — pendiente de integración
+
+- Catálogo de once formas documentadas en el navegador, con acceso directo desde portada y área académica y lectura sin JavaScript.
+- Fichas con transcripción, descomposición técnica en signos, procedencia de la referencia, fuentes y certeza de lectura separada de interpretación.
+- Alcance explícito: no hay ediciones de inscripciones completas ni segmentaciones lingüísticas incorporadas; no se generan análisis por IA.
+- Búsqueda, filtro de interpretación, enlaces directos, criterios de ampliación y pruebas de navegación y datos.
+
 ## Propuesta divulgativa v1.1 — 2026-10-21 — pendiente de integración
 
 - Identidad centrada en escritura ibérica nororiental; conversor y límites destacados.
