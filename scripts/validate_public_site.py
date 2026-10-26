@@ -33,6 +33,8 @@ def validate_editorial_references():
     pages = ("index.html", "historia.html", "metodologia.html", "academia.html", "convertir.html", "privacidad.html", "corpus.html")
     for name in pages:
         text = (docs / name).read_text(encoding="utf-8")
+        if any(phrase in text for phrase in ("contexto, segmentación", "fuente, segmentación")):
+            raise ValueError(f"{name}: ambiguous claim of existing linguistic segmentation")
         if "Proyecto abierto sobre lengua ibérica" in text or "Lengua ibérica · Patrimonio · Tecnología" in text:
             raise ValueError(f"obsolete public scope in {name}")
         require(text, ('href="#contenido"', 'id="contenido"', 'href="public-site.css"'), name)
