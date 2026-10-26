@@ -29,6 +29,11 @@ jobs:
       - name: Validate scholarly source audit
         run: python scripts/validate_source_audit.py
 
+      - name: Validate browser academic catalogue and evidence boundaries
+        run: |
+          python scripts/validate_academic_catalog.py
+          python -m unittest discover -s tests -p 'test_academic_catalog.py'
+
       - name: Validate local SVG integrity and provenance
         run: python scripts/validate_local_assets.py
 
