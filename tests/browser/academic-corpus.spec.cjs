@@ -84,7 +84,9 @@ test('las once fichas y las referencias se leen sin JavaScript', async ({ browse
     await expect(page.locator('#ib-ne-ebanen-001')).toBeInViewport();
     await expect(page.locator('#ib-ne-ebanen-001 .semantic-label')).toHaveText('Interpretación discutida');
     await expect(page.locator('#catalogueTools')).toBeHidden();
-    await expect(page.locator('noscript')).toContainText('las once fichas y sus referencias siguen disponibles');
+    // Playwright omits NOSCRIPT roots from its text matcher; assert the rendered paragraph.
+    await expect(page.locator('noscript p')).toBeVisible();
+    await expect(page.locator('noscript p')).toContainText('las once fichas y sus referencias siguen disponibles');
   } finally {
     await context.close();
   }
