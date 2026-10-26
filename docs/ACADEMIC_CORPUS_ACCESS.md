@@ -45,3 +45,9 @@ La necesidad de textos ibéricos segmentados sigue abierta. Esta entrega mejora 
 Catorce validadores y cinco pruebas negativas; matriz de navegador con recorrido desde portada y documentación académica, once fichas y referencias, búsqueda/filtros, enlaces profundos, ausencia de JavaScript, teclado y anchos 360/1440. Las capturas se conservan como artefactos de CI. Las pruebas de software no sustituyen revisión filológica ni auditoría integral de accesibilidad.
 
 Las comunicaciones privadas de evaluación y la matriz que distingue sus autores se conservan fuera del repositorio público. No se atribuye aval institucional ni revisión formal de datos.
+
+## Auditoría posterior del PR #41
+
+Se aclara que `likine` y `taŕśabań` son bases onomásticas extraídas por análisis bibliográfico, no transcripciones íntegras de sus grupos inscritos. Las notas identifican páginas y distinguen los vasos de Mas Castellar. El rótulo general «Forma de referencia adoptada» evita atribuir al objeto el recorte de una forma. Se corrige el margen de anclas en tabletas y se añade prueba a 360, 720 y 1440 píxeles.
+
+La propuesta de fichas completas, candidatos, atribuciones, derechos pendientes y dependencias se desarrolla en [FULL_INSCRIPTIONS_PLAN.md](FULL_INSCRIPTIONS_PLAN.md). No incorpora ninguna inscripción ni segmentación nueva.

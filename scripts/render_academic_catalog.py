@@ -37,7 +37,7 @@ def render():
   <header><p class="catalogue-kind">Forma aislada documentada · no edición de una inscripción completa</p>
   <h2>{esc(form['form'])}</h2><p class="catalogue-id">Identificador interno: <code>{fid}</code></p></header>
   <dl>
-    <dt>Transcripción adoptada</dt><dd class="catalogue-reading">{esc(form['form'])}</dd>
+    <dt>Forma de referencia adoptada</dt><dd class="catalogue-reading">{esc(form['form'])}</dd>
     <dt>Descomposición técnica en signos</dt><dd><code class="grapheme-sequence">{esc(' · '.join(form['grapheme_sequence']))}</code><small>Convención grafemática del visor; no separa palabras ni morfemas.</small></dd>
     <dt>Segmentación lingüística</dt><dd class="linguistic-status" data-status="not_catalogued">No incorporada al catálogo. No se ofrece una división léxica o morfológica revisada de esta forma.</dd>
     <dt>Contexto y procedencia de la referencia</dt><dd>{esc(entry['provenance']['context'])}. Soporte o ámbito: {esc(entry['provenance']['support'])}.<small>{esc(entry['provenance']['note'])}</small></dd>

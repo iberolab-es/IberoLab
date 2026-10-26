@@ -3,6 +3,18 @@ const fs = require('node:fs');
 const path = require('node:path');
 const seed = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/corpus/attested-forms.v1.json'), 'utf8'));
 
+for (const width of [360, 720, 1440]) {
+  test(`el enlace directo deja la ficha visible bajo la navegación a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/corpus.html');
+    await page.locator('.catalogue-index a[href="#ib-ne-ebanen-001"]').click();
+    const card = await page.locator('#ib-ne-ebanen-001').boundingBox();
+    const nav = await page.locator('.public-nav').boundingBox();
+    expect(card.y).toBeGreaterThanOrEqual(Math.max(0, nav.y + nav.height));
+    await expect(page.locator('#ib-ne-ebanen-001 h2')).toBeInViewport();
+  });
+}
+
 for (const width of [360, 1440]) {
   test(`el investigador llega al corpus desde la portada a ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });

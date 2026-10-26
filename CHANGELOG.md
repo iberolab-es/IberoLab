@@ -1,5 +1,7 @@
 # Historial de cambios
 
+Auditoría PR #41 (26/10/2026): bases onomásticas diferenciadas de secuencias inscritas; navegación por anclas en tabletas; plan documental de inscripciones completas sin nuevos registros.
+
 ## Propuesta de acceso académico al corpus — 2026-10-26 — pendiente de integración
 
 - Catálogo de once formas documentadas en el navegador, con acceso directo desde portada y área académica y lectura sin JavaScript.

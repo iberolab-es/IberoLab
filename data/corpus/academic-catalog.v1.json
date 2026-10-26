@@ -126,7 +126,7 @@
       "form_id": "ib-ne-likine-001",
       "context": "Elemento onomástico de la inscripción musiva de Caminreal.",
       "interpretation": "Antropónimo identificado dentro de la literatura sobre el mosaico.",
-      "transcription_note": "La pantalla muestra la forma aislada; no reconstruye la inscripción musiva completa.",
+      "transcription_note": "Base onomástica aislada por análisis bibliográfico: el primer grupo escrito del mosaico es likinete, no likine. Simón Cornago (2015), pp. 96–97, recoge la lectura y el aislamiento del sufijo -te; el valor gramatical se discute en pp. 100–102. Esta ficha conserva la base de referencia del corpus inicial y no edita ni segmenta el texto completo.",
       "provenance": {
         "context": "Caminreal",
         "support": "Mosaico",
@@ -142,9 +142,9 @@
     },
     {
       "form_id": "ib-ne-tarsaban-001",
-      "context": "Antropónimo documentado en dos escifos áticos de Mas Castellar, Pontós.",
-      "interpretation": "Nombre del propietario de los dos recipientes y probablemente de la casa, según el estudio.",
-      "transcription_note": "La publicación identifica el signo como variante m1. Su transcripción tradicional era m; IberoLab adopta ń siguiendo el estudio. El SVG es una referencia normalizada m1, no un facsímil.",
+      "context": "Base onomástica propuesta en el estudio de dos escifos distintos de Mas Castellar, Pontós: uno conserva taŕśa[ y otro permite proponer la lectura taŕśabańar.",
+      "interpretation": "Los autores proponen un nombre personal y lo relacionan con el propietario de los recipientes y, con mayor cautela, de la casa; es interpretación bibliográfica.",
+      "transcription_note": "Ferrer i Jané et al. (2025), pp. 185–187 y tabla 1 (p. 191), distinguen el vaso fragmentario de 2014 del vaso reunido a partir de fragmentos de 2019 y 2021. La lectura propuesta de este último termina en un signo parcialmente conservado: taŕśabańar. taŕśabań es la base onomástica propuesta por los autores, no la transcripción íntegra de ambos vasos. La variante m1 se transcribe aquí ń siguiendo el estudio; el SVG es normalizado, no un facsímil.",
       "provenance": {
         "context": "Mas Castellar, Pontós (Girona)",
         "support": "Escifos áticos",
