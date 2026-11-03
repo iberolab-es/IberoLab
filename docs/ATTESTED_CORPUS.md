@@ -7,7 +7,7 @@ IberoLab no empieza probando nombres personales o topónimos modernos. El primer
 La secuencia de trabajo es:
 
 1. registrar una lectura académica con su fuente;
-2. segmentarla en signos de la escritura utilizada;
+2. descomponerla técnicamente en signos de la escritura utilizada, sin introducir fronteras léxicas ni morfológicas;
 3. vincular cada token a un recurso gráfico controlado;
 4. comprobar que la forma completa se reconstruye sin vacíos;
 5. mantener separadas lectura, variante paleográfica, interpretación y representación normalizada;
@@ -15,7 +15,7 @@ La secuencia de trabajo es:
 
 ## Qué valida este corpus
 
-El corpus inicial valida **lecturas y segmentaciones**, no traducciones completas. Distingue:
+El corpus inicial permite contrastar **formas documentadas y su descomposición grafemática técnica**. No incluye segmentaciones léxicas o morfológicas revisadas ni ediciones de inscripciones completas. Las pruebas de software no validan los análisis lingüísticos. Distingue:
 
 - nombres propios identificados;
 - leyendas monetales y topónimos;
@@ -93,3 +93,7 @@ La cobertura técnica del corpus inicial está completa. Las siguientes tareas s
 4. mejorar el demostrador y la recreación sonora solo mediante reglas explícitas, casos reproducibles y revisión externa.
 
 No se incorporan como evidencia los 37 trazados del prototipo HTML anterior, porque no estaban vinculados a variantes paleográficas documentadas.
+
+## Acceso académico directo
+
+Las [fichas del corpus](corpus.html) muestran identificador interno, transcripción, descomposición técnica, contexto/procedencia de la referencia, bibliografía y certeza de lectura separada del estado interpretativo. Los identificadores de objetos no registrados se declaran ausentes. Las once fichas tienen segmentación lingüística no incorporada: no significa que la bibliografía no proponga análisis. No se usan esos análisis para rellenar huecos automáticamente.

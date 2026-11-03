@@ -1,12 +1,14 @@
 # Renderizador provisional de formas contrastadas
 
+> Nota de alcance (26/10/2026): este documento conserva el diagnóstico histórico del prototipo. El estado vigente de recursos locales y `ń` está en `ASSET_PROVENANCE.md`. La cadena técnica usa una descomposición grafemática del proyecto; no debe entenderse como segmentación léxica o morfológica publicada. Consulta las [fichas actuales](corpus.html).
+
 ## Objetivo
 
 Este renderizador permite comprobar que las lecturas del corpus se convierten en una secuencia visual no vacía antes de construir el motor para palabras modernas.
 
 No reproduce el ductus exacto de cada inscripción. Utiliza formas de referencia del signario ibérico nororiental dual para verificar la cadena técnica:
 
-`forma atestiguada → segmentación publicada → token → signo visible`
+`forma atestiguada → descomposición grafemática del proyecto → token → signo visible`
 
 ## Recursos gráficos
 
